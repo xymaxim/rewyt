@@ -1,6 +1,6 @@
 <script lang="ts">
   import { getExplorerContext } from "../explorer.svelte";
-  import { MS_PER_HOUR } from "../utils/timelineUtils";
+  import { MS_PER_HOUR } from "../utils/dateUtils";
   import MinimapOverlay from "./MinimapOverlay.svelte";
   import type { DayEntry } from "../types";
 

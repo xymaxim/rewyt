@@ -8,8 +8,8 @@ import type {
   ZoomLevel,
 } from "./types";
 import { ZOOM_LEVELS } from "./types";
-import { buildAvailableDays, MS_PER_DAY } from "./utils/dateUtils";
-import { clampViewRange, MS_PER_HOUR } from "./utils/timelineUtils";
+import { buildAvailableDays, MS_PER_DAY, MS_PER_HOUR } from "./utils/dateUtils";
+import { clampViewRange } from "./utils/timelineUtils";
 import { localOffsetMinutes } from "./utils/dateTimeUtils";
 
 // Context

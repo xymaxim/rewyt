@@ -5,7 +5,7 @@
   import PlusIcon from "phosphor-svelte/lib/PlusIcon";
   import { getExplorerContext } from "../explorer.svelte";
   import { ZOOM_LEVELS, type ZoomLevelKey } from "../types";
-  import { MS_PER_HOUR } from "../utils/timelineUtils";
+  import { MS_PER_HOUR } from "../utils/dateUtils";
   import MinimapOverlay from "./MinimapOverlay.svelte";
 
   interface Props {

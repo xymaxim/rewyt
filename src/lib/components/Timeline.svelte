@@ -1,5 +1,6 @@
 <script lang="ts">
   import { getExplorerContext } from "../explorer.svelte";
+  import { MS_PER_HOUR } from "../utils/dateUtils";
   import { useElementSize } from "../utils/domUtils.svelte";
   import { pixelToTime, timeToPixel } from "../utils/timePixelUtils";
   import {
@@ -7,7 +8,6 @@
     findDay,
     formatHoverTime,
     getStripeBackground,
-    MS_PER_HOUR,
     snapTime,
   } from "../utils/timelineUtils";
   import TimelineViewRange from "./TimelineViewRange.svelte";

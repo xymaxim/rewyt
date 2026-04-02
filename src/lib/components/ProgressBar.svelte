@@ -2,7 +2,8 @@
   import { Slider } from "$lib/components/ui/slider/index.js";
   import { onMount } from "svelte";
   import { getExplorerContext } from "../explorer.svelte.js";
-  import { clampViewRange, MS_PER_MINUTE } from "../utils/timelineUtils";
+  import { MS_PER_MINUTE } from "../utils/dateUtils";
+  import { clampViewRange } from "../utils/timelineUtils";
 
   const explorer = getExplorerContext();
 

@@ -1,10 +1,7 @@
 import { ZOOM_LEVELS } from "../types";
 import type { DayEntry, ViewRange, Timestamp } from "../types";
+import { MS_PER_SECOND, MS_PER_MINUTE, MS_PER_HOUR } from "./dateUtils";
 import { timeToPixel } from "./timePixelUtils";
-
-export const MS_PER_SECOND = 1_000;
-export const MS_PER_MINUTE = 60 * MS_PER_SECOND;
-export const MS_PER_HOUR = 60 * MS_PER_MINUTE;
 
 export interface Tick {
   px: number;
