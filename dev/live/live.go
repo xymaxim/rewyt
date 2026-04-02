@@ -25,7 +25,7 @@ type infoResponse struct {
 	Title           string    `json:"title"`
 	ChannelID       string    `json:"channelId"`
 	ChannelTitle    string    `json:"channelTitle"`
-	StreamStartTime time.Time `json:"streamStartTime"`
+	ActualStartTime time.Time `json:"actualStartTime"`
 }
 
 type mpdMetadata struct {
@@ -113,7 +113,7 @@ func infoHandler(w http.ResponseWriter, r *http.Request) {
 		Title:           videoTitle,
 		ChannelID:       "test-channel-id",
 		ChannelTitle:    "Live Stream Watching Club",
-		StreamStartTime: streamStartTime,
+		ActualStartTime: streamStartTime,
 	}
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(info); err != nil {
