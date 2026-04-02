@@ -2,29 +2,41 @@
   import { Slider } from "$lib/components/ui/slider/index.js";
   import { onMount } from "svelte";
   import { getExplorerContext } from "../explorer.svelte.js";
-  import { clampViewRange } from "../utils/timelineUtils";
+  import { clampViewRange, MS_PER_MINUTE } from "../utils/timelineUtils";
 
   const explorer = getExplorerContext();
 
+  const sliderStep = 10 * MS_PER_MINUTE;
+
   // State
-  let now = $state(Date.now());
   let isSliding = $state(false);
 
   // Derived
-  const min = $derived(
-    explorer.days[explorer.days.length - 1]?.dayStart ?? now,
+  const allowedStart = $derived(explorer.availableRange.start);
+  const allowedEnd = $derived(explorer.availableRange.end);
+
+  const fullRangeStart = $derived(
+    Math.min(
+      allowedStart,
+      explorer.days[explorer.days.length - 1]?.dayStart ?? allowedStart,
+    ),
   );
-  const max = $derived(explorer.days[0]?.dayEnd ?? now);
-  const allowedStart = $derived(now - 6 * 24 * 60 * 60 * 1000);
+  const fullRangeEnd = $derived(
+    Math.max(allowedEnd, explorer.days[0]?.dayEnd ?? allowedEnd),
+  );
 
   const allowedStartPercent = $derived(
-    Math.max(0, ((allowedStart - min) / (max - min)) * 100),
+    ((allowedStart - fullRangeStart) / (fullRangeEnd - fullRangeStart)) * 100,
   );
-  const nowPercent = $derived(Math.min(100, ((now - min) / (max - min)) * 100));
+  const allowedEndPercent = $derived(
+    ((allowedEnd - fullRangeStart) / (fullRangeEnd - fullRangeStart)) * 100,
+  );
 
   const sliderValue = $derived.by<number[]>(() => {
     if (explorer.selectedTime === null) return [allowedStart];
-    return [Math.min(Math.max(explorer.selectedTime, allowedStart), now)];
+    return [
+      Math.min(Math.max(explorer.selectedTime, allowedStart), allowedEnd),
+    ];
   });
 
   const thumbClass = $derived(
@@ -36,7 +48,7 @@
   // Event handlers
   function onValueChange(value: number) {
     if (!isSliding) return;
-    const t = Math.min(Math.max(value, allowedStart), now);
+    const t = Math.min(Math.max(value, allowedStart), allowedEnd);
     const vr = explorer.viewRange;
     explorer.setSelectedTime(t);
     if (!vr) return;
@@ -52,13 +64,9 @@
 
   // Lifecycle
   onMount(() => {
-    const interval = setInterval(() => {
-      now = Date.now();
-    }, 600_000);
     const onPointerUp = () => (isSliding = false);
     window.addEventListener("pointerup", onPointerUp);
     return () => {
-      clearInterval(interval);
       window.removeEventListener("pointerup", onPointerUp);
     };
   });
@@ -66,14 +74,14 @@
 
 <div class="relative w-full py-2">
   <div
-    style="position: absolute; left: calc({allowedStartPercent}% - 8px); width: calc({nowPercent -
+    style="position: absolute; left: calc({allowedStartPercent}% - 8px); width: calc({allowedEndPercent -
       allowedStartPercent}% + 10px);"
   >
     <Slider
       type="single"
       min={allowedStart}
-      max={now}
-      step={600_000}
+      max={allowedEnd}
+      step={sliderStep}
       value={sliderValue}
       {onValueChange}
       onpointerdown={() => (isSliding = true)}

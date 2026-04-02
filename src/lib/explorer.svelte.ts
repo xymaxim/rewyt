@@ -8,7 +8,7 @@ import type {
   ZoomLevel,
 } from "./types";
 import { ZOOM_LEVELS } from "./types";
-import { buildAvailableDays } from "./utils/dateUtils";
+import { buildAvailableDays, MS_PER_DAY } from "./utils/dateUtils";
 import { clampViewRange, MS_PER_HOUR } from "./utils/timelineUtils";
 import { localOffsetMinutes } from "./utils/dateTimeUtils";
 
@@ -55,7 +55,12 @@ export function createExplorer(
   });
 
   // Derived
-  const days = $derived(buildAvailableDays(now, depthDays, timezoneOffset));
+  const days = $derived.by(() => {
+    const depth = availableRange
+      ? Math.ceil((now - availableRange.start) / MS_PER_DAY) + 1
+      : 7;
+    return buildAvailableDays(now, depth, timezoneOffset);
+  });
   let viewRange = $state<ViewRange | null>(
     days[0] ? { start: days[0].dayStart, end: days[0].dayEnd } : null,
   );

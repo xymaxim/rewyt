@@ -1,6 +1,6 @@
 import type { DayEntry, Timestamp } from "../types";
 
-const MS_PER_DAY = 24 * 60 * 60 * 1000;
+export const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
 function midnightInOffset(utcMs: number, offsetMinutes: number): Timestamp {
   const shifted = utcMs + offsetMinutes * 60 * 1000;
