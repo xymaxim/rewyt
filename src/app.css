@@ -257,5 +257,5 @@ button[data-state="off"]:hover {
 }
 
 .text-timestamp {
-  @apply font-medium whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground;
+  @apply font-medium tabular-nums whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground;
 }
