@@ -275,7 +275,7 @@
           showHead={false}
         />
         <span
-          class="absolute rounded-md bg-[var(--ypb-selected)]/40 px-1.5 py-0.25 text-sm font-medium tabular-nums backdrop-blur-sm"
+          class="absolute rounded-md bg-[var(--ypb-selected-800)] px-1.5 py-0.25 text-sm font-medium tabular-nums"
           style="left: {hoverPx}px; bottom: 100%; transform: translateX(-50%); margin-bottom: -12px; z-index: 100"
           >{hoverTime}</span
         >
@@ -287,7 +287,7 @@
         class="pointer-events-none absolute inset-0 flex items-center justify-center opacity-100 transition-opacity group-hover:opacity-0"
       >
         <span
-          class="z-30 rounded-md bg-white/80 px-4 py-0.5 text-sm text-gray-400 backdrop-blur-sm"
+          class="z-30 z-200 rounded-md bg-neutral-50 px-4 py-0.5 text-sm text-gray-400"
         >
           Pick a time to rewind
         </span>
