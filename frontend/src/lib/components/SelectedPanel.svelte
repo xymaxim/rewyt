@@ -75,7 +75,7 @@
 <div class="mr-5">
   <div
     title="Jump to selected"
-    class="group flex flex-row cursor-pointer"
+    class="group flex cursor-pointer flex-row"
     onclick={() => seekOrRewind(explorer.selectedTime!)}
   >
     <span class="text-timestamp text-sm">
