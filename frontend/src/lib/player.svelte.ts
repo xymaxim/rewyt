@@ -198,7 +198,6 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     try {
       await shakaPlayer?.load("live:///mpd/now", 0).catch(console.error);
       lastRewindTarget = mpdStartTime?.getTime() ?? null;
-      console.log("lastRewindtarget", lastRewindTarget);
       const videoEl = getVideoEl();
       if (!videoEl) return;
       pause ? videoEl.pause() : videoEl.play();

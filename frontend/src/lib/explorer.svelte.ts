@@ -112,7 +112,6 @@ export function createExplorer(
   }
 
   function setStreamStartTime(ts: number | null): void {
-    console.log("set start time", ts);
     streamStartTime = ts;
     rangeStart = Math.max(ts, Date.now() - depthMs);
   }
