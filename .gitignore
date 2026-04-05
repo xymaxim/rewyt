@@ -3,8 +3,7 @@ build/bin
 node_modules
 frontend/dist
 
-frontend/dev/live/live
-frontend/dev/live/dash/
+local/dash
 
 # Logs
 logs

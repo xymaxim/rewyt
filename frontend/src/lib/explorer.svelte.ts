@@ -14,20 +14,6 @@ import { localOffsetMinutes } from "./utils/dateTimeUtils";
 
 export const DEPTH_HOURS = 167;
 
-// Context
-const EXPLORER_KEY = Symbol("explorer");
-
-export function setExplorerContext(store: Explorer): void {
-  setContext(EXPLORER_KEY, store);
-}
-
-export function getExplorerContext(): Explorer {
-  const store = getContext<Explorer>(EXPLORER_KEY);
-  if (!store)
-    throw new Error("getExplorerContext() called outside of explorer tree");
-  return store;
-}
-
 export function createExplorer(
   options: {
     depthHours?: number;
@@ -74,17 +60,20 @@ export function createExplorer(
     },
   );
 
-  const days = $derived.by(() => {
-    if (availableRange === null) return [];
-    const depthDays = Math.ceil((now - availableRange.start) / MS_PER_DAY) + 1;
-    return buildAvailableDays(new Date(now), depthDays, timezoneOffset).filter(
-      (d) => d.dayEnd > availableRange!.start,
+  let rangeStart = $state<number | null>(null);
+  const days = $derived.by<DayEntry[]>(() => {
+    if (rangeStart === null) return [];
+    const depthDays = Math.ceil((Date.now() - rangeStart) / MS_PER_DAY) + 1;
+    return buildAvailableDays(new Date(), depthDays, timezoneOffset).filter(
+      (d) => d.dayEnd > rangeStart!,
     );
   });
 
   let viewRange = $state<ViewRange | null>(
     days[0] ? { start: days[0].dayStart, end: days[0].dayEnd } : null,
   );
+
+  const isReady = $derived(streamStartTime !== null && days.length > 0);
 
   const dayWindow = $derived.by<ViewRange | null>(() => {
     if (viewRange === null) return null;
@@ -122,8 +111,10 @@ export function createExplorer(
     pauseAfterRewind = value;
   }
 
-  function setStreamStartTime(ts: number): void {
+  function setStreamStartTime(ts: number | null): void {
+    console.log("set start time", ts);
     streamStartTime = ts;
+    rangeStart = Math.max(ts, Date.now() - depthMs);
   }
 
   // View actions
@@ -218,6 +209,9 @@ export function createExplorer(
     get viewRange() {
       return viewRange;
     },
+    get isReady() {
+      return isReady;
+    },
     get dayWindow() {
       return dayWindow;
     },
@@ -262,3 +256,21 @@ export function createExplorer(
 }
 
 export type Explorer = ReturnType<typeof createExplorer>;
+
+// Context
+export interface ExplorerCell {
+  current: Explorer;
+}
+
+const EXPLORER_KEY = Symbol("explorer");
+
+export function setExplorerContext(cell: ExplorerCell): void {
+  setContext(EXPLORER_KEY, cell);
+}
+
+export function getExplorerContext(): Explorer {
+  const cell = getContext<ExplorerCell>(EXPLORER_KEY);
+  if (!cell)
+    throw new Error("getExplorerContext() called outside of explorer tree");
+  return cell.current;
+}

@@ -13,17 +13,14 @@
   let isSliding = $state(false);
 
   // Derived
-  const allowedStart = $derived(explorer.availableRange.start);
-  const allowedEnd = $derived(explorer.availableRange.end);
+  const allowedStart = $derived(explorer.availableRange?.start);
+  const allowedEnd = $derived(explorer.availableRange?.end);
 
   const fullRangeStart = $derived(
-    Math.min(
-      allowedStart,
-      explorer.days[explorer.days.length - 1]?.dayStart ?? allowedStart,
-    ),
+    Math.min(allowedStart, explorer.days.at(-1)?.dayStart ?? allowedStart),
   );
   const fullRangeEnd = $derived(
-    Math.max(allowedEnd, explorer.days[0]?.dayEnd ?? allowedEnd),
+    Math.max(allowedEnd, explorer.days.at(0)?.dayEnd ?? allowedEnd),
   );
 
   const allowedStartPercent = $derived(

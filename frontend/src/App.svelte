@@ -1,109 +1,137 @@
 <script lang="ts">
- import { onMount } from "svelte";
- import { createExplorer, setExplorerContext } from "./lib/explorer.svelte";
- import { createPlayer } from "./lib/player.svelte";
- import { formatOffset } from "./lib/utils/dateTimeUtils";
- import ExplorerPane from "./lib/components/ExplorerPane.svelte";
+  import { onMount } from "svelte";
+  import { StartStream } from "../wailsjs/go/main/App";
+  import { createExplorer, setExplorerContext } from "./lib/explorer.svelte";
+  import { createPlayer } from "./lib/player.svelte";
+  import { formatOffset } from "./lib/utils/dateTimeUtils";
+  import TopBar from "./lib/components/TopBar.svelte";
+  import ExplorerPane from "./lib/components/ExplorerPane.svelte";
 
- type KeyHandler = (e: KeyboardEvent) => void;
+  export const StreamStatus = {
+    IDLE: "idle",
+    LOADING: "loading",
+    READY: "ready",
+    STARTING: "starting",
+  } as const;
+  type StreamStatus = (typeof StreamStatus)[keyof typeof StreamStatus];
 
- const explorer = createExplorer();
- setExplorerContext(explorer);
+  type KeyHandler = (e: KeyboardEvent) => void;
 
- const player = createPlayer(() => videoEl);
+  let explorerCell = $state({ current: createExplorer() });
+  setExplorerContext(explorerCell);
 
- // State
- let videoEl = $state<HTMLVideoElement | null>(null);
+  let explorer = $derived(explorerCell.current);
 
- // Effects: player-explorer wiring
- $effect(() => {
-     explorer.setPlayheadTime(player.playheadTime?.getTime() ?? null);
- });
+  let player = $state(createPlayer(() => videoEl));
 
- $effect(() => {
-     explorer.setIsRewinding(player.isRewinding);
- });
+  // State
+  let videoEl = $state<HTMLVideoElement | null>(null);
+  let streamStatus = $state<StreamStatus>(StreamStatus.IDLE);
 
- $effect(() => {
-     const info = player.streamInfo;
-     if (info) explorer.setStreamStartTime(info.actualStartTime.getTime());
- });
+  // Effects: player-explorer wiring
+  $effect(() => {
+    explorer.setPlayheadTime(player.playheadTime?.getTime() ?? null);
+  });
 
- // Keyboard shortcuts
- const playKeyMap: Record<string, KeyHandler> = {
-     " ": (e) => {
-         e.preventDefault();
-         player.togglePlayPause();
-     },
-     ArrowLeft: () => player.step(-2),
-     ArrowRight: () => player.step(2),
-     a: () => {
-         if (explorer.playheadTime !== null)
-             explorer.assignMark("A", explorer.playheadTime);
-     },
-     b: () => {
-         if (explorer.playheadTime !== null)
-             explorer.assignMark("B", explorer.playheadTime);
-     },
- };
+  $effect(() => {
+    explorer.setIsRewinding(player.isRewinding);
+  });
 
- function handleKeyDown(e: KeyboardEvent) {
-     const target = e.target as HTMLElement;
-     if (
-         target.tagName === "INPUT" ||
-         target.tagName === "TEXTAREA" ||
-         target.isContentEditable
-     )
-         return;
-     const keyMap = playKeyMap;
-     keyMap[e.key]?.(e);
- }
+  $effect(() => {
+    const info = player.streamInfo;
+    if (!info) return;
+    explorer.setStreamStartTime(info.actualStartTime.getTime());
+  });
 
- // Interval and screenshot
- function onIntervalEnd() {
-     if (explorer.marks.A !== null) {
-         player.seekTo(explorer.marks.A);
-     } else {
-         player.stopInterval();
-     }
- }
+  // Events
+  async function onStreamStart(videoId: string) {
+    streamStatus = StreamStatus.STARTING;
+    try {
+      await StartStream(videoId);
+      explorerCell.current.destroy();
+      explorerCell.current = createExplorer();
+      player.destroy();
+      player = createPlayer(() => videoEl);
+      streamStatus = StreamStatus.LOADING;
+      await player.init();
+      streamStatus = StreamStatus.READY;
+    } catch (err) {
+      console.error(err);
+      streamStatus = StreamStatus.IDLE;
+    }
+  }
 
- function handleScreenshot(ts: number) {
-     const dataUrl = player.captureScreenshot();
-     if (!dataUrl || !player.streamInfo) return;
-     const shifted = new Date(ts + explorer.timezoneOffset * 60 * 1000);
-     const iso = shifted.toISOString().slice(0, 19).replace(/[:-]/g, "");
-     const offset = formatOffset(explorer.timezoneOffset);
-     const a = document.createElement("a");
-     a.href = dataUrl;
-     a.download = `Screenshot_${player.streamInfo.id}_${iso}${offset}.png`;
-     a.click();
- }
+  // Keyboard shortcuts
+  const playKeyMap: Record<string, KeyHandler> = {
+    " ": (e) => {
+      e.preventDefault();
+      player.togglePlayPause();
+    },
+    ArrowLeft: () => player.step(-2),
+    ArrowRight: () => player.step(2),
+    a: () => {
+      if (explorer.playheadTime !== null)
+        explorer.assignMark("A", explorer.playheadTime);
+    },
+    b: () => {
+      if (explorer.playheadTime !== null)
+        explorer.assignMark("B", explorer.playheadTime);
+    },
+  };
 
- // Lifecycle
- onMount(() => {
-     window.addEventListener("keydown", handleKeyDown);
-     videoEl?.addEventListener("interval-end", onIntervalEnd);
-     player.init().catch(console.error);
+  function handleKeyDown(e: KeyboardEvent) {
+    const target = e.target as HTMLElement;
+    if (
+      target.tagName === "INPUT" ||
+      target.tagName === "TEXTAREA" ||
+      target.isContentEditable
+    )
+      return;
+    const keyMap = playKeyMap;
+    keyMap[e.key]?.(e);
+  }
 
-     return () => {
-         window.removeEventListener("keydown", handleKeyDown);
-         videoEl?.removeEventListener("interval-end", onIntervalEnd);
-         player.destroy();
-         explorer.destroy();
-     };
- });
+  // Interval and screenshot
+  function onIntervalEnd() {
+    if (explorer.marks.A !== null) {
+      player.seekTo(explorer.marks.A);
+    } else {
+      player.stopInterval();
+    }
+  }
+
+  function handleScreenshot(ts: number) {
+    const dataUrl = player.captureScreenshot();
+    if (!dataUrl || !player.streamInfo) return;
+    const shifted = new Date(ts + explorer.timezoneOffset * 60 * 1000);
+    const iso = shifted.toISOString().slice(0, 19).replace(/[:-]/g, "");
+    const offset = formatOffset(explorer.timezoneOffset);
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    a.download = `Screenshot_${player.streamInfo.id}_${iso}${offset}.png`;
+    a.click();
+  }
+
+  // Lifecycle
+  onMount(() => {
+    window.addEventListener("keydown", handleKeyDown);
+    videoEl?.addEventListener("interval-end", onIntervalEnd);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      videoEl?.removeEventListener("interval-end", onIntervalEnd);
+      explorerCell.current.destroy();
+      player.destroy();
+    };
+  });
 </script>
 
 <main class="mx-auto flex w-full max-w-4xl min-w-2xl flex-col gap-2 px-6 py-3">
-    <div
-        class="flex min-h-[362px] w-full justify-center overflow-hidden rounded-lg bg-black"
-    >
-      
-    <div
-      data-shaka-player-container
-      class="group relative flex w-full items-center justify-center"
-    >
+  <TopBar {onStreamStart} />
+  <div
+    class="flex min-h-[362px] w-full justify-center overflow-hidden rounded-lg bg-black"
+  >
+    <div class="group relative flex w-full items-center justify-center">
       {#if player.streamInfo}
         <div
           class="absolute top-0 right-0 left-0 z-10 flex flex-col gap-0.5 px-4 py-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -132,35 +160,44 @@
       <video
         bind:this={videoEl}
         class="block h-auto max-h-full w-auto max-w-full"
-        data-shaka-player
         muted
       ></video>
     </div>
   </div>
 
-  {#if player.streamInfo}
+  {#if streamStatus === StreamStatus.STARTING}
+    <p class="mt-8 w-full text-center text-base text-gray-400">
+      Starting playback...
+    </p>
+  {:else if streamStatus === StreamStatus.LOADING}
+    <p class="mt-8 w-full text-center text-base text-gray-400">
+      Loading stream...
+    </p>
+  {:else if streamStatus === StreamStatus.READY}
     <div
       class:opacity-50={explorer.isRewinding}
       class:pointer-events-none={explorer.isRewinding}
     >
-      <ExplorerPane
-        isMpdLoaded={player.isMpdLoaded}
-        isPlayingInterval={player.isPlayingInterval}
-        lastRewindTarget={player.lastRewindTarget}
-        mpdStartTime={player.mpdStartTime}
-        playingTime={player.playheadTime}
-        seekableRange={player.seekableRange}
-        {videoEl}
-        onPlayInterval={(a, b) => player.playInterval(a, b)}
-        onReplay={() => player.replay()}
-        onRewind={(isoTime, pause) => player.rewind(isoTime, pause)}
-        onRewindToLive={() => player.rewindToLive()}
-        onScreenshot={(ts) => handleScreenshot(ts)}
-        onSeekTo={(time, pause) => player.seekTo(time, pause)}
-        onStep={(s) => player.step(s)}
-        onStopInterval={() => player.stopInterval(explorer.marks.A)}
-        onTogglePlayPause={() => player.togglePlayPause()}
-      />
+      {#if explorer.isReady}
+        <ExplorerPane
+          isMpdLoaded={player.isMpdLoaded}
+          isPlayingInterval={player.isPlayingInterval}
+          lastRewindTarget={player.lastRewindTarget}
+          mpdStartTime={player.mpdStartTime}
+          playingTime={player.playheadTime}
+          seekableRange={player.seekableRange}
+          {videoEl}
+          onPlayInterval={(a, b) => player.playInterval(a, b)}
+          onReplay={() => player.replay()}
+          onRewind={(isoTime, pause) => player.rewind(isoTime, pause)}
+          onRewindToLive={() => player.rewindToLive()}
+          onScreenshot={(ts) => handleScreenshot(ts)}
+          onSeekTo={(time, pause) => player.seekTo(time, pause)}
+          onStep={(s) => player.step(s)}
+          onStopInterval={() => player.stopInterval(explorer.marks.A)}
+          onTogglePlayPause={() => player.togglePlayPause()}
+        />
+      {/if}
     </div>
   {/if}
 </main>

@@ -22,6 +22,7 @@ const PLAYER_CONFIG = {
 
 export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   let shakaPlayer: shaka.Player | null = null;
+  let shakaUi: shaka.ui.Overlay | null = null;
   let cachedManifest: { uri: string; data: Uint8Array } | null = null;
   let animFrameId: number;
 
@@ -66,6 +67,11 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
 
   function registerSchemes() {
     shaka.net.NetworkingEngine.registerScheme(
+      "wails",
+      shaka.net.HttpXHRPlugin.parse,
+    );
+
+    shaka.net.NetworkingEngine.registerScheme(
       "live",
       (uri: string, request: shaka.extern.Request) => {
         if (cachedManifest?.uri === uri) {
@@ -88,9 +94,6 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
             if (!json.metadata) throw new Error("Invalid MPD response");
             mpdStartTime = new Date(json.metadata.startActualTime);
             isMpdLoaded = true;
-            if (streamInfo && json.metadata.videoTitle) {
-              streamInfo = { ...streamInfo, title: json.metadata.videoTitle };
-            }
             const data = new TextEncoder().encode(
               rewriteManifestBaseUrl(json.mpd),
             );
@@ -139,12 +142,12 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
 
     await shakaPlayer.attach(videoEl);
 
-    const ui = new shaka.ui.Overlay(
+    shakaUi = new shaka.ui.Overlay(
       shakaPlayer,
       videoEl.parentElement!,
       videoEl,
     );
-    ui.configure({
+    shakaUi.configure({
       controlPanelElements: [
         "play_pause",
         "spacer",
@@ -161,10 +164,13 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     videoEl.addEventListener("timeupdate", onTimeUpdate);
   }
 
-  function destroy() {
+  async function destroy() {
     cancelAnimationFrame(animFrameId);
     getVideoEl()?.removeEventListener("timeupdate", onTimeUpdate);
-    shakaPlayer?.destroy();
+    await shakaPlayer?.unload().catch(() => {});
+    shakaUi?.destroy();
+    await shakaPlayer?.destroy().catch(() => {});
+    shakaPlayer = null;
   }
 
   // Playback controls

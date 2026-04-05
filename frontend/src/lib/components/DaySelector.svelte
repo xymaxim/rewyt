@@ -12,10 +12,8 @@
   let hoverDay = $state<DayEntry | null>(null);
 
   // Derived
-  const minimapStart = $derived(
-    explorer.days[explorer.days.length - 1].dayStart,
-  );
-  const minimapEnd = $derived(explorer.days[0].dayEnd);
+  const minimapStart = $derived(explorer.days.at(-1)?.dayStart ?? 0);
+  const minimapEnd = $derived(explorer.days.at(0)?.dayEnd ?? 0);
   const minimapSpan = $derived(minimapEnd - minimapStart);
 
   const activeRect = $derived.by<{ left: number; width: number } | null>(() => {
