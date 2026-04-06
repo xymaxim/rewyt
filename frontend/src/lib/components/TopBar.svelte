@@ -102,17 +102,22 @@
       {/if}
     </InputGroup>
     {#if focused && currentVideoId}
-      <div class="absolute left-0 top-full z-50 mt-1 flex w-full flex-col rounded-lg border bg-white p-2 shadow-md">
-        {#if streamTitle}
-          <span class="truncate text-sm font-medium text-neutral-800" title={streamTitle}>
-            {streamTitle}
+      <div class="absolute left-0 top-full z-50 mt-1 flex w-full items-center gap-2 rounded-lg border bg-white p-2 shadow-md">
+        <div class="flex min-w-0 flex-1 flex-col">
+          {#if streamTitle}
+            <span class="truncate text-sm font-medium text-neutral-800" title={streamTitle}>
+              {streamTitle}
+            </span>
+          {:else}
+            <Skeleton class="h-4 w-3/4" />
+          {/if}
+          <span class="mt-0.5 truncate text-xs text-neutral-500">
+            {getCanonicalUrl(currentVideoId)}
           </span>
-        {:else}
-          <Skeleton class="h-4 w-3/4" />
-        {/if}
-        <span class="mt-0.5 truncate text-xs text-neutral-500">
-          {getCanonicalUrl(currentVideoId)}
-        </span>
+        </div>
+        <Button variant="ghost" size="icon-sm" onclick={copyCurrentUrl}>
+          <CopyIcon />
+        </Button>
       </div>
     {/if}
   </div>
