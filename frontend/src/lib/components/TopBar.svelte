@@ -1,5 +1,7 @@
 <script lang="ts">
   import { Input } from "$lib/components/ui/input/index.js";
+  import { Button } from "$lib/components/ui/button/index.js";
+  import CopyIcon from "phosphor-svelte/lib/CopyIcon";
 
   interface Props {
     onStreamStart: () => void;
@@ -13,14 +15,8 @@
   let loading = $state(false);
   let error = $state(false);
 
-  const displayValue = $derived(
-    focused
-      ? (inputValue ? (inputValue.startsWith('https://') ? inputValue : `https://${inputValue}`) : '')
-      : inputValue.replace(/^https?:\/\//, '')
-  );
-
- function extractVideoId(input: string): string | null {
-     const trimmed = input.trim();
+  function extractVideoId(input: string): string | null {
+    const trimmed = input.trim();
     const patterns = [
       /(?:youtube\.com\/watch\?[^#]*v=)([a-zA-Z0-9_-]{11})/,
       /(?:youtube\.com\/live\/)([a-zA-Z0-9_-]{11})/,
@@ -34,9 +30,17 @@
     return null;
   }
 
-    function getNormalizedUrl(videoId: string): string {
-        return `youtube.com/live/${videoId}`
-    }
+  let currentVideoId = $state<string | null>(null);
+
+  function getDisplayUrl(videoId: string): string {
+    return `youtube.com/live/${videoId}`;
+  }
+
+  function getCanonicalUrl(videoId: string): string {
+    return `https://www.youtube.com/live/${videoId}`;
+  }
+
+  const displayValue = $derived(focused ? "" : currentVideoId ? getDisplayUrl(currentVideoId) : "");
 
   async function onKeyDown(e: KeyboardEvent) {
     if (e.key !== "Enter") return;
@@ -47,7 +51,8 @@
     }
     error = false;
     loading = true;
-    inputValue = getNormalizedUrl(videoId);
+    currentVideoId = videoId;
+    inputValue = getCanonicalUrl(videoId);
     try {
       onStreamStart(videoId);
     } catch (err) {
@@ -57,28 +62,39 @@
       loading = false;
     }
   }
+
+  function copyCurrentUrl() {
+    if (currentVideoId) navigator.clipboard.writeText(getCanonicalUrl(currentVideoId));
+  }
 </script>
 
 <div class="mb-1 flex items-center justify-center gap-2">
-  <Input
-    bind:ref={inputEl}
-    value={displayValue}
-    type="text"
-    placeholder="Paste YouTube live stream link"
-    disabled={loading}
-    class="h-8 rounded-lg border px-3 text-sm font-medium transition-[width] duration-200 outline-none hover:bg-neutral-300/70
-         {focused ? 'w-full bg-white! shadow-md' : 'w-80 bg-neutral-200'}"
-    aria-invalid={error}
-    onfocus={() => {
-      focused = true;
-      setTimeout(() => inputEl?.select(), 200);
-    }}
-    onblur={() => {
-      focused = false;
-    }}
-    onkeydown={onKeyDown}
-    oninput={(e: Event) => {
-      inputValue = (e.target as HTMLInputElement).value;
-    }}
-  />
+  <div class="relative {focused ? 'w-full' : 'w-80'}">
+    <Input
+      bind:ref={inputEl}
+      value={displayValue}
+      type="text"
+      placeholder="Paste YouTube live stream link"
+      disabled={loading}
+      class="h-8 rounded-lg border px-3 text-sm font-medium outline-none hover:bg-neutral-300/70 w-full
+           {focused ? 'bg-white! shadow-md' : 'bg-neutral-200'}"
+      aria-invalid={error}
+      onfocus={() => { focused = true; }}
+      onblur={() => { focused = false; }}
+      onkeydown={onKeyDown}
+      oninput={(e: Event) => {
+        inputValue = (e.target as HTMLInputElement).value;
+      }}
+    />
+    {#if focused && currentVideoId}
+      <div class="absolute left-0 top-full z-50 mt-1 flex w-full items-center gap-2 rounded-lg border bg-white p-2 shadow-md">
+        <span class="flex-1 truncate text-sm text-neutral-600">
+          {getCanonicalUrl(currentVideoId)}
+        </span>
+        <Button variant="ghost" size="icon-sm" onclick={copyCurrentUrl}>
+          <CopyIcon />
+        </Button>
+      </div>
+    {/if}
+  </div>
 </div>
