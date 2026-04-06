@@ -5,6 +5,7 @@
     InputGroupInput,
   } from "$lib/components/ui/input-group/index.js";
   import { Button } from "$lib/components/ui/button/index.js";
+  import { Skeleton } from "$lib/components/ui/skeleton/index.js";
   import CopyIcon from "phosphor-svelte/lib/CopyIcon";
   import XIcon from "phosphor-svelte/lib/XIcon";
 
@@ -106,8 +107,10 @@
           <span class="truncate text-sm font-medium text-neutral-800" title={streamTitle}>
             {streamTitle}
           </span>
+        {:else}
+          <Skeleton class="h-4 w-3/4" />
         {/if}
-        <span class="truncate text-xs text-neutral-500">
+        <span class="mt-0.5 truncate text-xs text-neutral-500">
           {getCanonicalUrl(currentVideoId)}
         </span>
       </div>
