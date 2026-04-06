@@ -1,7 +1,12 @@
 <script lang="ts">
-  import { Input } from "$lib/components/ui/input/index.js";
+  import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+  } from "$lib/components/ui/input-group/index.js";
   import { Button } from "$lib/components/ui/button/index.js";
   import CopyIcon from "phosphor-svelte/lib/CopyIcon";
+  import XIcon from "phosphor-svelte/lib/XIcon";
 
   interface Props {
     onStreamStart: () => void;
@@ -70,22 +75,30 @@
 
 <div class="mb-1 flex items-center justify-center gap-2">
   <div class="relative {focused ? 'w-full' : 'w-80'}">
-    <Input
-      bind:ref={inputEl}
-      value={displayValue}
-      type="text"
-      placeholder="Paste YouTube live stream link"
-      disabled={loading}
-      class="h-8 rounded-lg border px-3 text-sm font-medium outline-none hover:bg-neutral-300/70 w-full
-           {focused ? 'bg-white! shadow-md' : 'bg-neutral-200'}"
-      aria-invalid={error}
-      onfocus={() => { focused = true; }}
-      onblur={() => { focused = false; }}
-      onkeydown={onKeyDown}
-      oninput={(e: Event) => {
-        inputValue = (e.target as HTMLInputElement).value;
-      }}
-    />
+    <InputGroup class="{focused ? 'bg-white! shadow-md' : 'bg-neutral-200 hover:bg-neutral-300/70'}">
+      <InputGroupInput
+        class="text-sm font-medium"
+        bind:ref={inputEl}
+        value={displayValue}
+        type="text"
+        placeholder="Paste YouTube live stream link"
+        disabled={loading}
+        aria-invalid={error}
+        onfocus={() => { focused = true; }}
+        onblur={() => { focused = false; }}
+        onkeydown={onKeyDown}
+        oninput={(e: Event) => {
+          inputValue = (e.target as HTMLInputElement).value;
+        }}
+      />
+      {#if focused && currentVideoId}
+        <InputGroupAddon align="inline-end">
+          <Button variant="ghost" size="icon-sm" onclick={() => { inputEl?.blur(); focused = false; }}>
+            <XIcon />
+          </Button>
+        </InputGroupAddon>
+      {/if}
+    </InputGroup>
     {#if focused && currentVideoId}
       <div class="absolute left-0 top-full z-50 mt-1 flex w-full items-center gap-2 rounded-lg border bg-white p-2 shadow-md">
         <span class="flex-1 truncate text-sm text-neutral-600">
