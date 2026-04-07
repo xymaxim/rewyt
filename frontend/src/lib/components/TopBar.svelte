@@ -47,7 +47,9 @@
     return `https://www.youtube.com/live/${videoId}`;
   }
 
-  const displayValue = $derived(focused ? "" : currentVideoId ? getDisplayUrl(currentVideoId) : "");
+  const displayValue = $derived(
+    focused ? "" : currentVideoId ? getDisplayUrl(currentVideoId) : "",
+  );
 
   async function onKeyDown(e: KeyboardEvent) {
     if (e.key !== "Enter") return;
@@ -71,13 +73,18 @@
   }
 
   function copyCurrentUrl() {
-    if (currentVideoId) navigator.clipboard.writeText(getCanonicalUrl(currentVideoId));
+    if (currentVideoId)
+      navigator.clipboard.writeText(getCanonicalUrl(currentVideoId));
   }
 </script>
 
 <div class="mb-1 flex items-center justify-center gap-2">
   <div class="relative {focused ? 'w-full' : 'w-80'}">
-    <InputGroup class="{focused ? 'bg-white! shadow-md' : 'bg-neutral-200 hover:bg-neutral-300/70'}">
+    <InputGroup
+      class={focused
+        ? "bg-white! shadow-md"
+        : "bg-neutral-200 hover:bg-neutral-300/70"}
+    >
       <InputGroupInput
         class="text-sm font-medium"
         bind:ref={inputEl}
@@ -86,8 +93,12 @@
         placeholder="Paste YouTube live stream link"
         disabled={loading}
         aria-invalid={error}
-        onfocus={() => { focused = true; }}
-        onblur={() => { focused = false; }}
+        onfocus={() => {
+          focused = true;
+        }}
+        onblur={() => {
+          focused = false;
+        }}
         onkeydown={onKeyDown}
         oninput={(e: Event) => {
           inputValue = (e.target as HTMLInputElement).value;
@@ -95,17 +106,29 @@
       />
       {#if focused && currentVideoId}
         <InputGroupAddon align="inline-end">
-          <Button variant="ghost" size="icon-sm" onclick={() => { inputEl?.blur(); focused = false; }}>
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            onclick={() => {
+              inputEl?.blur();
+              focused = false;
+            }}
+          >
             <XIcon />
           </Button>
         </InputGroupAddon>
       {/if}
     </InputGroup>
     {#if focused && currentVideoId}
-      <div class="absolute left-0 top-full z-50 mt-1 flex w-full items-center gap-2 rounded-lg border bg-white p-2 shadow-md">
+      <div
+        class="absolute top-full left-0 z-50 mt-1 flex w-full items-center gap-2 rounded-lg border bg-white p-2 shadow-md"
+      >
         <div class="flex min-w-0 flex-1 flex-col">
           {#if streamTitle}
-            <span class="truncate text-sm font-medium text-neutral-800" title={streamTitle}>
+            <span
+              class="truncate text-sm font-medium text-neutral-800"
+              title={streamTitle}
+            >
               {streamTitle}
             </span>
           {:else}
