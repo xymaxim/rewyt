@@ -126,13 +126,13 @@
         title="Jump to playhead"
         onclick={jumpToPlayhead}
       >
-        <span class="text-timestamp text-sm font-normal! tabular-nums">
+        <span class="text-timestamp text-sm">
           {formatDateTime(
             playingTime.getTime(),
             explorer.timezoneOffset,
             false,
           )}
-          <span class="text-xs font-medium!"
+          <span class="text-xs"
             >{formatOffset(explorer.timezoneOffset)}</span
           >
         </span>
