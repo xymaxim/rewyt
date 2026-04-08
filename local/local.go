@@ -1,8 +1,8 @@
 package local
 
 import (
-	"encoding/json"
 	"context"
+	"encoding/json"
 	"fmt"
 	"log"
 	"log/slog"
@@ -12,10 +12,12 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/xymaxim/ypb/playback"
 )
 
 const (
-	timescale = 10000
+	timescale       = 10000
 	segmentDuration = 10 // seconds
 	videoTitle      = "Test live stream video created with FFMPEG"
 )
@@ -70,7 +72,9 @@ type mpdResponse struct {
 	MPD      string      `json:"mpd"`
 }
 
-type ServerConfig struct {
+type Config struct {
+	// YouTube video ID.
+	VideoID string
 	// Port to listen on.
 	Port int
 	// Directory with media segments.
@@ -78,77 +82,71 @@ type ServerConfig struct {
 	// Response delay for /mpd requests (in s).
 	MPDDelay int
 	// Stream start (in hours ago).
-	StreamStart int 
+	StreamStart int
 }
 
-type Server struct {
-	Server *http.Server
-	Config ServerConfig
+type Stream struct {
+	server *http.Server
 	cancel context.CancelFunc
+	done   chan struct{}
 }
 
-// func NewServer(cfg ServerConfig) *Server {
-// 	srv := &Server{Config: cfg}
-	
-// 	mux := http.NewServeMux()
-// 	mux.HandleFunc("/info", srv.infoHandler)
-// 	mux.HandleFunc("/mpd/{interval}", srv.mpdHandler)
-// 	mux.HandleFunc("/segments/init.mp4", srv.initSegmentHandler)
-// 	mux.HandleFunc("/segments/{segment}", srv.segmentHandler)
-
-// 	handler := corsMiddleware(loggingMiddleware(mux))
-
-// 	srv.Server = &http.Server{
-// 		Addr:    ":" + strconv.Itoa(srv.Config.Port),
-// 		Handler: handler,
-// 	}
-
-// 	return srv
-// }
-
-func (s *Server) Start(videoID string, cfg ServerConfig) error {
-	if s.cancel != nil {
-		s.cancel()
-	}
-
-	ctx, cancel := context.WithCancel(context.Background())
-	s.cancel = cancel
+func NewStream(ctx context.Context, cfg Config) *Stream {
+	ctx, cancel := context.WithCancel(ctx)
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/info", infoHandler(cfg.StreamStart))
+	mux.HandleFunc("/info", infoHandler(cfg.VideoID, cfg.StreamStart))
 	mux.HandleFunc("/mpd/{interval}", mpdHandler(cfg.MPDDelay))
 	mux.HandleFunc("/segments/init.mp4", initSegmentHandler(cfg.SegmentsDir))
 	mux.HandleFunc("/segments/{segment}", segmentHandler(cfg.SegmentsDir))
 
 	handler := corsMiddleware(loggingMiddleware(mux))
 
-	srv := &http.Server{
-		Addr:    ":" + strconv.Itoa(cfg.Port),
-		Handler: handler,
+	stream := &Stream{
+		server: &http.Server{
+			Addr:    ":" + strconv.Itoa(cfg.Port),
+			Handler: handler,
+		},
+		cancel: cancel,
+		done:   make(chan struct{}),
 	}
 
 	go func() {
 		<-ctx.Done()
-		srv.Shutdown(context.Background())
+		stream.server.Close()
+		close(stream.done)
+		log.Println("stream server stopped")
 	}()
 
-	go func() {
-		slog.Info("stream server starting", "port", cfg.Port, "video", videoID)
-		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Printf("stream server error: %v", err)
-		}
-		log.Printf("stream server stopped")
-	}()
-	
-	return nil
-	
+	return stream
 }
 
-func infoHandler(streamStart int) http.HandlerFunc {
+func (s *Stream) Server() *http.Server {
+	return s.server
+}
+
+func (s *Stream) Playback() playback.Playbacker {
+	return nil
+}
+
+func (s *Stream) Start() error {
+	if err := s.server.ListenAndServe(); err != http.ErrServerClosed {
+		log.Printf("ListenAndServe(): %v", err)
+		return err
+	}
+	return nil
+}
+
+func (s *Stream) Stop() {
+	s.cancel()
+	<-s.done
+}
+
+func infoHandler(videoID string, streamStart int) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		startHoursAgo := time.Duration(streamStart) * time.Hour
 		info := infoResponse{
-			ID:              "abcdefgh123",
+			ID:              videoID,
 			Title:           videoTitle,
 			ChannelID:       "test-channel-id",
 			ChannelTitle:    "Live Stream Watching Club",
@@ -164,7 +162,7 @@ func infoHandler(streamStart int) http.HandlerFunc {
 func mpdHandler(mpdDelay int) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		interval := r.PathValue("interval")
-		
+
 		var t time.Time
 		if interval == "now" {
 			t = time.Now().UTC()
@@ -181,9 +179,9 @@ func mpdHandler(mpdDelay int) http.HandlerFunc {
 		}
 
 		slog.Info("request manifest", "interval", interval)
-		
+
 		startNumber := segmentNumberForTime(t)
-		
+
 		mpd := strings.ReplaceAll(
 			mpdTemplate,
 			"{{currentTime}}",
@@ -191,25 +189,25 @@ func mpdHandler(mpdDelay int) http.HandlerFunc {
 		)
 		mpd = strings.ReplaceAll(
 			mpd,
-		"{{currentTime}}",
+			"{{currentTime}}",
 			time.Now().UTC().Format(time.RFC3339),
 		)
 		mpd = strings.ReplaceAll(
 			mpd,
 			"{{availabilityStartTime}}",
-			time.Now().UTC().Add(-segmentDuration * time.Second).Format(time.RFC3339),
-	)
+			time.Now().UTC().Add(-segmentDuration*time.Second).Format(time.RFC3339),
+		)
 		mpd = strings.ReplaceAll(mpd, "{{timescale}}", strconv.Itoa(timescale))
 		mpd = strings.ReplaceAll(
 			mpd,
 			"{{segmentDuration}}",
-		strconv.Itoa(segmentDuration * timescale),
+			strconv.Itoa(segmentDuration*timescale),
 		)
 		mpd = strings.ReplaceAll(mpd, "{{startNumber}}", strconv.Itoa(startNumber))
 		mpd = strings.ReplaceAll(
 			mpd,
 			"{{presentationTimeOffset}}",
-			strconv.Itoa((startNumber - 1)*segmentDuration*timescale),
+			strconv.Itoa((startNumber-1)*segmentDuration*timescale),
 		)
 
 		slog.Info(
@@ -217,7 +215,7 @@ func mpdHandler(mpdDelay int) http.HandlerFunc {
 			"startNumber", startNumber,
 			"availabilityStartTime", segmentStartTime(t),
 		)
-		
+
 		resp := mpdResponse{
 			Metadata: mpdMetadata{
 				VideoTitle:      videoTitle,
@@ -225,10 +223,10 @@ func mpdHandler(mpdDelay int) http.HandlerFunc {
 				StartTargetTime: t,
 			},
 			MPD: mpd,
-	}
-		
+		}
+
 		time.Sleep(time.Duration(mpdDelay) * time.Second)
-		
+
 		w.Header().Set("Content-Type", "application/json")
 		if err := json.NewEncoder(w).Encode(resp); err != nil {
 			slog.Error("encoding mpd response", "err", err)
