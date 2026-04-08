@@ -8,6 +8,8 @@ import (
 	"github.com/xymaxim/ypb/stream"
 )
 
+const playbackPort = 8080
+
 // App struct
 type App struct {
 	ctx    context.Context
@@ -31,8 +33,7 @@ func (a *App) StartStream(videoID string) error {
 		a.stream.Stop()
 	}
 
-	logNewStream(videoID)
-	s, err := newStream(a.ctx, videoID)
+	s, err := newStream(a.ctx, videoID, playbackPort)
 	if err != nil {
 		return fmt.Errorf("creating stream: %w", err)
 	}

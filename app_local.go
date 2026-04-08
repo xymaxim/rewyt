@@ -11,11 +11,11 @@ import (
 	"ypb-play/local"
 )
 
-func newStream(ctx context.Context, videoID string) (stream.Streamer, error) {
-	log.Printf("running new stream type=local v=%s", videoID)
+func newStream(ctx context.Context, videoID string, port int) (stream.Streamer, error) {
+	log.Printf("running new stream on port %d type=local v=%s", port, videoID)
 	cfg := local.Config{
 		VideoID:     videoID,
-		Port:        8080,
+		Port:        port,
 		SegmentsDir: "./local/dash/segments/",
 		MPDDelay:    0,
 		StreamStart: 200,
