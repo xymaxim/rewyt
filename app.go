@@ -2,11 +2,10 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 
 	"github.com/xymaxim/ypb/stream"
-
-	"ypb-play/local"
 )
 
 // App struct
@@ -27,25 +26,22 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) StartStream(videoID string) error {
-	cfg := local.Config{
-		VideoID:     videoID,
-		Port:        8080,
-		SegmentsDir: "./local/dash/segments/",
-		MPDDelay:    0,
-		StreamStart: 200,
-	}
 	if a.stream != nil {
 		log.Println("stopping current stream")
 		a.stream.Stop()
 	}
 
-	stream := local.NewStream(a.ctx, cfg)
-	a.stream = stream
+	logNewStream(videoID)
+	s, err := newStream(a.ctx, videoID)
+	if err != nil {
+		return fmt.Errorf("creating stream: %w", err)
+	}
+
+	a.stream = s
 
 	go func() {
-		log.Printf("starting stream v=%s addr=%s", videoID, stream.Server().Addr)
-		if err := stream.Start(); err != nil {
-			log.Printf("running stream: %v", err)
+		if err := s.Start(); err != nil {
+			log.Printf("error running stream: %v", err)
 		}
 	}()
 

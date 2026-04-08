@@ -113,7 +113,9 @@ func NewStream(ctx context.Context, cfg Config) *Stream {
 
 	go func() {
 		<-ctx.Done()
-		stream.server.Close()
+		if err := stream.server.Close(); err != nil {
+			log.Println("failed to close stream server")
+		}
 		close(stream.done)
 		log.Println("stream server stopped")
 	}()

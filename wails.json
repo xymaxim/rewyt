@@ -9,5 +9,6 @@
   "author": {
     "name": "Maxim Stolyarchuk",
     "email": "maxim.stolyarchuk@gmail.com"
-  }
+  },
+  "build_tags": "youtube"
 }
