@@ -6,6 +6,7 @@
   import * as Select from "$lib/components/ui/select/index.js";
   import { Switch } from "$lib/components/ui/switch/index.js";
   import ArrowCounterClockwiseIcon from "phosphor-svelte/lib/ArrowCounterClockwiseIcon";
+  import ArrowUpRightIcon from "phosphor-svelte/lib/ArrowUpRightIcon";
   import DotsThreeOutlineIcon from "phosphor-svelte/lib/DotsThreeOutlineIcon";
   import DotsThreeVerticalIcon from "phosphor-svelte/lib/DotsThreeVerticalIcon";
   import GearIcon from "phosphor-svelte/lib/GearIcon";
@@ -46,6 +47,14 @@
   }: Props = $props();
 
   const explorer = getExplorerContext();
+
+  // Derived: check if playhead is outside current view
+  const isPlayheadOutOfView = $derived.by(() => {
+    if (playingTime === null || explorer.viewRange === null) return false;
+    const pt = explorer.playheadTime;
+    if (pt === null) return false;
+    return pt < explorer.viewRange.start || pt > explorer.viewRange.end;
+  });
 
   // State
   let timezoneDialogOpen = $state(false);
@@ -126,15 +135,20 @@
         title="Jump to playhead"
         onclick={jumpToPlayhead}
       >
-        <span class="text-timestamp text-lg font-bold! text-foreground!">
+        <span class="relative inline-block text-timestamp text-lg font-bold! {isPlayheadOutOfView ? 'text-gray-300!' : 'text-foreground!'}">
           {formatDateTime(
             playingTime.getTime(),
             explorer.timezoneOffset,
             false,
           )}
-          <span class="text-xs text-muted-foreground"
+          <span class="text-xs"
             >{formatOffset(explorer.timezoneOffset)}</span
-          >
+                                                      >
+          {#if isPlayheadOutOfView}
+            <span class="absolute top-0 h-7 w-7 p-0.5 mx-auto left-0 right-0 items-center rounded-full bg-[var(--ypb-play-200)]">
+              <ArrowUpRightIcon size={14} weight="bold" class="text-foreground h-full w-full" />
+</span>
+          {/if}
         </span>
       </div>
     {:else}
@@ -192,7 +206,7 @@
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
           <Button {...props} title="More" variant="ghost" size="icon">
-            <DotsThreeVerticalIcon />
+            <DotsThreeVerticalIcon weight="bold"/>
           </Button>
         {/snippet}
       </DropdownMenu.Trigger>
