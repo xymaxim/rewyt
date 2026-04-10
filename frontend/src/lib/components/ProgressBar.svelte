@@ -85,14 +85,15 @@
       onpointerdown={() => (isSliding = true)}
       onpointerup={() => (isSliding = false)}
       class="w-full cursor-pointer {thumbClass}
-            [&_[data-slot=slider-range]]:bg-transparent
-            [&_[data-slot=slider-track]]:bg-black/15
-            [&_[role=slider]]:z-10
-            [&_[role=slider]]:h-4
-            [&_[role=slider]]:w-4
-            [&_[role=slider]]:cursor-ew-resize
-            [&_[role=slider]]:border-[var(--ypb-selected)]
-            [&_[role=slider]]:bg-[var(--ypb-selected)]"
+          [&_[data-slot=slider-range]]:bg-transparent
+          [&_[data-slot=slider-track]]:bg-black/15
+          [&_[role=slider]]:z-10
+          [&_[role=slider]]:h-4
+          [&_[role=slider]]:w-5
+          [&_[role=slider]]:cursor-ew-resize
+          [&_[role=slider]]:border-4
+          [&_[role=slider]]:border-[#06b6d4]
+          [&_[role=slider]]:bg-[var(--ypb-selected-light)]"
     />
   </div>
 </div>
