@@ -125,7 +125,7 @@
         onclick={jumpToPlayhead}
       >
         <span
-          class="text-timestamp relative inline-block text-lg font-bold! {isPlayheadOutOfView
+          class="text-timestamp relative inline-block text-lg font-semibold! {isPlayheadOutOfView
             ? 'text-gray-300!'
             : 'text-foreground!'}"
         >
