@@ -5,14 +5,16 @@
   import { Label } from "$lib/components/ui/label/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
   import { Switch } from "$lib/components/ui/switch/index.js";
-  import ArrowCounterClockwiseIcon from "phosphor-svelte/lib/ArrowCounterClockwiseIcon";
-  import ArrowUpRightIcon from "phosphor-svelte/lib/ArrowUpRightIcon";
-  import DotsThreeOutlineIcon from "phosphor-svelte/lib/DotsThreeOutlineIcon";
-  import DotsThreeVerticalIcon from "phosphor-svelte/lib/DotsThreeVerticalIcon";
-  import GearIcon from "phosphor-svelte/lib/GearIcon";
-  import PauseIcon from "phosphor-svelte/lib/PauseIcon";
-  import PlayIcon from "phosphor-svelte/lib/PlayIcon";
-  import BroadcastIcon from "phosphor-svelte/lib/BroadcastIcon";
+  import {
+    ArrowUpRight,
+    Radio,
+    Circle,
+    EllipsisVertical,
+    Pause,
+    Play,
+    RotateCcw,
+    Settings,
+  } from "lucide-svelte";
   import { getExplorerContext } from "../explorer.svelte";
   import { clampViewRange } from "../utils/timelineUtils";
   import {
@@ -104,10 +106,12 @@
   <div class="flex flex-row justify-center">
     {#if explorer.isRewinding && explorer.selectedTime}
       <div
-        class="mr-6 flex h-9 items-center justify-center rounded-full px-2.5 text-foreground"
+        class="mr-6 flex h-9 items-center justify-center gap-0.5 rounded-full px-2.5 text-foreground"
         style="background: linear-gradient(to right, oklch(0.8194 0.1242 193.06) 0%, var(--ypb-selected-700) 100%)"
       >
-        <DotsThreeOutlineIcon class="size-6" />
+        <Circle size={6} strokeWidth={5} fill="none" />
+        <Circle size={6} strokeWidth={5} fill="none" />
+        <Circle size={6} strokeWidth={5} fill="none" />
       </div>
     {/if}
   </div>
@@ -135,11 +139,7 @@
             <span
               class="absolute top-0 right-0 left-0 mx-auto h-7 w-7 items-center rounded-full bg-[var(--ypb-play-200)] p-0.5 ring-2 ring-[var(--background)]"
             >
-              <ArrowUpRightIcon
-                size={14}
-                weight="bold"
-                class="h-full w-full text-foreground"
-              />
+              <ArrowUpRight class="h-full w-full text-foreground" />
             </span>
           {/if}
         </span>
@@ -156,13 +156,12 @@
         class="p-0! {isPlaying ? '!bg-[var(--ypb-play-light)]' : ''}"
         onclick={onTogglePlayPause}
       >
-        {#if isPlaying}<PauseIcon
-            weight="fill"
+        {#if isPlaying}<Pause class="size-4.5" />{:else}<Play
             class="size-4.5"
-          />{:else}<PlayIcon weight="fill" class="size-4.5" />{/if}
+          />{/if}
       </Button>
       <Button title="Repeat" variant="ghost" size="icon" onclick={onReplay}>
-        <ArrowCounterClockwiseIcon weight="bold" class="size-4.5" />
+        <RotateCcw class="size-4.5" />
       </Button>
     </div>
 
@@ -193,7 +192,7 @@
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
           <Button {...props} title="More" variant="ghost" size="icon">
-            <DotsThreeVerticalIcon weight="bold" />
+            <EllipsisVertical />
           </Button>
         {/snippet}
       </DropdownMenu.Trigger>
@@ -214,14 +213,14 @@
       title="Go to live"
       variant="ghost"
       class="hover:bg-transparent hover:text-[var(--ypb-play)]"
-      onclick={onRewindToLive}><BroadcastIcon /></Button
+      onclick={onRewindToLive}><Radio /></Button
     >
 
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
           <Button {...props} title="Settings" variant="ghost" size="lg">
-            <GearIcon />
+            <Settings />
           </Button>
         {/snippet}
       </DropdownMenu.Trigger>

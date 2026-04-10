@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as Tabs from "$lib/components/ui/tabs/index.js";
-  import RewindIcon from "phosphor-svelte/lib/RewindIcon";
+  import { Rewind } from "lucide-svelte";
   import { getExplorerContext } from "../explorer.svelte";
   import SelectedPanel from "./SelectedPanel.svelte";
   import IntervalPanel from "./IntervalPanel.svelte";
@@ -46,7 +46,7 @@
       class="z-10 flex h-auto w-[80px] flex-row gap-1 bg-[var(--background)]"
     >
       <Tabs.Trigger value="selected" class="z-20">
-        <RewindIcon weight="bold" class="h-auto! w-auto!" size={20} />
+        <Rewind class="size-5" />
       </Tabs.Trigger>
       <Tabs.Trigger
         value="interval"

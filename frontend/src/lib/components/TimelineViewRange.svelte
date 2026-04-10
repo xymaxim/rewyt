@@ -1,8 +1,7 @@
 <script lang="ts">
   import * as ButtonGroup from "$lib/components/ui/button-group/index.js";
   import { Button } from "$lib/components/ui/button/index.js";
-  import MinusIcon from "phosphor-svelte/lib/MinusIcon";
-  import PlusIcon from "phosphor-svelte/lib/PlusIcon";
+  import { Minus, Plus } from "lucide-svelte";
   import { getExplorerContext } from "../explorer.svelte";
   import { ZOOM_LEVELS, type ZoomLevelKey } from "../types";
   import { MS_PER_HOUR } from "../utils/dateUtils";
@@ -218,7 +217,7 @@
           onclick={zoomOut}
           disabled={zoomIdx >= zoomKeys.length - 1}
         >
-          <MinusIcon />
+          <Minus/>
         </Button>
         <Button
           variant="ghost"
@@ -227,7 +226,7 @@
           onclick={zoomIn}
           disabled={zoomIdx <= 0}
         >
-          <PlusIcon />
+          <Plus />
         </Button>
       </ButtonGroup.Root>
     </div>

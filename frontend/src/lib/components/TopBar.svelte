@@ -6,8 +6,7 @@
   } from "$lib/components/ui/input-group/index.js";
   import { Button } from "$lib/components/ui/button/index.js";
   import { Skeleton } from "$lib/components/ui/skeleton/index.js";
-  import CopySimpleIcon from "phosphor-svelte/lib/CopySimpleIcon";
-  import XIcon from "phosphor-svelte/lib/XIcon";
+  import { Copy, X } from "lucide-svelte";
 
   interface Props {
     onStreamStart: () => void;
@@ -117,7 +116,7 @@
               focused = false;
             }}
           >
-            <XIcon />
+            <X />
           </Button>
         </InputGroupAddon>
       {/if}
@@ -142,7 +141,7 @@
           </span>
         </div>
         <Button variant="ghost" size="icon-sm" onclick={copyCurrentUrl}>
-          <CopySimpleIcon />
+          <Copy />
         </Button>
       </div>
     {/if}

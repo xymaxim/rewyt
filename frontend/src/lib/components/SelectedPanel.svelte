@@ -2,9 +2,7 @@
   import { Button } from "$lib/components/ui/button/index.js";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
-  import ArrowArcLeftIcon from "phosphor-svelte/lib/ArrowArcLeftIcon";
-  import ArrowArcRightIcon from "phosphor-svelte/lib/ArrowArcRightIcon";
-  import DotsThreeVerticalIcon from "phosphor-svelte/lib/DotsThreeVerticalIcon";
+  import { Undo, Redo, EllipsisVertical } from "lucide-svelte";
   import { getExplorerContext } from "../explorer.svelte";
   import { clampViewRange } from "../utils/timelineUtils";
   import { formatDateTime, formatISOString } from "../utils/dateTimeUtils";
@@ -93,7 +91,7 @@
         size="icon-sm"
         onclick={() => stepTime(-1)}
       >
-        <ArrowArcLeftIcon />
+        <Undo />
       </Button>
       <Button
         title="Jump forward"
@@ -101,7 +99,7 @@
         size="icon-sm"
         onclick={() => stepTime(1)}
       >
-        <ArrowArcRightIcon />
+        <Redo />
       </Button>
       <Select.Root type="single" bind:value={stepSeconds}>
         <Select.Trigger class="h-8! text-xs">
@@ -143,7 +141,7 @@
           class="selection-toolbar__item--button-narrow"
           style="--item-bg: var(--ypb-selected-light)"
         >
-          <DotsThreeVerticalIcon />
+          <EllipsisVertical />
         </Button>
       {/snippet}
     </DropdownMenu.Trigger>

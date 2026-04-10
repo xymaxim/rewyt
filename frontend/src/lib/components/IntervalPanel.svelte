@@ -1,10 +1,7 @@
 <script lang="ts">
   import { Button } from "$lib/components/ui/button/index.js";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
-  import DotsThreeVerticalIcon from "phosphor-svelte/lib/DotsThreeVerticalIcon";
-  import RepeatIcon from "phosphor-svelte/lib/RepeatIcon";
-  import StopIcon from "phosphor-svelte/lib/StopIcon";
-  import XIcon from "phosphor-svelte/lib/XIcon";
+  import { EllipsisVertical, Repeat, Square, X } from "lucide-svelte";
   import { getExplorerContext } from "../explorer.svelte";
   import { clampViewRange } from "../utils/timelineUtils";
   import {
@@ -120,7 +117,7 @@
     size="icon-sm"
     onclick={onClear}
   >
-    <XIcon />
+    <X />
   </Button>
 </div>
 
@@ -133,7 +130,7 @@
     disabled={markA === null || markB === null}
     onclick={toggleInterval}
   >
-    {#if isPlayingInterval}<StopIcon />{:else}<RepeatIcon />{/if}
+    {#if isPlayingInterval}<Square />{:else}<Repeat />{/if}
   </Button>
 
   <DropdownMenu.Root>
@@ -148,7 +145,7 @@
           class="selection-toolbar__item--button-narrow"
           style="--item-bg: var(--ypb-interval-light)"
         >
-          <DotsThreeVerticalIcon />
+          <EllipsisVertical />
         </Button>
       {/snippet}
     </DropdownMenu.Trigger>

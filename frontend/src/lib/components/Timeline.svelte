@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import ArrowArcLeftIcon from "phosphor-svelte/lib/ArrowArcLeftIcon";
+  import { Undo } from "lucide-svelte";
   import { getExplorerContext } from "../explorer.svelte";
   import { MS_PER_HOUR } from "../utils/dateUtils";
   import { useElementSize } from "../utils/domUtils.svelte";
@@ -325,7 +325,7 @@
             onmouseleave={() => (isHoveringButton = false)}
             title="Rewind to selected time"
           >
-            <ArrowArcLeftIcon size={18} weight="bold" />
+            <Undo class="size-4.5" />
           </button>
         {/if}
 
