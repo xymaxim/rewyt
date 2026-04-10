@@ -170,13 +170,15 @@
   function onClick(e: MouseEvent) {
     if (!timelineEl || range === null || showScrubBar) return;
     const spanMs = range.end - range.start;
-    const ts = snapTime(
-      pixelToTime(
-        e.clientX - timelineEl.getBoundingClientRect().left,
-        range,
-        bar.width,
+    const ts = Math.round(
+      snapTime(
+        pixelToTime(
+          e.clientX - timelineEl.getBoundingClientRect().left,
+          range,
+          bar.width,
+        ),
+        spanMs,
       ),
-      spanMs,
     );
     if (!isAvailable(ts)) return;
     explorer.setSelectedTime(ts);
