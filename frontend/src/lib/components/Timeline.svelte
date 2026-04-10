@@ -344,7 +344,7 @@
 
       <div
         bind:this={hoverLabelEl}
-        class="pointer-events-none absolute z-100 rounded-md bg-[var(--ypb-selected-light)] px-1.5 text-sm font-medium tabular-nums"
+        class="pointer-events-none absolute z-100 rounded-md bg-[var(--ypb-selected-light)] px-1.5 text-sm font-semibold tabular-nums"
         style="display: none; transform: translate(-50%, -50%); margin-top: -8px;"
       ></div>
     </div>
