@@ -212,7 +212,7 @@
 
   <div
     bind:this={timelineEl}
-    class="group relative h-[60px] w-full rounded-md transition-[filter]"
+    class="group cursor-timeline relative h-[60px] w-full rounded-md transition-[filter]"
     style="background: {stripeGradient} {stripeOffsetPx}px 0 / {stripeWidthPx}px 100%;"
     class:blur-sm={showScrubBar}
     class:pointer-events-none={showScrubBar}
@@ -293,18 +293,16 @@
         style="left: 0; background: var(--ypb-play); will-change: transform;"
       ></div>
       {#if hoverPx !== null && !isHoveringButton}
-        <TimelineNeedle
-          px={hoverPx}
-          color="var(--ypb-selected)"
-          lineStyle="dotted"
-          style="filter: none; z-index: 100;"
-          showHead={false}
-        />
-        <span
-          class="absolute rounded-md bg-[var(--ypb-selected-light)] px-1.5 py-0.25! text-sm font-medium tabular-nums"
-          style="left: {hoverPx}px; bottom: 100%; transform: translateX(-50%); margin-bottom: -11px; z-index: 100"
-          >{hoverTime}</span
+        <div
+          class="pointer-events-none absolute z-[100]"
+          style="left: {hoverPx}px; bottom: 100%; transform: translateX(-50%); margin-bottom: -11px;"
         >
+          <span
+            class="rounded-md bg-[var(--ypb-selected-light)] px-1.5 py-0.5 text-sm font-medium tabular-nums"
+          >
+            {hoverTime}
+          </span>
+        </div>
       {/if}
     </div>
 
@@ -334,6 +332,12 @@
 
 <style>
   @reference "tailwindcss";
+  .cursor-timeline {
+    cursor:
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='oklch(0.89 0.1 156)' stroke='%2306b6d4' stroke-width='4'/></svg>")
+        12 12,
+      auto;
+  }
   .unavailable-back {
     @apply cursor-not-allowed rounded-md backdrop-blur-md backdrop-grayscale;
     background: --alpha(var(--background) / 70%);
