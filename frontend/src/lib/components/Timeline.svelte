@@ -32,6 +32,7 @@
   let timelineEl = $state<HTMLDivElement | null>(null);
   let playheadEl = $state<HTMLDivElement | null>(null);
   let hoverPx = $state<number | null>(null);
+  let hoverPy = $state<number | null>(null);
   let isHovering = $state(false);
   let shiftHeld = $state(false);
   let isHoveringButton = $state(false);
@@ -140,10 +141,13 @@
 
   // Event handlers
   function onMouseMove(e: MouseEvent) {
-    const px = e.clientX - timelineEl.getBoundingClientRect().left;
+    const rect = timelineEl.getBoundingClientRect();
+    const px = e.clientX - rect.left;
+    const py = e.clientY - rect.top;
     const ts = range ? pixelToTime(px, range, bar.width) : null;
     const avail = ts && isAvailable(ts);
     hoverPx = avail ? px : null;
+    hoverPy = avail ? py : null;
   }
 
   function onMouseEnter() {
@@ -154,6 +158,7 @@
 
   function onMouseLeave(e: MouseEvent) {
     hoverPx = null;
+    hoverPy = null;
     isHovering = false;
     shiftHeld = false;
     window.removeEventListener("keydown", onKeyDown);
@@ -185,6 +190,7 @@
     if (!e.ctrlKey)
       onRewind(new Date(ts).toISOString(), explorer.pauseAfterRewind);
     hoverPx = null;
+    hoverPy = null;
   }
 </script>
 
@@ -217,7 +223,10 @@
     class:blur-sm={showScrubBar}
     class:pointer-events-none={showScrubBar}
     onmousemove={onMouseMove}
-    onmouseleave={() => (hoverPx = null)}
+    onmouseleave={() => {
+      hoverPx = null;
+      hoverPy = null;
+    }}
     onclick={onClick}
   >
     {#if seekableLeft !== null && seekableRight !== null}
@@ -294,8 +303,8 @@
       ></div>
       {#if hoverPx !== null && !isHoveringButton}
         <div
-          class="pointer-events-none absolute z-[100]"
-          style="left: {hoverPx}px; bottom: 100%; transform: translateX(-50%); margin-bottom: -11px;"
+          class="pointer-events-none absolute z-100"
+          style="left: {hoverPx}px; top: {hoverPy}px; transform: translate(-50%, -50%); margin-top: -8px;"
         >
           <span
             class="rounded-md bg-[var(--ypb-selected-light)] px-1.5 py-0.5 text-sm font-medium tabular-nums"
