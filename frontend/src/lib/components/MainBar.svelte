@@ -120,12 +120,12 @@
   <div class="play-toolbar">
     {#if playingTime !== null}
       <div
-        class="flex cursor-pointer items-center gap-1.5"
+        class="flex cursor-pointer items-center"
         title="Jump to playhead"
         onclick={jumpToPlayhead}
       >
         <span
-          class="text-timestamp relative inline-block text-lg font-semibold! {isPlayheadOutOfView
+          class="w-48 text-timestamp relative inline-block text-lg font-semibold! {isPlayheadOutOfView
             ? 'text-gray-300!'
             : 'text-foreground!'}"
         >
