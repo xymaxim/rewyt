@@ -34,6 +34,7 @@
   let playheadEl = $state<HTMLDivElement | null>(null);
   let isHovering = $state(false);
   let isHoveringButton = $state(false);
+  let ctrlHeld = $state(false);
   let shiftHeld = $state(false);
 
   // Hover tracking
@@ -194,16 +195,19 @@
     hoverPy = null;
     isHovering = false;
     shiftHeld = false;
+    ctrlHeld = false;
     stopHoverTracking();
     window.removeEventListener("keydown", onKeyDown);
     window.removeEventListener("keyup", onKeyUp);
   }
 
   function onKeyDown(e: KeyboardEvent) {
-    if (e.key === "Shift") shiftHeld = true;
+    shiftHeld = e.shiftKey;
+    ctrlHeld = e.ctrlKey;
   }
   function onKeyUp(e: KeyboardEvent) {
-    if (e.key === "Shift") shiftHeld = false;
+    shiftHeld = e.shiftKey;
+    ctrlHeld = e.ctrlKey;
   }
 
   function onClick(e: MouseEvent) {
@@ -258,7 +262,9 @@
 
   <div
     bind:this={timelineEl}
-    class="group cursor-rewind relative h-[60px] w-full rounded-md transition-[filter]"
+    class="group relative h-[60px] w-full rounded-md transition-[filter]"
+    class:cursor-rewind={!ctrlHeld && isHovering}
+    class:cursor-rewind-ctrl={ctrlHeld && isHovering}
     style="background: {stripeGradient} {stripeOffsetPx}px 0 / {stripeWidthPx}px 100%;"
     class:blur-sm={showScrubBar}
     class:pointer-events-none={showScrubBar}
@@ -377,7 +383,13 @@
   @reference "tailwindcss";
   .cursor-rewind {
     cursor:
-      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='8' fill='oklch(0.89 0.1 156)' stroke='%2306b6d4' stroke-width='4'/></svg>")
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='10' fill='%2306b6d4'/><circle cx='12' cy='12' r='6' fill='oklch(0.89 0.1 156)'/></svg>")
+        12 12,
+      auto;
+  }
+  .cursor-rewind-ctrl {
+    cursor:
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='10' fill='%2306b6d4'/><circle cx='12' cy='12' r='3' fill='oklch(0.89 0.1 156)'/></svg>")
         12 12,
       auto;
   }
