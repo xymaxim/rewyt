@@ -126,7 +126,7 @@
   // Hover tracking
   function tick() {
     if (hoverLabelEl) {
-      if (hoverPx !== null && hoverPy !== null && !isHoveringButton) {
+      if (hoverPx !== null && hoverPy !== null && !isHoveringButton && !shiftHeld) {
         hoverLabelEl.style.display = "block";
         hoverLabelEl.style.left = `${hoverPx}px`;
         hoverLabelEl.style.top = `${hoverPy}px`;
@@ -202,12 +202,12 @@
   }
 
   function onKeyDown(e: KeyboardEvent) {
-    shiftHeld = e.shiftKey;
-    ctrlHeld = e.ctrlKey;
+    if (e.key === "Shift") shiftHeld = true;
+    if (e.key === "Control") ctrlHeld = true;
   }
   function onKeyUp(e: KeyboardEvent) {
-    shiftHeld = e.shiftKey;
-    ctrlHeld = e.ctrlKey;
+    if (e.key === "Shift") shiftHeld = false;
+    if (e.key === "Control") ctrlHeld = false;
   }
 
   function onClick(e: MouseEvent) {
