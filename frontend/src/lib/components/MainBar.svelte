@@ -7,11 +7,11 @@
   import { Switch } from "$lib/components/ui/switch/index.js";
   import {
     ArrowUpRight,
-    Radio,
+    Camera,
     Circle,
-    EllipsisVertical,
     Pause,
     Play,
+    Radio,
     RotateCcw,
     Settings,
   } from "lucide-svelte";
@@ -163,6 +163,13 @@
       <Button title="Repeat" variant="ghost" size="icon" onclick={onReplay}>
         <RotateCcw class="size-4.5" />
       </Button>
+      <Button
+        title="Take screenshot"
+        variant="ghost"
+        size="icon"
+        onclick={() => onScreenshot(explorer.playheadTime)}>
+        <Camera class="size-4.5" />
+      </Button>
     </div>
 
     <div class="play-toolbar__group">
@@ -188,23 +195,6 @@
       >
     </div>
 
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        {#snippet child({ props })}
-          <Button {...props} title="More" variant="ghost" size="icon">
-            <EllipsisVertical />
-          </Button>
-        {/snippet}
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content side="top">
-        <DropdownMenu.Item
-          class="flex cursor-pointer items-center gap-2"
-          onclick={() => onScreenshot(explorer.playheadTime)}
-        >
-          Take screenshot
-        </DropdownMenu.Item>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
   </div>
 
   <!-- Right -->
