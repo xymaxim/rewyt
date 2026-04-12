@@ -22,6 +22,7 @@
     formatDateTime,
     formatOffset,
   } from "../utils/dateTimeUtils";
+  import ActionButton from "./ActionButton.svelte";
 
   interface Props {
     isPlaying: boolean;
@@ -163,14 +164,15 @@
       <Button title="Repeat" variant="ghost" size="icon" onclick={onReplay}>
         <RotateCcw class="size-4.5" />
       </Button>
-      <Button
+      <ActionButton
         title="Take screenshot"
+        action={() => onScreenshot(explorer.playheadTime)}
+        notification={{ message: "Screenshot saved" }}
         variant="ghost"
         size="icon"
-        onclick={() => onScreenshot(explorer.playheadTime)}
       >
         <Camera class="size-4.5" />
-      </Button>
+      </ActionButton>
     </div>
 
     <div class="play-toolbar__group">

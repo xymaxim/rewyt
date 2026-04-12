@@ -114,9 +114,11 @@
     }, durationMs);
   }
 
-  function handleScreenshot(ts: number) {
+  async function handleScreenshot(ts: number) {
     const dataUrl = player.captureScreenshot();
-    if (!dataUrl || !player.streamInfo) return;
+    if (!dataUrl || !player.streamInfo) {
+      throw new Error("Unable to capture screenshot");
+    }
     const shifted = new Date(ts + explorer.timezoneOffset * 60 * 1000);
     const iso = shifted.toISOString().slice(0, 19).replace(/[:-]/g, "");
     const offset = formatOffset(explorer.timezoneOffset);
@@ -125,7 +127,6 @@
     a.href = dataUrl;
     a.download = filename;
     a.click();
-    toast("Screenshot saved");
   }
 
   // Lifecycle
