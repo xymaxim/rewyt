@@ -202,7 +202,7 @@
     <div class="mt-8 flex w-full items-center justify-center gap-10 text-base">
       <p class="text-muted-foreground animate-pulse">Starting playback...</p>
       <a
-          class="cursor-pointer font-medium text-black transition-colors hover:text-muted-foreground"
+          class="cursor-pointer font-semibold text-black text-sm transition-colors hover:text-muted-foreground"
           onclick={onCancelStreamStart}
       >
         Cancel
