@@ -1,6 +1,7 @@
 <script lang="ts">
   import { getExplorerContext } from "../explorer.svelte";
   import { MS_PER_HOUR } from "../utils/dateUtils";
+  import { clampViewRange } from "../utils/timelineUtils";
   import MinimapOverlay from "./MinimapOverlay.svelte";
   import type { DayEntry } from "../types";
 
@@ -113,24 +114,35 @@
 
   function onClick(e: MouseEvent) {
     if (!barEl) return;
+
     const day = dayAtPixel(e.clientX - barEl.getBoundingClientRect().left);
     if (!day) return;
+
     const spanMs = explorer.zoomLevel;
     const { start, end } = dayWindowTs(day);
     const center = (start + end) / 2;
 
-    let newStart = center - spanMs / 2;
-    let newEnd = newStart + spanMs;
-    if (newStart < start) {
-      newStart = start;
-      newEnd = newStart + spanMs;
-    }
-    if (newEnd > end) {
-      newEnd = end;
-      newStart = newEnd - spanMs;
+    let targetCenter = center;
+    const currentVr = explorer.viewRange;
+    if (currentVr !== null) {
+      const currentCenter = (currentVr.start + currentVr.end) / 2;
+      const currentDay = explorer.days.find(
+        (d) => currentCenter >= d.dayStart && currentCenter < d.dayEnd,
+      );
+      if (currentDay) {
+        const timeOfDayOffset = currentCenter - currentDay.dayStart;
+        targetCenter = start + timeOfDayOffset;
+      }
     }
 
-    explorer.setViewRange({ start: newStart, end: newEnd });
+    explorer.setViewRange(
+      clampViewRange(
+        targetCenter,
+        spanMs,
+        explorer.days,
+        explorer.centeredOnMidnight,
+      ),
+    );
   }
 </script>
 
