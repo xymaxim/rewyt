@@ -16,7 +16,6 @@ const playbackPort = 8080
 type App struct {
 	ctx         context.Context
 	stream      stream.Streamer
-	startCtx    context.Context
 	startCancel context.CancelFunc
 }
 
@@ -39,7 +38,6 @@ func (a *App) StartStream(videoID string) error {
 	}
 
 	startCtx, cancel := context.WithCancel(a.ctx)
-	a.startCtx = startCtx
 	a.startCancel = cancel
 
 	s, err := newStream(startCtx, videoID, playbackPort)
