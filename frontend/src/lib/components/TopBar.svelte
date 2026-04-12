@@ -11,15 +11,25 @@
   interface Props {
     onStreamStart: () => void;
     streamTitle: string | null;
+    streamStatus: string;
   }
 
-  let { onStreamStart, streamTitle }: Props = $props();
+  let { onStreamStart, streamTitle, streamStatus }: Props = $props();
 
   let inputEl = $state<HTMLInputElement | null>(null);
   let inputValue = $state("");
   let focused = $state(false);
   let loading = $state(false);
   let error = $state(false);
+
+  $effect(() => {
+    if (streamStatus === "idle") {
+      currentVideoId = null;
+      inputValue = "";
+      loading = false;
+      error = false;
+    }
+  });
 
   function extractVideoId(input: string): string | null {
     const trimmed = input.trim();
@@ -92,7 +102,7 @@
         value={displayValue}
         type="text"
         placeholder="Paste YouTube live stream link"
-        disabled={loading}
+        disabled={loading || streamStatus === "starting"}
         aria-invalid={error}
         onfocus={() => {
           focused = true;

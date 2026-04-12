@@ -94,8 +94,13 @@ type Stream struct {
 	done   chan struct{}
 }
 
-func NewStream(ctx context.Context, cfg Config) *Stream {
-	time.Sleep(time.Duration(cfg.StartDelay) * time.Second)
+func NewStream(ctx context.Context, cfg Config) (*Stream, error) {
+	select {
+	case <-time.After(time.Duration(cfg.StartDelay) * time.Second):
+	case <-ctx.Done():
+		log.Println("stream start cancelled")
+		return nil, fmt.Errorf("canceling stream start: %w", ctx.Err())
+	}
 
 	ctx, cancel := context.WithCancel(ctx)
 
@@ -126,7 +131,7 @@ func NewStream(ctx context.Context, cfg Config) *Stream {
 		log.Println("stream server stopped")
 	}()
 
-	return stream
+	return stream, nil
 }
 
 func (s *Stream) Server() *http.Server {

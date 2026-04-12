@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { StartStream } from "../wailsjs/go/main/App";
+  import { CancelStreamStart, StartStream } from "../wailsjs/go/main/App";
   import { createExplorer, setExplorerContext } from "./lib/explorer.svelte";
   import { createPlayer } from "./lib/player.svelte";
   import { formatOffset } from "./lib/utils/dateTimeUtils";
@@ -47,19 +47,30 @@
   // Events
   async function onStreamStart(videoId: string) {
     streamStatus = StreamStatus.STARTING;
+    explorerCell.current.destroy();
+    explorerCell.current = createExplorer();
+    await player.destroy();
+    player = createPlayer(() => videoEl);
     try {
       await StartStream(videoId);
-      explorerCell.current.destroy();
-      explorerCell.current = createExplorer();
-      await player.destroy();
-      player = createPlayer(() => videoEl);
       streamStatus = StreamStatus.LOADING;
       await player.init();
       streamStatus = StreamStatus.READY;
     } catch (err) {
       console.error(err);
+      if (streamStatus === StreamStatus.STARTING) {
+        streamStatus = StreamStatus.IDLE;
+        return;
+      }
       streamStatus = StreamStatus.IDLE;
     }
+  }
+
+  function onCancelStreamStart() {
+    CancelStreamStart();
+    player.destroy();
+    player = createPlayer(() => videoEl);
+    streamStatus = StreamStatus.IDLE;
   }
 
   // Keyboard shortcuts
@@ -149,7 +160,7 @@
   {#if toastMessage}
     <Toast message={toastMessage} />
   {/if}
-  <TopBar {onStreamStart} streamTitle={player.streamInfo?.title ?? null} />
+  <TopBar {onStreamStart} streamTitle={player.streamInfo?.title ?? null} streamStatus={streamStatus} />
   <div
     class="flex min-h-[362px] w-full justify-center overflow-hidden rounded-lg bg-black"
   >
@@ -188,11 +199,17 @@
   </div>
 
   {#if streamStatus === StreamStatus.STARTING}
-    <p class="mt-8 w-full text-center text-base text-gray-400">
-      Starting playback...
-    </p>
+    <div class="mt-8 flex w-full items-center justify-center gap-10 text-base">
+      <p class="text-muted-foreground animate-pulse">Starting playback...</p>
+      <a
+          class="cursor-pointer font-medium text-black transition-colors hover:text-muted-foreground"
+          onclick={onCancelStreamStart}
+      >
+        Cancel
+      </a>
+    </div>
   {:else if streamStatus === StreamStatus.LOADING}
-    <p class="mt-8 w-full text-center text-base text-gray-400">
+    <p class="mt-8 w-full text-center text-base animate-pulse text-muted-foreground">
       Loading stream...
     </p>
   {:else if streamStatus === StreamStatus.READY}
