@@ -104,22 +104,17 @@
 
 <div class="mt-1 grid w-full" style="grid-template-columns: 1fr auto 1fr;">
   <!-- Left -->
-  <div class="flex flex-row justify-center">
-    {#if explorer.isRewinding && explorer.selectedTime}
-      <div
-        class="mr-6 flex h-9 items-center justify-center gap-0.5 rounded-full px-2.5 text-foreground"
-        style="background: linear-gradient(to right, oklch(0.8194 0.1242 193.06) 0%, var(--ypb-selected-700) 100%)"
-      >
+  <div></div>
+
+  <!-- Center -->
+  <div class="play-toolbar">
+    {#if explorer.isRewinding}
+      <div class="flex w-48 items-center justify-center gap-0.5 text-muted-foreground">
         <Circle size={6} strokeWidth={5} fill="none" />
         <Circle size={6} strokeWidth={5} fill="none" />
         <Circle size={6} strokeWidth={5} fill="none" />
       </div>
-    {/if}
-  </div>
-
-  <!-- Center -->
-  <div class="play-toolbar">
-    {#if playingTime !== null}
+    {:else if playingTime !== null}
       <div
         class="flex cursor-pointer items-center"
         title="Jump to playhead"
