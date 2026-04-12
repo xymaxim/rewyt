@@ -120,7 +120,18 @@ export function createExplorer(
   function setZoom(level: ZoomLevel): void {
     zoomLevel = level;
     if (viewRange === null) return;
-    const center = selectedTime ?? (viewRange.start + viewRange.end) / 2;
+    let center: Timestamp;
+    if (selectedTime !== null) {
+      center = selectedTime;
+    } else if (
+      playheadTime !== null &&
+      playheadTime >= viewRange.start &&
+      playheadTime <= viewRange.end
+    ) {
+      center = playheadTime;
+    } else {
+      center = (viewRange.start + viewRange.end) / 2;
+    }
     viewRange = clampViewRange(center, level, days, centeredOnMidnight);
   }
 
