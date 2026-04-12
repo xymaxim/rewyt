@@ -18,7 +18,7 @@ func newStream(ctx context.Context, videoID string, port int) (stream.Streamer, 
 		Port:        port,
 		SegmentsDir: "./local/dash/segments/",
 		MPDDelay:    0,
-		StartDelay:  0,
+		StartDelay:  10,
 		StreamStart: 200,
 	}
 	return local.NewStream(ctx, cfg)
