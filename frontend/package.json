@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",
+    "@fontsource-variable/geist-mono": "^5.2.7",
     "@tailwindcss/vite": "^4.2.1",
     "knip": "^6.1.1",
     "lucide-svelte": "^1.0.1",

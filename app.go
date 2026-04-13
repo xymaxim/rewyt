@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"github.com/xymaxim/ypb/stream"
 )
 
@@ -40,8 +41,13 @@ func (a *App) StartStream(videoID string) error {
 	startCtx, cancel := context.WithCancel(a.ctx)
 	a.startCancel = cancel
 
-	s, err := newStream(startCtx, videoID, playbackPort)
+	onStdout := func(b []byte) {
+		runtime.EventsEmit(a.ctx, "stream-stdout", string(b))
+	}
+
+	s, err := newStream(startCtx, videoID, playbackPort, onStdout)
 	if err != nil {
+		a.stream = nil
 		a.startCancel()
 		return fmt.Errorf("creating stream: %w", err)
 	}

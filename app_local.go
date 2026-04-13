@@ -11,7 +11,7 @@ import (
 	"ypb-play/local"
 )
 
-func newStream(ctx context.Context, videoID string, port int) (stream.Streamer, error) {
+func newStream(ctx context.Context, videoID string, port int, onYtdlpStdout func([]byte)) (stream.Streamer, error) {
 	log.Printf("running new stream on port %d type=local v=%s", port, videoID)
 	cfg := local.Config{
 		VideoID:     videoID,
@@ -20,6 +20,7 @@ func newStream(ctx context.Context, videoID string, port int) (stream.Streamer, 
 		MPDDelay:    0,
 		StartDelay:  10,
 		StreamStart: 200,
+		OnStdout:    onYtdlpStdout,
 	}
 	return local.NewStream(ctx, cfg)
 }

@@ -1,6 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { CancelStreamStart, StartStream } from "../wailsjs/go/main/App";
+  import { EventsOn } from "../wailsjs/runtime/runtime";
+  import { ChevronDown, ChevronUp } from "lucide-svelte";
+  import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "$lib/components/ui/collapsible";
+  import { Card, CardContent } from "$lib/components/ui/card";
   import { createExplorer, setExplorerContext } from "./lib/explorer.svelte";
   import { createPlayer } from "./lib/player.svelte";
   import { formatOffset } from "./lib/utils/dateTimeUtils";
@@ -28,6 +32,9 @@
   // State
   let videoEl = $state<HTMLVideoElement | null>(null);
   let streamStatus = $state<StreamStatus>(StreamStatus.IDLE);
+  let ytdlpStdout = $state<string>("");
+  let unlistenStdout: (() => void) | null = null;
+  let showStdoutLog = $state(false);
 
   // Effects: player-explorer wiring
   $effect(() => {
@@ -47,27 +54,43 @@
   // Events
   async function onStreamStart(videoId: string) {
     streamStatus = StreamStatus.STARTING;
+    ytdlpStdout = "";
+    showStdoutLog = false;
+    unlistenStdout = EventsOn("stream-stdout", (chunk: string) => {
+      ytdlpStdout += chunk;
+    });
+
     explorerCell.current.destroy();
     explorerCell.current = createExplorer();
     await player.destroy();
     player = createPlayer(() => videoEl);
     try {
       await StartStream(videoId);
+      cleanupStdout();
       streamStatus = StreamStatus.LOADING;
       await player.init();
       streamStatus = StreamStatus.READY;
     } catch (err) {
       console.error(err);
       if (streamStatus === StreamStatus.STARTING) {
+        cleanupStdout();
         streamStatus = StreamStatus.IDLE;
         return;
       }
+      cleanupStdout();
       streamStatus = StreamStatus.IDLE;
     }
   }
 
+  function cleanupStdout() {
+    unlistenStdout?.();
+    unlistenStdout = null;
+    ytdlpStdout = "";
+  }
+
   function onCancelStreamStart() {
     CancelStreamStart();
+    cleanupStdout();
     player.destroy();
     player = createPlayer(() => videoEl);
     streamStatus = StreamStatus.IDLE;
@@ -199,15 +222,31 @@
   </div>
 
   {#if streamStatus === StreamStatus.STARTING}
-    <div class="mt-8 flex w-full items-center justify-center gap-10 text-base">
-      <p class="text-muted-foreground animate-pulse">Starting playback...</p>
-      <a
-          class="cursor-pointer font-semibold text-black text-sm transition-colors hover:text-muted-foreground"
-          onclick={onCancelStreamStart}
-      >
-        Cancel
-      </a>
-    </div>
+    <Card class="mt-6 bg-neutral-50 rounded-lg">
+      <CardContent>
+        <Collapsible bind:open={showStdoutLog}>
+          <div class="flex items-center justify-between text-base">
+            <CollapsibleTrigger class="flex items-center gap-2 text-muted-foreground">
+                <p class="animate-pulse">Step 1. Starting playback...</p>
+                {#if showStdoutLog}<ChevronUp size={16} />{:else}<ChevronDown size={16} />{/if}
+            </CollapsibleTrigger>
+            <a
+              class="cursor-pointer font-semibold text-black text-sm transition-colors hover:text-muted-foreground"
+              onclick={onCancelStreamStart}
+            >
+              Cancel
+            </a>
+          </div>
+          <CollapsibleContent>
+            {#if ytdlpStdout}
+              <div class="mt-3 max-h-32 overflow-y-auto rounded-md bg-neutral-100 p-3 font-mono text-xs text-muted-foreground whitespace-pre-wrap">
+                {ytdlpStdout}
+              </div>
+            {/if}
+          </CollapsibleContent>
+        </Collapsible>
+      </CardContent>
+    </Card>
   {:else if streamStatus === StreamStatus.LOADING}
     <p class="mt-8 w-full text-center text-base animate-pulse text-muted-foreground">
       Loading stream...

@@ -22,6 +22,21 @@ const (
 	videoTitle      = "Test live stream video created with FFMPEG"
 )
 
+const fakeStdoutText = `From fairest creatures we desire increase,
+That thereby beauty's rose might never die,
+But as the riper should by time decease,
+His tender heir might bear his memory;
+But thou, contracted to thine own bright eyes,
+Feed'st thy light's flame with self-substantial fuel,
+Making a famine where abundance lies,
+Thyself thy foe, to thy sweet self too cruel.
+Thou that art now the world's fresh ornament
+And only herald to the gaudy spring,
+Within thine own bud buriest thy content,
+And, tender churl, mak'st waste in niggarding.
+Pity the world, or else this glutton be,
+To eat the world's due, by the grave and thee.`
+
 const mpdTemplate = `<?xml version="1.0" encoding="UTF-8"?>
 <MPD xmlns="urn:mpeg:DASH:schema:MPD:2011"
      profiles="urn:mpeg:dash:profile:isoff-live:2011"
@@ -85,6 +100,8 @@ type Config struct {
 	StartDelay int
 	// Stream start (in hours ago).
 	StreamStart int
+	// Stdout callback to simulate yt-dlp progress.
+	OnStdout func([]byte)
 }
 
 type Stream struct {
@@ -95,11 +112,20 @@ type Stream struct {
 }
 
 func NewStream(ctx context.Context, cfg Config) (*Stream, error) {
-	select {
-	case <-time.After(time.Duration(cfg.StartDelay) * time.Second):
-	case <-ctx.Done():
-		log.Println("stream start cancelled")
-		return nil, fmt.Errorf("canceling stream start: %w", ctx.Err())
+	progressLines := strings.Split(fakeStdoutText, "\n")
+
+	delayMs := time.Duration(cfg.StartDelay) * time.Second
+	interval := delayMs / time.Duration(len(progressLines))
+	for _, line := range progressLines {
+		select {
+		case <-time.After(interval):
+			if cfg.OnStdout != nil {
+				cfg.OnStdout([]byte(line + "\n"))
+			}
+		case <-ctx.Done():
+			log.Println("stream start cancelled")
+			return nil, fmt.Errorf("canceling stream start: %w", ctx.Err())
+		}
 	}
 
 	ctx, cancel := context.WithCancel(ctx)
