@@ -90,7 +90,7 @@
 </script>
 
 <div class="mb-1 flex items-center justify-center gap-2">
-  <div class="relative {focused ? 'w-full' : 'w-80'}">
+  <div class="relative {focused ? 'w-full' : 'w-90'}">
     <InputGroup
       class={focused
         ? "bg-white! shadow-md"
