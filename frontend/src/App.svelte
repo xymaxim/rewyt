@@ -188,6 +188,7 @@
     class="cursor-default flex min-h-[362px] w-full justify-center overflow-hidden rounded-lg bg-black"
     class:bg-neutral-200={!player.streamInfo}
     class:bg-black={player.streamInfo}
+    class:pointer-events-none={streamStatus !== StreamStatus.READY}
   >
     <div class="group relative flex w-full items-center justify-center">
         {#if !player.streamInfo}
