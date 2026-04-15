@@ -207,8 +207,7 @@
       streamStatus === StreamStatus.STARTING}
     class:bg-black={streamStatus === StreamStatus.LOADING ||
       streamStatus === StreamStatus.READY}
-    class:pointer-events-none={streamStatus === StreamStatus.LOADING ||
-      streamStatus === StreamStatus.READY}
+
     class:overflow-hidden={streamStatus === StreamStatus.LOADING ||
       streamStatus === StreamStatus.READY}
   >
