@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Doodle, Circle, Square } from "./doodle";
+  import { Doodle, Bead, Circle, Rectangle, Pill } from "./doodle";
   import type { PrimitiveDescriptor, OklchRange } from "./doodle";
 
   // ─── oklch palette ────────────────────────────────────────────────────────
@@ -33,6 +33,19 @@
 
   let primitives = $state<PrimitiveDescriptor[]>([
     {
+      component: Bead,
+      config: {
+        sizeRange: [80, 80],
+        ringProportions: [0.32, 0.62, 1.0],
+        ringColors: [
+          { l: [0.5, 0.82], c: [0.08, 0.26], h: [0, 360] },
+          { l: [0.5, 0.82], c: [0.08, 0.26], h: [0, 360] },
+          { l: [0.5, 0.82], c: [0.08, 0.26], h: [0, 360] },
+        ],
+      },
+      onclick: shuffle,
+    },
+    {
       component: Circle,
       config: {
         sizeRange: [60, 80],
@@ -47,23 +60,29 @@
         colorRange: oklchRange,
         opacity: [1, 1],
       },
-      onclick: shuffle,
     },
     {
-      component: Square,
+      component: Pill,
       config: {
-        sizeRange: [60, 80],
-        angleRange: [0, 180],
-        colorRange: oklchRange,
-        rounded: [0, 0],
-        opacity: [0.8, 1],
+        sizeRange: [80, 100],
+        ratioRange: [0.8, 0.8],
+        ringProportions: [0.4, 1.0],
+        ringColors: [
+          { l: [0.5, 0.82], c: [0.08, 0.26], h: [0, 360] },
+          { l: [0.5, 0.82], c: [0.08, 0.26], h: [0, 360] },
+        ],
+        // angleRange: [0, 180],
+        // colorRange: oklchRange,
+        // rounded: [0, 0],
+        // opacity: [0.8, 1],
       },
     },
     {
-      component: Square,
+      component: Rectangle,
       config: {
-        sizeRange: [20, 44],
-        angleRange: [0, 160],
+        sizeRange: [60, 80],
+        ratioRange: [0.2, 0.5],
+        angleRange: [0, 180],
         colorRange: oklchRange,
         rounded: [0, 0],
         opacity: [0.8, 1],

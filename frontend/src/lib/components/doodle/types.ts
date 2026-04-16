@@ -41,6 +41,24 @@ export interface SquareConfig extends BasePrimitiveConfig {
   rounded?: Range;
 }
 
+export interface RectangleConfig extends BasePrimitiveConfig {
+  angleRange: Range;
+  ratioRange: Range;
+  colorRange?: OklchRange;
+  strokeWidth?: Range;
+  filled?: boolean;
+  rounded?: Range;
+}
+
+export interface BeadConfig extends BasePrimitiveConfig {
+  ringProportions: [number, number, number];
+  ringColors: [OklchRange, OklchRange, OklchRange];
+}
+
+export interface PillConfig extends BeadConfig {
+  ratioRange: Range; // width / height; [1,1] = circle, [2,2] = classic pill
+}
+
 // ─── Primitive props contract — every primitive component must accept these ──
 
 export interface PrimitiveProps<

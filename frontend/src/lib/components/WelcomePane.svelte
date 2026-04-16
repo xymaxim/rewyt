@@ -53,7 +53,7 @@
       <ButtonGroup.Root class="flex w-full items-center gap-2 px-5">
         <ButtonGroup.Root class="flex flex-1 items-center">
           <InputGroup.Root
-            class={"h-11 w-full rounded-xl " +
+            class={"h-11 w-full rounded-xl border-none " +
               (focused
                 ? "!bg-white shadow-md"
                 : "bg-white hover:bg-neutral-50")}
