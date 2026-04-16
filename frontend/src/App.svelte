@@ -8,9 +8,7 @@
   import TopBar from "./lib/components/TopBar.svelte";
   import ExplorerPane from "./lib/components/ExplorerPane.svelte";
   import Toast from "./lib/components/Toast.svelte";
-  import WelcomePane from "./lib/components/WelcomePane.svelte";
   import StartingProgress from "./lib/components/StartingProgress.svelte";
-  import StartingDoodle from "./lib/components/StartingDoodle.svelte";
 
   export const StreamStatus = {
     IDLE: "idle",

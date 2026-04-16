@@ -142,7 +142,13 @@
             {getCanonicalUrl(currentVideoId)}
           </span>
         </div>
-        <Button variant="ghost" size="icon-sm" onclick={copyCurrentUrl}>
+        <Button
+          variant="ghost"
+          size="icon"
+          title="Copy link"
+          class="rounded-full"
+          onmousedown={copyCurrentUrl}
+        >
           <Copy />
         </Button>
       </div>
