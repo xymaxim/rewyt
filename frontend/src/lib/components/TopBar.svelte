@@ -1,8 +1,10 @@
 <script lang="ts">
-  import * as InputGroup from "$lib/components/ui/input-group/index.js";
-  import { Button } from "$lib/components/ui/button/index.js";
-  import { Skeleton } from "$lib/components/ui/skeleton/index.js";
-  import { Copy, X } from "lucide-svelte";
+  import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+  import * as InputGroup from "$lib/components/ui/input-group";
+  import { Button } from "$lib/components/ui/button";
+  import { Skeleton } from "$lib/components/ui/skeleton";
+  import { Copy, Menu, X } from "lucide-svelte";
+  import HotkeyModal from "./HotkeyModal.svelte";
   import { extractVideoId } from "$lib/utils/urlUtils";
 
   interface Props {
@@ -20,7 +22,9 @@
   let loading = $state(false);
   let error = $state(false);
   let currentVideoId = $state<string | null>(null);
+  let showHotkeys = $state(false);
 
+  // Effects
   $effect(() => {
     if (videoId && videoId !== currentVideoId) {
       currentVideoId = videoId;
@@ -75,7 +79,7 @@
   }
 </script>
 
-<div class="mb-1 flex items-center justify-center gap-2">
+<div class="relative mb-1 flex items-center justify-center gap-2">
   <div class="relative {focused ? 'w-full' : 'w-100'}">
     <InputGroup.Root
       class="rounded-full! border-none {focused
@@ -89,7 +93,7 @@
         value={displayValue}
         class="text-center text-sm font-medium focus-visible:ring-0!"
         type="text"
-        placeholder="Paste YouTube live stream link"
+        placeholder="Paste YouTube video link"
         disabled={loading || streamStatus === "starting"}
         aria-invalid={error}
         onfocus={() => {
@@ -154,4 +158,28 @@
       </div>
     {/if}
   </div>
+
+  {#if !focused}
+    <div class="absolute right-0">
+      <DropdownMenu.Root>
+        <DropdownMenu.Trigger asChild>
+          <Button
+            variant="ghost"
+            size="icon-lg"
+            class="rounded-full hover:bg-neutral-200"
+          >
+            <Menu />
+          </Button>
+        </DropdownMenu.Trigger>
+        <DropdownMenu.Content align="end" class="w-50 text-base">
+          <DropdownMenu.Item onSelect={() => (showHotkeys = true)}>
+            Hotkeys
+            <DropdownMenu.Shortcut>?</DropdownMenu.Shortcut>
+          </DropdownMenu.Item>
+        </DropdownMenu.Content>
+      </DropdownMenu.Root>
+    </div>
+  {/if}
 </div>
+
+<HotkeyModal bind:open={showHotkeys} />
