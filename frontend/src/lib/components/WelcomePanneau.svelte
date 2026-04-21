@@ -19,9 +19,11 @@
   interface Props {
     collapsing: boolean;
     collapsingDuration: number;
+    playing: boolean;
+    seed?: number;
   }
 
-  let { collapsing, collapsingDuration }: Props = $props();
+  let { collapsing, collapsingDuration, playing, seed = 0 }: Props = $props();
 
   const initialPrimitives: PrimitiveDescriptor[] = [
     {
@@ -87,8 +89,6 @@
     },
   ];
 
-  let seed = $state(0);
-
   const primitives = $derived.by(() => {
     seed;
     return [...initialPrimitives].sort(() => Math.random() - 0.5);
@@ -99,10 +99,12 @@
   {primitives}
   width={640}
   height={342}
-  rx={270}
-  aspect={16 / 7}
+  rx={240}
+  aspect={16 / 8}
   nudge={[-10, 10]}
   {seed}
   collapsed={collapsing}
   {collapsingDuration}
+  orbiting={playing}
+  orbitingSpeed={0.01}
 />
