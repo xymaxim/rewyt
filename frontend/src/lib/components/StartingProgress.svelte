@@ -14,6 +14,15 @@
   }
 
   let { onCancel, stdout, showLog }: Props = $props();
+
+  let element: HTMLDivElement;
+
+  $effect(() => {
+    if (element) {
+      element.scrollTop = element.scrollHeight;
+    }
+    stdout;
+  });
 </script>
 
 <Card.Root class="mt-2 gap-0 rounded-lg bg-[var(--background)]">
@@ -43,7 +52,8 @@
       <CollapsibleContent>
         {#if stdout}
           <div
-            class="mt-3 max-h-36 overflow-y-auto rounded-md bg-neutral-50 p-3 font-mono text-sm whitespace-pre-wrap text-muted-foreground"
+            bind:this={element}
+            class="mt-3 max-h-36 overflow-y-auto rounded-md bg-neutral-200 p-2 font-mono text-sm leading-tight whitespace-pre-wrap text-muted-foreground"
           >
             {stdout}
           </div>
