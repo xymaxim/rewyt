@@ -14,8 +14,8 @@
     nudge?: Range;
     collapsed?: boolean;
     collapsingDuration?: number;
-    orbiting?: boolean;
-    orbitingSpeed?: number;
+    playing?: boolean;
+    playSpeed?: number;
     class?: string;
   }
 
@@ -30,15 +30,15 @@
     nudge = [0, 0],
     collapsed = false,
     collapsingDuration = 600,
-    orbiting = false,
-    orbitingSpeed = 0.01,
+    playing = false,
+    playSpeed = 0.01,
     class: className = "",
   }: Props = $props();
 
   // State
   let seed = $state(propSeed);
   let ready = $state(false);
-  let orbitAngle = $state(0);
+  let angle = $state(0);
 
   // Derived
   const cx = $derived(width / 2);
@@ -50,22 +50,14 @@
     return primitives.map(() => randBetween(nudge));
   });
 
-  const orbitalPositions = $derived(
-    getOrbitalPositions(
-      primitives.length,
-      cx,
-      cy,
-      rx,
-      aspect,
-      nudgeOffsets,
-      orbitAngle,
-    ),
+  const playPositions = $derived(
+    getPositions(primitives.length, cx, cy, rx, aspect, nudgeOffsets, angle),
   );
 
   const positions = $derived(
     !ready || collapsed
       ? primitives.map(() => ({ x: cx, y: cy }))
-      : orbitalPositions,
+      : playPositions,
   );
 
   const rotationSpeedRange = [-3, 3];
@@ -81,9 +73,9 @@
   });
 
   const rotations = $derived.by(() => {
-    orbitAngle;
+    angle;
     return primitives.map((_, i) => {
-      return orbitAngle * rotationSpeeds[i];
+      return angle * rotationSpeeds[i];
     });
   });
 
@@ -94,7 +86,7 @@
     );
   });
 
-  function getOrbitalPositions(
+  function getPositions(
     n: number,
     cx: number,
     cy: number,
@@ -104,11 +96,15 @@
     angleOffset = 0,
   ): { x: number; y: number }[] {
     if (n === 0) return [];
+
     const ry = rx / aspect;
+    const maxTan = playing ? 2 : 0.8;
+
     return Array.from({ length: n }, (_, i) => {
-      const angle = ((2 * Math.PI) / n) * i - Math.PI / 2 + angleOffset;
+      const angle = ((2 * Math.PI) / n) * i - Math.PI / 1 + angleOffset;
+      const tanValue = Math.max(-maxTan, Math.min(maxTan, Math.tan(angle)));
       return {
-        x: cx + (rx + nudges[i]) * Math.cos(angle),
+        x: cx + (rx + nudges[i]) * tanValue,
         y: cy + (ry + nudges[i]) * Math.sin(angle),
       };
     });
@@ -119,8 +115,8 @@
 
     let animationFrameId: number;
     const animate = () => {
-      if (orbiting && !collapsed) {
-        orbitAngle += orbitingSpeed;
+      if (playing && !collapsed) {
+        angle += playSpeed;
       }
       animationFrameId = requestAnimationFrame(animate);
     };
@@ -148,6 +144,7 @@
       <g
         class="slot"
         class:collapsed
+        class:playing={playing && !collapsed}
         style="translate: {positions[i].x}px {positions[i]
           .y}px; rotate: {rotations[i]}rad;"
       >
@@ -163,5 +160,9 @@
       cubic-bezier(0.34, 1.56, 0.64, 1);
     transform-origin: center;
     transform-box: fill-box;
+  }
+
+  .slot.playing {
+    transition: none;
   }
 </style>
