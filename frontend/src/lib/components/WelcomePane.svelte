@@ -95,7 +95,7 @@
         {seed}
         class="flex flex-col select-none"
       >
-        <div class="flex gap-6">
+        <div class="flex justify-center gap-6">
           <ElementTilt>
             <span
               class="pointer-events-auto flex cursor-pointer items-center gap-1 leading-none transition select-none hover:scale-105 active:scale-95"
