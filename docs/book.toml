@@ -1,0 +1,8 @@
+[book]
+title = "Rewyt documentation"
+
+[output.html]
+no-section-label = true
+
+[preprocessor.variables.variables]
+release_version = "v2026.4.26"
