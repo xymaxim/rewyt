@@ -16,7 +16,7 @@ export function randomOklch(range: OklchRange): string {
 }
 
 export const OKLCH_RANGE: OklchRange = {
-  l: [0.7, 0.85],
-  c: [0.05, 0.25],
+  l: [0.8, 0.9],
+  c: [0.05, 0.15],
   h: [0, 360],
 };
