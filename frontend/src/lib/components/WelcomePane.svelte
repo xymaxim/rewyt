@@ -108,8 +108,11 @@
           <ElementTilt>
             <span
               class="pointer-events-auto flex cursor-pointer items-center gap-1 leading-none transition select-none hover:scale-105 active:scale-95"
-              onclick={() => {
-                playing = !playing;
+              onpointerdown={() => {
+                playing = true;
+              }}
+              onpointerup={() => {
+                playing = false;
               }}
             >
               {#if playing}
