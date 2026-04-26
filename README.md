@@ -1,65 +1,81 @@
-# ypb-play
+# Rewyt
 
 _Rewind and play YouTube live streams_
 
-This is a desktop application that lets you interactively rewind and play
-YouTube live streams beyond the web player's standard 12-hour limit. You can
-quicky browse stream history and pick specific moments to replay or download
-them later.
+This is a desktop app to rewatch past moments of live streams beyond YouTube's limits.
 
-Built with [Go](https://go.dev/), [Svelte
-5](https://github.com/sveltejs/svelte/), [Shaka
-Player](https://github.com/shaka-project/shaka-player/), and packaged with
-[Wails](https://github.com/wailsapp/wails/).
+Built with [Go](https://go.dev/), [Svelte](https://github.com/sveltejs/svelte/),
+[Shaka Player](https://github.com/shaka-project/shaka-player/), and packaged
+with [Wails](https://github.com/wailsapp/wails/).
+
+Available on Linux, macOS, and Windows.
 
 ## Overview
 
-The application is built on a Go backend with an user interface written in
-Svelte. It uses our [ypb](https://github.com/xymaxim/ypb) to locate stream
-moments and generate corresponding dynamic MPEG-DASH manifests, with a proxy
-serving media segments to the user while handling retryable HTTP errors. Video
-playback is handled by Shaka Player with adaptive streaming.
+```mermaid
+---
+config:
+  flowchart:
+    defaultRenderer: elk
+  theme: base
+  layout: dagre
+  look: neo
+  themeVariables:
+    dropShadow: false
+---
+flowchart LR
+ subgraph Rewyt["`**Rewyt app**`"]
+    direction TB
+        A["Frontend<br>(Svelte + Shaka Player)"]
+        B["Backend<br>(Go, Wails)"]
+  end
+ subgraph CoreTools["Stream proxy"]
+    direction TB
+        C["`**ypb**<br>Start proxy server<br>Generate MPDs`"]
+        D["`**yt-dlp**<br>Fetch metadata<br>Solve JS challenges`"]
+  end
+    B -- Rewind<br>moments --> C
+    C --> D
+    D --> YT{{"`**YouTube**`"}}
+    C -- Locate<br>segments --> YT
+    A <== Stream<br>video ==> C
+    C ==> YT
+
+     A:::app
+     B:::app
+     YT:::yt
+    classDef app stroke:#222,stroke-dasharray: 3 3,stroke-width:3px,fill:none
+    classDef yt stroke:#ff0033,stroke-dasharray: 3 3,stroke-width:3px,fill:none
+```
+
+The app is built on a Go backend with a Svelte frontend. It uses our
+**[ypb](https://github.com/xymaxim/ypb)** to locate moments in a live stream and
+generate dynamic MPEG-DASH manifests. A proxy layer delivers media segments and
+gracefully handles connection errors. **[Shaka
+Player](https://github.com/shaka-project/shaka-player)** plays the video with
+adaptive streaming from YouTube through the stream proxy.
 
 ## Installation
 
-ypb-play can be run in two ways: (1) as a **desktop application** via binaries
-pre-built with Wails or (2) as a **web application** via container image and
-accessed with a local browser
-
-### Pre-built binaries
-
-This method requires [yt-dlp](https://github.com/yt-dlp/yt-dlp/) (nightly build)
-to be installed in your system. Downloading intervals will also require
-[FFmpeg](http://ffmpeg.org/) and
-[ypb](https://xymaxim.github.io/ypb/guides/install/install.html) to be installed
-separetely.
-
-Then, download the latest binary for your platform: [GitHub
-Releases](https://github.com/xymaxim/ypb/releases/latest)
-
-### Container image
-
-The container image contains all needed dependencies required for rewinding,
-playing, and downloading live streams.
-
-You’ll need either [Podman](https://podman.io/getting-started/installation) or
-[Docker](https://docs.docker.com/get-docker/).
-
-1. Pull the latest image: `podman pull ghcr.io/xymaxim/ypb-play`
-2. Run the web application: `podman run --rm -p 3000:8080 ghcr.io/xymaxim/ypb-play`
-3. Open this address in a browser: http://localhost:3000/
-
-> [!NOTE]
-> On macOS and Windows, Podman requires a virtual machine. Initialize and start it once:
->
->     podman machine init
->     podman machine start
+Rewyt comes as a (1) **desktop app** via pre-built binaries or (2) **web
+app** via container, accessible through your browser. See the [Installation
+guide](https://xymaxim.github.io/rewyt/guides/install/install.html) for setup
+instructions.
 
 ## Credits
 
-The font used in the application is [Inter](https://github.com/rsms/inter/). The
-icons are from [Phosphorous Icons](https://phosphoricons.com/).
+The font used in the application is [Geist](https://vercel.com/font). The
+icons are from [Lucide Icons](https://lucide.dev/).
+
+## Disclaimer
+
+This app unfortunately violates YouTube's [Terms of
+Service](https://www.youtube.com/t/terms), so use it at your own risk. You
+might run into rate limits or get blocked if YouTube notices.
+
+If you enjoy the videos you watch, please consider supporting the creators by
+subscribing to their channels and engaging with their content directly.
 
 ## License
 
-MIT.
+GNU Affero General Public License v3.0.
