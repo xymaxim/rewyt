@@ -78,7 +78,7 @@
   class="pointer-events-auto relative flex w-full flex-col items-center justify-center"
   class:hidden
 >
-  <div bind:this={containerEl} class="h-full w-full overflow-hidden opacity-80">
+  <div bind:this={containerEl} class="h-full w-full overflow-hidden">
     <WelcomePanneau {seed} collapsing={hiding} {playing} />
   </div>
 
