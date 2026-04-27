@@ -180,7 +180,7 @@ export function getStripeBackground(
       : -((range.start % stripeMs) / spanMs) * barWidth;
 
   const stripeGradient =
-    "repeating-linear-gradient(90deg, rgb(0 0 0 / 5%) 0%, rgb(221 201 172 / 100%) 5%, rgb(0 0 0 / 5%) 100%)";
+    "repeating-linear-gradient(90deg, rgb(0 0 0 / 2%) 0%, #d9d9d9 5%, rgb(0 0 0 / 2%) 100%)";
 
   return {
     stripeWidthPx: (stripeMs / spanMs) * barWidth,
