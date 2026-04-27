@@ -388,7 +388,7 @@
   @reference "tailwindcss";
   .cursor-rewind {
     cursor:
-      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='10' fill='%2306b6d4'/><circle cx='12' cy='12' r='6' fill='oklch(0.89 0.1 156)'/></svg>")
+      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='10' fill='%2306b6d4'/><circle cx='12' cy='12' r='5' fill='oklch(0.89 0.1 156)'/></svg>")
         12 12,
       auto;
   }
