@@ -11,7 +11,7 @@
   const {
     px,
     color,
-    width = 2,
+    width = 3,
     lineStyle = "solid",
     style = "",
     showHead = true,
