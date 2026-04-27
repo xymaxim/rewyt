@@ -243,7 +243,7 @@
             </div>
           {/if}
 
-          <div class="absolute z-10 rounded-2xl bg-[var(--rewyt-play-200)]">
+          <div class="absolute z-10 rounded-2xl bg-[var(--rewyt-play-200)] {streamStatus === StreamStatus.STARTING ? 'opacity-0' : ''} transition duration-600">
             {#key welcomeKey}
               <WelcomePane hiding={streamStatus !== StreamStatus.IDLE} />
             {/key}
