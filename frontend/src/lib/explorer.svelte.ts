@@ -46,6 +46,8 @@ export function createExplorer(
     B: null,
   });
 
+  let dragTime = $state<number | null>(null);
+
   // Derived
   const depthMs = depthHours * MS_PER_HOUR;
 
@@ -171,6 +173,11 @@ export function createExplorer(
     }
   }
 
+  function setDragTime(ts: number | null): void {
+    dragTime = ts;
+  }
+
+
   // Marks
   function clearAllMarks(): void {
     marks = { ...marks, A: null, B: null, activeTarget: "A" };
@@ -187,6 +194,7 @@ export function createExplorer(
     const [a, b] = marks.A <= marks.B ? [marks.A, marks.B] : [marks.B, marks.A];
     return { a, b };
   }
+
 
   // Settings
   function setShowTimelineViewRange(value: boolean): void {
@@ -225,6 +233,10 @@ export function createExplorer(
     get playheadTime() {
       return playheadTime;
     },
+    get dragTime() {
+      return dragTime;
+    },
+
     get marks() {
       return marks;
     },
@@ -251,6 +263,7 @@ export function createExplorer(
     setSelectedTime,
     clearSelectedTime,
     setPlayheadTime,
+    setDragTime,
     clearAllMarks,
     assignMark,
     getInterval,

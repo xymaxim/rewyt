@@ -4,17 +4,19 @@
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
-  import { Switch } from "$lib/components/ui/switch/index.js";
-  import {
-    ArrowUpRight,
-    Camera,
-    Circle,
-    Pause,
-    Play,
-    Radio,
-    RotateCcw,
-    Settings,
-  } from "lucide-svelte";
+ import { Switch } from "$lib/components/ui/switch/index.js";
+ import TimelineViewRange from "$lib/components/TimelineViewRange.svelte";
+ import DaySlider from "$lib/components/DaySlider.svelte";
+ import {
+     ArrowUpRight,
+     Camera,
+     Circle,
+     Pause,
+     Play,
+     Radio,
+     RotateCcw,
+     Settings,
+ } from "lucide-svelte";
   import { getExplorerContext } from "../explorer.svelte";
   import { clampViewRange } from "../utils/timelineUtils";
   import {
@@ -102,12 +104,9 @@
   }
 </script>
 
-<div class="mt-1 grid w-full" style="grid-template-columns: 1fr auto 1fr;">
-  <!-- Left -->
-  <div></div>
-
+<div class="mt-2 grid w-full gap-1" style="grid-template-columns: auto 1fr;">
   <!-- Center -->
-  <div class="play-toolbar">
+    <div class="play-toolbar pl-0!">
     {#if explorer.isRewinding}
       <div
         class="flex w-48 items-center justify-center gap-0.5 text-muted-foreground"
@@ -118,21 +117,24 @@
       </div>
     {:else if playingTime !== null}
       <div
-        class="flex cursor-pointer items-center"
-        title="Jump to playhead"
-        onclick={jumpToPlayhead}
+          class="flex cursor-pointer items-center"
+          title="Jump to playhead"
+          onclick={jumpToPlayhead}
       >
-        <span
-          class="text-timestamp relative inline-block w-48 text-lg font-semibold! {isPlayheadOutOfView
-            ? 'text-gray-300!'
-            : 'text-foreground!'}"
-        >
-          {formatDateTime(
-            playingTime.getTime(),
-            explorer.timezoneOffset,
-            false,
-          )}
-          <span class="text-xs">{formatOffset(explorer.timezoneOffset)}</span>
+          <span
+              class="text-timestamp relative flex items-center justify-start! inline-block w-42 text-lg font-semibold! {isPlayheadOutOfView
+                                                                                                        ? 'text-gray-300!'
+                                                                                                        : 'text-foreground!'}"
+          >
+              Apr 24, 13:00:01
+
+
+              <!-- {formatDateTime(
+                   playingTime.getTime(),
+                   explorer.timezoneOffset,
+                   false,
+                   )} -->
+          <span class="text-sm">+03</span>
           {#if isPlayheadOutOfView}
             <span
               class="absolute top-0 right-0 left-0 mx-auto h-7 w-7 items-center rounded-full bg-[var(--rewyt-play-200)] p-0.5 ring-2 ring-[var(--background)]"
@@ -166,174 +168,182 @@
         action={() => onScreenshot(explorer.playheadTime)}
         notification={{ message: "Screenshot saved" }}
         variant="ghost"
-        size="icon"
+          size="icon"
       >
         <Camera class="size-4.5" />
       </ActionButton>
     </div>
 
     <div class="play-toolbar__group">
-      <Button
-        title="Mark A"
-        variant="ghost"
-        size="icon"
-        class="text-base font-bold"
-        onclick={() => {
-          if (explorer.playheadTime !== null)
-            explorer.assignMark("A", explorer.playheadTime);
-        }}>A</Button
-      >
-      <Button
-        title="Mark B"
-        variant="ghost"
-        size="icon"
-        class="text-base font-bold"
-        onclick={() => {
-          if (explorer.playheadTime !== null)
-            explorer.assignMark("B", explorer.playheadTime);
-        }}>B</Button
-      >
+        <Button
+            title="Mark A"
+            variant="ghost"
+            size="icon"
+            class="text-sm font-bold bg-[var(--rewyt-interval-200)]/50!"
+            onclick={() => {
+                    if (explorer.playheadTime !== null)
+                    explorer.assignMark("A", explorer.playheadTime);
+                    }}>AB</Button
+                         >
+        <!-- <Button
+             title="Mark B"
+             variant="ghost"
+             size="icon"
+             class="text-base font-bold"
+             onclick={() => {
+                     if (explorer.playheadTime !== null)
+                     explorer.assignMark("B", explorer.playheadTime);
+                     }}>B</Button
+             > -->
+        <Button
+            title="Mark A"
+            variant="ghost"
+            size="icon"
+            class="text-sm bg-[var(--color-view)]!" >+</Button
+                                                     >
     </div>
   </div>
 
   <!-- Right -->
-  <div class="flex flex-row items-center justify-end gap-1">
-    <Button
-      title="Go to live"
-      variant="ghost"
-      class="hover:bg-transparent hover:text-[var(--rewyt-play)]"
-      onclick={onRewindToLive}><Radio /></Button
-    >
+  <div class="relative flex flex-row w-full justify-end gap-1 bg-neutral-200/50 rounded-2xl px-2 h-9">
 
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        {#snippet child({ props })}
-          <Button {...props} title="Settings" variant="ghost" size="lg">
-            <Settings />
-          </Button>
-        {/snippet}
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content align="end" class="w-64 rounded-2xl!">
-        <DropdownMenu.Item
-          class="flex cursor-pointer items-center justify-between gap-2"
-          onclick={openTimezoneDialog}
-        >
-          Change timezone...
-          <span class="text-xs font-medium text-muted-foreground"
-            >{formatOffset(explorer.timezoneOffset)}</span
-          >
-        </DropdownMenu.Item>
-
-        <div class="flex items-center space-x-2">
-          <DropdownMenu.Item
-            class="flex w-full items-center justify-between"
-            onSelect={(e) => e.preventDefault()}
-          >
-            <Label
-              for="timelineviewrange-toggle"
-              class="cursor-pointer font-normal">Show timeline scrub bar</Label
-            >
-            <Switch
-              id="timelineviewrange-toggle"
-              checked={explorer.showTimelineViewRange}
-              onCheckedChange={(v) => explorer.setShowTimelineViewRange(v)}
-            />
-          </DropdownMenu.Item>
-        </div>
-
-        <DropdownMenu.Separator />
-
-        <DropdownMenu.Group>
-          <DropdownMenu.Label
-            class="cursor-pointer text-xs font-medium text-muted-foreground"
-            >Rewinding</DropdownMenu.Label
-          >
-          <DropdownMenu.Item
-            class="flex w-full items-center justify-between"
-            onSelect={(e) => e.preventDefault()}
-          >
-            <Label
-              for="pauseafterrewind-toggle"
-              class="cursor-pointer font-normal">Pause after rewind</Label
-            >
-            <Switch
-              id="pauseafterrewind-toggle"
-              checked={explorer.pauseAfterRewind}
-              onCheckedChange={(v) => explorer.setPauseAfterRewind(v)}
-            />
-          </DropdownMenu.Item>
-        </DropdownMenu.Group>
-
-        <DropdownMenu.Separator />
-
-        <DropdownMenu.Group>
-          <DropdownMenu.Label
-            class="cursor-pointer text-xs font-medium text-muted-foreground"
-            >Timeline</DropdownMenu.Label
-          >
-          <DropdownMenu.CheckboxItem
-            checked={!explorer.centeredOnMidnight}
-            onCheckedChange={() => explorer.setCenteredOnMidnight(false)}
-            class="cursor-pointer"
-          >
-            Center on noon
-          </DropdownMenu.CheckboxItem>
-          <DropdownMenu.CheckboxItem
-            checked={explorer.centeredOnMidnight}
-            onCheckedChange={() => explorer.setCenteredOnMidnight(true)}
-            class="cursor-pointer"
-          >
-            Center on midnight
-          </DropdownMenu.CheckboxItem>
-        </DropdownMenu.Group>
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
-
-    <Dialog.Root bind:open={timezoneDialogOpen}>
-      <Dialog.Content class="max-w-sm [&_button[data-dialog-close]]:hidden">
-        <Dialog.Header>
-          <Dialog.Title>Timezone</Dialog.Title>
-        </Dialog.Header>
-
-        <Select.Root type="single" bind:value={pendingOffsetValue}>
-          <Select.Trigger class="w-full">
-            {pendingOffsetValue}
-          </Select.Trigger>
-          <Select.Content class="z-1000 max-h-72">
-            {#each UTC_OFFSETS as offset}
-              <Select.Item value={offset.value} label={offset.label}>
-                <span class="tabular-nums">{offset.label}</span>
-                {#if playheadSnapshot !== null}
-                  <span class="ml-auto text-gray-400 tabular-nums">
-                    {formatSnapshotTime(offset.offsetMinutes)}
-                  </span>
-                {/if}
-              </Select.Item>
-            {/each}
-          </Select.Content>
-        </Select.Root>
-
-        <Dialog.Footer>
-          <Button variant="ghost" onclick={cancelTimezone}>Cancel</Button>
-          <Button variant="ghost" onclick={confirmTimezone}>OK</Button>
-        </Dialog.Footer>
-      </Dialog.Content>
-    </Dialog.Root>
   </div>
+      <!-- <Button
+           title="Go to live"
+           variant="ghost"
+           class="hover:bg-transparent hover:text-[var(--rewyt-play)]"
+           onclick={onRewindToLive}><Radio /></Button
+           >
+
+           <DropdownMenu.Root>
+           <DropdownMenu.Trigger>
+           {#snippet child({ props })}
+           <Button {...props} title="Settings" variant="ghost" size="lg">
+           <Settings />
+           </Button>
+           {/snippet}
+           </DropdownMenu.Trigger>
+           <DropdownMenu.Content align="end" class="w-64 rounded-2xl!">
+           <DropdownMenu.Item
+           class="flex cursor-pointer items-center justify-between gap-2"
+           onclick={openTimezoneDialog}
+           >
+           Change timezone...
+           <span class="text-xs font-medium text-muted-foreground"
+           >{formatOffset(explorer.timezoneOffset)}</span
+           >
+           </DropdownMenu.Item>
+
+           <div class="flex items-center space-x-2">
+           <DropdownMenu.Item
+           class="flex w-full items-center justify-between"
+           onSelect={(e) => e.preventDefault()}
+           >
+           <Label
+           for="timelineviewrange-toggle"
+           class="cursor-pointer font-normal">Show timeline scrub bar</Label
+           >
+           <Switch
+           id="timelineviewrange-toggle"
+           checked={explorer.showTimelineViewRange}
+           onCheckedChange={(v) => explorer.setShowTimelineViewRange(v)}
+           />
+           </DropdownMenu.Item>
+           </div>
+
+           <DropdownMenu.Separator />
+
+           <DropdownMenu.Group>
+           <DropdownMenu.Label
+           class="cursor-pointer text-xs font-medium text-muted-foreground"
+           >Rewinding</DropdownMenu.Label
+           >
+           <DropdownMenu.Item
+           class="flex w-full items-center justify-between"
+           onSelect={(e) => e.preventDefault()}
+           >
+           <Label
+           for="pauseafterrewind-toggle"
+           class="cursor-pointer font-normal">Pause after rewind</Label
+           >
+           <Switch
+           id="pauseafterrewind-toggle"
+           checked={explorer.pauseAfterRewind}
+           onCheckedChange={(v) => explorer.setPauseAfterRewind(v)}
+           />
+           </DropdownMenu.Item>
+           </DropdownMenu.Group>
+
+           <DropdownMenu.Separator />
+
+           <DropdownMenu.Group>
+           <DropdownMenu.Label
+           class="cursor-pointer text-xs font-medium text-muted-foreground"
+           >Timeline</DropdownMenu.Label
+           >
+           <DropdownMenu.CheckboxItem
+           checked={!explorer.centeredOnMidnight}
+           onCheckedChange={() => explorer.setCenteredOnMidnight(false)}
+           class="cursor-pointer"
+           >
+           Center on noon
+           </DropdownMenu.CheckboxItem>
+           <DropdownMenu.CheckboxItem
+           checked={explorer.centeredOnMidnight}
+           onCheckedChange={() => explorer.setCenteredOnMidnight(true)}
+           class="cursor-pointer"
+           >
+           Center on midnight
+           </DropdownMenu.CheckboxItem>
+           </DropdownMenu.Group>
+           </DropdownMenu.Content>
+           </DropdownMenu.Root>
+
+           <Dialog.Root bind:open={timezoneDialogOpen}>
+           <Dialog.Content class="max-w-sm [&_button[data-dialog-close]]:hidden">
+           <Dialog.Header>
+           <Dialog.Title>Timezone</Dialog.Title>
+           </Dialog.Header>
+
+           <Select.Root type="single" bind:value={pendingOffsetValue}>
+           <Select.Trigger class="w-full">
+           {pendingOffsetValue}
+           </Select.Trigger>
+           <Select.Content class="z-1000 max-h-72">
+           {#each UTC_OFFSETS as offset}
+           <Select.Item value={offset.value} label={offset.label}>
+           <span class="tabular-nums">{offset.label}</span>
+           {#if playheadSnapshot !== null}
+           <span class="ml-auto text-gray-400 tabular-nums">
+           {formatSnapshotTime(offset.offsetMinutes)}
+           </span>
+           {/if}
+           </Select.Item>
+           {/each}
+           </Select.Content>
+           </Select.Root>
+
+           <Dialog.Footer>
+           <Button variant="ghost" onclick={cancelTimezone}>Cancel</Button>
+           <Button variant="ghost" onclick={confirmTimezone}>OK</Button>
+           </Dialog.Footer>
+           </Dialog.Content>
+           </Dialog.Root>
+           </div> -->
 </div>
 
 <style>
-  @reference "tailwindcss";
+ @reference "tailwindcss";
 
-  .play-toolbar {
-    @apply inline-flex h-10! min-w-120 flex-row items-center gap-1 rounded-xl px-3 py-1;
-  }
+ .play-toolbar {
+     @apply inline-flex h-10! flex-row items-center gap-0 rounded-xl px-3 py-1;
+ }
 
   .play-toolbar :global(button[data-slot="button"]) {
-    @apply h-8 w-10 rounded-full bg-neutral-200 hover:bg-[var(--rewyt-play-light)]/50;
+    @apply h-10 w-11 rounded-4xl bg-rose-200 hover:bg-[var(--rewyt-play-light)]/50;
   }
 
   .play-toolbar__group {
-    @apply flex items-center gap-1;
+    @apply flex items-center gap-0;
   }
 </style>

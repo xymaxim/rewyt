@@ -73,7 +73,7 @@
       const wallHour = new Date(
         t + explorer.timezoneOffset * 60 * 1000,
       ).getUTCHours();
-      if (hourIndex % 2 === 0) {
+      if (hourIndex % 3 === 0) {
         const center = t + 30 * 60 * 1000;
         const px = ((center - windowStart) / windowSpan) * barWidth;
         result.push({ px, text: `${wallHour}h` });
@@ -89,7 +89,7 @@
     let t = windowStart;
     while (t < windowEnd) {
       const hourIndex = Math.round((t - windowStart) / MS_PER_HOUR);
-      if (hourIndex % 2 !== 0) {
+      if (hourIndex % 3 !== 0) {
         const center = t + 30 * 60 * 1000;
         result.push(((center - windowStart) / windowSpan) * barWidth);
       }
@@ -189,16 +189,17 @@
     {/each}
     {#each dots as px}
       <div
-        class="pointer-events-none absolute h-1 w-1 rounded-full bg-gray-300/60"
+        class="pointer-events-none absolute h-1 w-1 rounded-full bg-gray-300/60 hidden"
         style="left: {px}px; top: 50%; transform: translate(-50%, -50%);"
       ></div>
     {/each}
 
     <div
-      class="absolute top-1 bottom-1 z-30 cursor-ew-resize rounded-lg border-2 border-gray-300/60 bg-gray-300/20"
-      style="left: {spanLeft}px; width: {spanWidth}px;"
-      onmousedown={onSpanMouseDown}
-      onclick={(e) => e.stopPropagation()}
+        class="absolute top-[1px]  z-30 cursor-ew-resize size-9 rounded-full border-2 border-gray-300/0 bg-white"
+        class:hidden={explorer.zoomLevel === 24 * 60 * 60 * 1000}
+        style="transform: translateX({spanLeft}px);"
+        onmousedown={onSpanMouseDown}
+        onclick={(e) => e.stopPropagation()}
     ></div>
     <MinimapOverlay
       minimapStart={windowStart}

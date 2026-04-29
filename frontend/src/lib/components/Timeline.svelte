@@ -13,9 +13,25 @@
     snapTime,
   } from "../utils/timelineUtils";
   import TimelineViewRange from "./TimelineViewRange.svelte";
+
+  // Returns a "Mon DD" / "Today" label if `ts` falls exactly on local midnight, else null.
+  function formatDayLabel(ts: number, offsetMinutes: number): string | null {
+    const shifted = new Date(ts + offsetMinutes * 60 * 1000);
+    if (shifted.getUTCHours() !== 0 || shifted.getUTCMinutes() !== 0) return null;
+    const now = new Date(Date.now() + offsetMinutes * 60 * 1000);
+    const isToday =
+      now.getUTCFullYear() === shifted.getUTCFullYear() &&
+      now.getUTCMonth() === shifted.getUTCMonth() &&
+      now.getUTCDate() === shifted.getUTCDate();
+    if (isToday) return "Today";
+    return shifted.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC",
+    });
+  }
   import IntervalFrame from "./IntervalFrame.svelte";
   import TimelineNeedle from "./TimelineNeedle.svelte";
-  import TimelineViewControl from "./TimelineViewControl.svelte";
 
   interface Props {
     seekableRange: { start: number; end: number } | null;
@@ -61,7 +77,16 @@
     const day = findDay(center, explorer.days);
     const dayStart =
       day?.dayStart ?? Math.floor(center / MS_PER_HOUR) * MS_PER_HOUR;
-    return buildTicks(range, bar.width, dayStart, explorer.timezoneOffset);
+    return buildTicks(range, bar.width, dayStart, explorer.timezoneOffset).map(
+      (tick) => {
+        if (!tick.major || tick.label !== "00:00") return { ...tick, dayLabel: null };
+        const ts = pixelToTime(tick.px, range, bar.width);
+        return {
+          ...tick,
+          dayLabel: ts !== null ? formatDayLabel(ts, explorer.timezoneOffset) : null,
+        };
+      },
+    );
   });
 
   const { stripeWidthPx, stripeOffsetPx, stripeGradient } = $derived.by(() =>
@@ -250,17 +275,17 @@
   onmouseleave={onMouseLeave}
   role="region"
 >
-  <TimelineViewControl />
-
   <div class="relative h-6 w-full">
     {#each ticks.filter((t) => t.major) as tick}
       <span
-        class="absolute text-sm whitespace-nowrap text-foreground"
+        class="absolute text-sm whitespace-nowrap"
+        class:text-foreground={!tick.dayLabel}
+        class:text-muted-foreground={!!tick.dayLabel}
         class:text-gray-300={!isAvailable(
           pixelToTime(tick.px, range!, bar.width),
         )}
         style="left: {tick.px}px; transform: translateX(-50%);"
-        >{tick.label}</span
+      >{tick.dayLabel ?? tick.label}</span
       >
     {/each}
   </div>
@@ -308,7 +333,7 @@
 
     {#each ticks as tick}
       <div
-        class="absolute z-90 w-px bg-black/30"
+        class="absolute z-90 w-px bg-black/30 font-bold"
         style="left: {tick.px}px; height: {tick.major
           ? 10
           : 6}px; width: {tick.major ? 1 : 1}px;"
@@ -373,33 +398,33 @@
     {/if}
   </div>
   {#if showScrubBar}
-    <div
-      class="pointer-events-auto absolute inset-x-4 top-1/2 z-30 mt-1 -translate-y-1/2"
-    >
-      <TimelineViewRange
-        showControls={false}
-        class="overflow-visible rounded-lg border-1 border-gray-300/60 bg-white/70"
-      />
-    </div>
+      <div
+          class="pointer-events-auto absolute inset-x-4 top-1/2 z-30 mt-1 -translate-y-1/2"
+      >
+          <TimelineViewRange
+              showControls={false}
+              class="overflow-visible rounded-lg border-1 border-gray-300/60 bg-white/70"
+          />
+      </div>
   {/if}
 </div>
 
 <style>
-  @reference "tailwindcss";
-  .cursor-rewind {
-    cursor:
-      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='10' fill='%2306b6d4'/><circle cx='12' cy='12' r='5' fill='oklch(0.89 0.1 156)'/></svg>")
-        12 12,
-      auto;
-  }
-  .cursor-rewind-ctrl {
-    cursor:
-      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='10' fill='%2306b6d4'/><circle cx='12' cy='12' r='3' fill='oklch(0.89 0.1 156)'/></svg>")
-        12 12,
-      auto;
-  }
-  .unavailable-back {
-    @apply cursor-not-allowed rounded-md backdrop-blur-md backdrop-grayscale;
-    background: --alpha(var(--background) / 70%);
-  }
+ @reference "tailwindcss";
+ .cursor-rewind {
+     cursor:
+         url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='10' fill='%2306b6d4'/><circle cx='12' cy='12' r='5' fill='oklch(0.89 0.1 156)'/></svg>")
+     12 12,
+     auto;
+ }
+ .cursor-rewind-ctrl {
+     cursor:
+         url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='10' fill='%2306b6d4'/><circle cx='12' cy='12' r='3' fill='oklch(0.89 0.1 156)'/></svg>")
+     12 12,
+     auto;
+ }
+ .unavailable-back {
+     @apply cursor-not-allowed rounded-md backdrop-blur-md backdrop-grayscale;
+     background: --alpha(var(--background) / 70%);
+ }
 </style>

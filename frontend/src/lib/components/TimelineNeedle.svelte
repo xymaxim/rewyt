@@ -23,7 +23,7 @@
   style="
     left: {px}px;
     inset-block: 0px;
-    filter: drop-shadow(0 0 2px lightgray);
+    filter: drop-shadow(0 0 0px lightgray);
     {style}     
   "
 >

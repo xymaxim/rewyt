@@ -70,30 +70,39 @@
   });
 </script>
 
-<div class="relative w-full py-2">
+<div class="relative w-full py-2 mt-2">
   <div
     style="position: absolute; left: calc({allowedStartPercent}% - 8px); width: calc({allowedEndPercent -
       allowedStartPercent}% + 10px);"
   >
-    <Slider
-      type="single"
-      min={allowedStart}
-      max={allowedEnd}
-      step={sliderStep}
-      value={sliderValue}
-      {onValueChange}
-      onpointerdown={() => (isSliding = true)}
-      onpointerup={() => (isSliding = false)}
-      class="w-full cursor-pointer {thumbClass}
+      <Slider
+          type="single"
+          min={allowedStart}
+          max={allowedEnd}
+          step={sliderStep}
+          value={sliderValue}
+          {onValueChange}
+          onpointerdown={() => (isSliding = true)}
+          onpointerup={() => (isSliding = false)}
+          class="w-full cursor-pointer {thumbClass}
           [&_[data-slot=slider-range]]:bg-transparent
-          [&_[data-slot=slider-track]]:bg-black/15
-          [&_[role=slider]]:z-10
-          [&_[role=slider]]:h-4
-          [&_[role=slider]]:w-5
+          [&_[data-slot=slider-track]]:bg-neutral-200/0
+          [&_[data-slot=slider-track]]:transition
+          [&_[data-slot=slider-track]]:z-10
+          [&_[data-slot=slider-track]]:border-0
+          [&_[data-slot=slider-track]]:h-9
+          [&_[data-slot=slider-track]]:rounded-xl
+          [&_[role=slider]]:z-0
+          [&_[role=slider]]:h-9
+          [&_[role=slider]]:w-8
           [&_[role=slider]]:cursor-ew-resize
-          [&_[role=slider]]:border-4
-          [&_[role=slider]]:border-[#06b6d4]
-          [&_[role=slider]]:bg-[var(--rewyt-selected-light)]"
+          [&_[role=slider]]:border-2
+          [&_[role=slider]]:transition-all
+          [&_[role=slider]]:shadow-none
+          [&_[role=slider]]:rounded-full
+          [&_[role=slider]]:hover:outline-none!
+          [&_[role=slider]]:border-neutral-200
+          [&_[role=slider]]:bg-neutral-200"
     />
   </div>
 </div>

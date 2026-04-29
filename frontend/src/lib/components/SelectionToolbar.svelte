@@ -1,47 +1,50 @@
 <script lang="ts">
-  import * as Tabs from "$lib/components/ui/tabs/index.js";
-  import { Rewind } from "lucide-svelte";
-  import { getExplorerContext } from "../explorer.svelte";
-  import SelectedPanel from "./SelectedPanel.svelte";
-  import IntervalPanel from "./IntervalPanel.svelte";
+ import * as Tabs from "$lib/components/ui/tabs/index.js";
+ import { Rewind } from "lucide-svelte";
+ import { getExplorerContext } from "../explorer.svelte";
+ import SelectedPanel from "./SelectedPanel.svelte";
+ import IntervalPanel from "./IntervalPanel.svelte";
+ import TimelineViewControl from "./TimelineViewControl.svelte";
 
-  interface Props {
-    isPlayingInterval: boolean;
-    seekableRange: { start: number; end: number } | null;
-    onSeekTo: (time: number, pause?: boolean) => void;
-    onPlayInterval: (a: number, b: number) => void;
-    onRewind: (isoTime: string, pause?: boolean) => void;
-    onStopInterval: () => void;
-  }
+ interface Props {
+     isPlayingInterval: boolean;
+     seekableRange: { start: number; end: number } | null;
+     onSeekTo: (time: number, pause?: boolean) => void;
+     onPlayInterval: (a: number, b: number) => void;
+     onRewind: (isoTime: string, pause?: boolean) => void;
+     onStopInterval: () => void;
+ }
 
-  const {
-    isPlayingInterval,
-    seekableRange,
-    onPlayInterval,
-    onRewind,
-    onSeekTo,
-    onStopInterval,
-  }: Props = $props();
+ const {
+     isPlayingInterval,
+     seekableRange,
+     onPlayInterval,
+     onRewind,
+     onSeekTo,
+     onStopInterval,
+ }: Props = $props();
 
-  const explorer = getExplorerContext();
+ const explorer = getExplorerContext();
 
-  let activeTab = $state("selected");
+ let activeTab = $state("selected");
 
-  const markA = $derived(explorer.marks.A);
-  const markB = $derived(explorer.marks.B);
+ const markA = $derived(explorer.marks.A);
+ const markB = $derived(explorer.marks.B);
 
-  function clearInterval() {
-    if (isPlayingInterval) onStopInterval();
-    explorer.clearAllMarks();
-    activeTab = "selected";
-  }
+ function clearInterval() {
+     if (isPlayingInterval) onStopInterval();
+     explorer.clearAllMarks();
+     activeTab = "selected";
+ }
 </script>
 
 <div class="mx-auto flex w-full max-w-3xl">
-  <Tabs.Root
-    bind:value={activeTab}
-    class="relative flex w-full flex-row items-center"
-  >
+    <!-- <TimelineViewControl /> -->
+
+    <Tabs.Root
+        bind:value={activeTab}
+        class="relative flex w-full flex-row items-center"
+    >
     <Tabs.List
       class="z-10 flex h-auto w-[80px] flex-row gap-1 bg-[var(--background)]"
     >

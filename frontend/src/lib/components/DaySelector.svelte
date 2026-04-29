@@ -148,32 +148,32 @@
 
 <div
   bind:this={barEl}
-  class="relative mt-1 h-[36px] w-full cursor-pointer p-[3px] select-none"
+  class="relative mt-[-13px] h-9 w-full cursor-pointer p-[3px] select-none"
   onmousemove={onMouseMove}
   onmouseleave={onMouseLeave}
   onclick={onClick}
 >
   {#if hoverRect !== null}
     <div
-      class="pointer-events-none absolute inset-y-1 rounded-lg border-2 border-gray-200 transition-[left,width]"
+      class="pointer-events-none absolute inset-y-1 rounded-lg border-0 border-gray-200 transition-[left,width]"
       style="left: {hoverRect.left}px; width: {hoverRect.width}px;"
     ></div>
   {/if}
 
   {#if activeRect !== null}
-    <div
-      class="pointer-events-none absolute inset-y-1 rounded-lg border-2 border-gray-300"
-      style="left: {activeRect.left}px; width: {activeRect.width}px;"
-    ></div>
+      <div
+          class="pointer-events-none absolute inset-y-1 rounded-lg border-0 border-gray-300"
+          style="left: {activeRect.left}px; width: {activeRect.width}px;"
+      ></div>
   {/if}
 
   {#each explorer.days.slice(0, -1) as day}
-    {@const dw = explorer.dayWindow}
-    {@const isActiveEdge =
-      dw && (day.dayStart === dw.start || day.dayStart === dw.end)}
+      {@const dw = explorer.dayWindow}
+      {@const isActiveEdge =
+        dw && (day.dayStart === dw.start || day.dayStart === dw.end)}
     {#if !isActiveEdge && !hoverDay}
       <div
-        class="pointer-events-none absolute w-[2px] bg-gray-300"
+          class="pointer-events-none absolute w-[0px] bg-gray-300"
         style="left: {toPixel(
           day.dayStart,
         )}px; height: 10px; top: 50%; transform: translate(-50%, -50%);"
@@ -183,11 +183,11 @@
 
   {#each explorer.days as day}
     <span
-      class="pointer-events-none absolute text-sm whitespace-nowrap text-muted-foreground"
+        class="pointer-events-none absolute text-sm whitespace-nowrap text-muted-foreground z-10"
       style="left: {toPixel(
         day.dayStart + 12 * MS_PER_HOUR,
       )}px; top: 50%; transform: translate(-50%, -50%);"
-    >
+    >        
       {formatLabel(day)}
     </span>
   {/each}
