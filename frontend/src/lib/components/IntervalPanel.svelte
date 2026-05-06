@@ -82,11 +82,12 @@
   }
 </script>
 
-<div class="mr-5 flex items-center gap-1">
+<div class="mr-5 flex items-center gap-2">
   {#if markA !== null}
+    <div class="flex bg-[var(--rewyt-interval-100)]/50 rounded-full size-6 items-center justify-center text-sm font-semibold">A</div>
     <span
       title="Jump to A"
-      class="text-timestamp cursor-pointer text-sm whitespace-nowrap"
+      class="text-timestamp cursor-pointer whitespace-nowrap"
       onclick={() => seekOrRewind(markA!)}
     >
       {formatDateTime(markA, explorer.timezoneOffset, false)}
@@ -98,9 +99,10 @@
   <span class="text-gray-600">—</span>
 
   {#if markB !== null}
+    <div class="flex bg-[var(--rewyt-interval-100)]/50 rounded-full size-6 items-center justify-center text-sm font-semibold">B</div>
     <span
       title="Jump to B"
-      class="text-timestamp cursor-pointer text-sm whitespace-nowrap"
+      class="text-timestamp cursor-pointer whitespace-nowrap"
       onclick={() => seekOrRewind(markB!)}
     >
       {sameDay
@@ -108,7 +110,7 @@
         : `${formatDateTime(markB, explorer.timezoneOffset, false)}`}
     </span>
   {:else}
-    <span class="text-sm text-gray-400">Not picked</span>
+    <span class="text-base text-gray-400">Not picked</span>
   {/if}
 
   <Button

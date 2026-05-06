@@ -47,7 +47,8 @@ export function createExplorer(
   });
 
   let dragTime = $state<number | null>(null);
-
+  let isSliding = $state(false);
+    
   // Derived
   const depthMs = depthHours * MS_PER_HOUR;
 
@@ -177,6 +178,10 @@ export function createExplorer(
     dragTime = ts;
   }
 
+  function setIsSliding(v: boolean): void {
+    isSliding = v;
+  }
+
 
   // Marks
   function clearAllMarks(): void {
@@ -236,6 +241,9 @@ export function createExplorer(
     get dragTime() {
       return dragTime;
     },
+    get isSliding() {
+      return isSliding;
+    },
 
     get marks() {
       return marks;
@@ -264,6 +272,7 @@ export function createExplorer(
     clearSelectedTime,
     setPlayheadTime,
     setDragTime,
+    setIsSliding,
     clearAllMarks,
     assignMark,
     getInterval,

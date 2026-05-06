@@ -55,7 +55,7 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
     : value;
 
     explorer.setDragTime(value);
-    //explorer.setSelectedTime(value);
+    explorer.setSelectedTime(value);
     if (options.updateViewRange !== false) {
      explorer.setViewRange(clampViewRange(
       center,
@@ -66,8 +66,8 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
     }
 }
 
-  function onPointerDown() { isSliding = true; }
-  function onPointerUp() { isSliding = false; }
+  function onPointerDown() { isSliding = true; explorer.setIsSliding(true);}
+  function onPointerUp() { isSliding = false; explorer.setIsSliding(false);}
 
   $effect(() => {
     if (!barEl) return;

@@ -1,10 +1,9 @@
 <script lang="ts">
  import * as Tabs from "$lib/components/ui/tabs/index.js";
- import { Rewind } from "lucide-svelte";
+ import { Play, Rewind } from "lucide-svelte";
  import { getExplorerContext } from "../explorer.svelte";
  import SelectedPanel from "./SelectedPanel.svelte";
  import IntervalPanel from "./IntervalPanel.svelte";
- import TimelineViewControl from "./TimelineViewControl.svelte";
 
  interface Props {
      isPlayingInterval: boolean;
@@ -39,25 +38,25 @@
 </script>
 
 <div class="mx-auto flex w-full max-w-3xl">
-    <!-- <TimelineViewControl /> -->
-
     <Tabs.Root
         bind:value={activeTab}
         class="relative flex w-full flex-row items-center"
     >
-    <Tabs.List
-      class="z-10 flex h-auto w-[80px] flex-row gap-1 bg-[var(--background)]"
-    >
-      <Tabs.Trigger value="selected">
-        <Rewind class="size-5" />
-      </Tabs.Trigger>
-      <Tabs.Trigger
-        value="interval"
-        disabled={markA === null && markB === null}
-        class="relative left-[-15px] font-bold tracking-tight"
-      >
-        AB
-      </Tabs.Trigger>
+        <Tabs.List
+            class="z-10 flex h-auto w-[80px] flex-row gap-1 bg-[var(--background)]"
+        >
+            <Tabs.Trigger value="selected"
+                          class="relative left-[-15px] font-bold tracking-tight z-11"
+            >
+                <Rewind class="size-5" />
+            </Tabs.Trigger>
+            <Tabs.Trigger
+                value="interval"
+                disabled={markA === null && markB === null}
+                class="relative left-[-30px] font-bold tracking-tight z-12"
+            >
+            AB
+        </Tabs.Trigger>
     </Tabs.List>
 
     <Tabs.Content

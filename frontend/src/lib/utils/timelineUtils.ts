@@ -123,10 +123,10 @@ export function snapTime(ts: Timestamp, spanMs: number): Timestamp {
   switch (true) {
     case spanMs <= 30 * MS_PER_MINUTE:
       return snapToMinute(ts, 2);
-    case spanMs <= ZOOM_LEVELS["1h"]:
-      return snapToMinute(ts, 10);
     case spanMs <= ZOOM_LEVELS["2h"]:
-      return snapToMinute(ts, 30);
+      return snapToMinute(ts, 10);
+    // case spanMs <= ZOOM_LEVELS["2h"]:
+    //   return snapToMinute(ts, 30);
     case spanMs <= ZOOM_LEVELS["12h"]:
       return snapToHour(ts, 5);
     default:
@@ -158,7 +158,7 @@ export function formatHoverTime(
   const h = String(shifted.getUTCHours()).padStart(2, "0");
   const m = String(shifted.getUTCMinutes()).padStart(2, "0");
   const s = String(shifted.getUTCSeconds()).padStart(2, "0");
-  return spanMs <= ZOOM_LEVELS["1h"] ? `${h}:${m}:${s}` : `${h}:${m}`;
+  return spanMs <= ZOOM_LEVELS["2h"] ? `${h}:${m}:${s}` : `${h}:${m}`;
 }
 
 // Background

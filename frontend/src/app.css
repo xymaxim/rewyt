@@ -159,7 +159,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --color-view: #F8DE7E;
+  --color-view: #FED24E;
 }
 
 @keyframes shimmer {
@@ -181,7 +181,7 @@
 }
 
 @utility selection-toolbar__item {
-  @apply inline-flex h-10! items-center gap-1 rounded-xl! px-3 py-1;
+  @apply inline-flex h-10! items-center gap-1 rounded-2xl! px-3 py-1;
 }
 
 @utility selection-toolbar__item--button {
@@ -227,5 +227,15 @@ button[data-state="off"]:hover {
 }
 
 .text-timestamp {
-  @apply font-medium whitespace-nowrap text-muted-foreground tabular-nums transition-colors hover:text-foreground;
+  @apply font-medium whitespace-nowrap text-sm text-muted-foreground transition-colors hover:text-foreground;
 }
+
+@keyframes pulse-play {
+  0%, 100% {
+    background-color: var(--rewyt-play-700);
+  }
+  50% {
+    background-color: var(--rewyt-play-950);
+  }
+}
+

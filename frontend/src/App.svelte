@@ -12,7 +12,7 @@
   import Toast from "./lib/components/Toast.svelte";
   import StartingPane from "./lib/components/StartingPane.svelte";
   import StartingProgress from "./lib/components/StartingProgress.svelte";
-
+ 
   export const StreamStatus = {
     IDLE: "idle",
     LOADING: "loading",
@@ -215,6 +215,7 @@
     class:overflow-hidden={streamStatus === StreamStatus.LOADING ||
       streamStatus === StreamStatus.READY}
   >
+
     <div class="group relative flex w-full cursor-default! justify-center">
       {#if player.streamInfo}
         <div
