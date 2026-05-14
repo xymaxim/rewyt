@@ -1,11 +1,11 @@
 <script lang="ts">
- import { Slider } from "bits-ui";
- import { getExplorerContext } from "$lib/explorer.svelte.js";
- import { MS_PER_MINUTE, MS_PER_HOUR } from "$lib/utils/dateUtils";
- import { useTimeSlider } from "$lib/components/sliders/useTimeSlider.svelte";
- import MinimapOverlay from "$lib/components/MinimapOverlay.svelte";
- import UnallowedMask from "$lib/components/sliders/UnallowedMask.svelte";
- import type { DayEntry } from "$lib/types";
+  import { Slider } from "bits-ui";
+  import { getExplorerContext } from "$lib/explorer.svelte.js";
+  import { MS_PER_MINUTE, MS_PER_HOUR } from "$lib/utils/dateUtils";
+  import { useTimeSlider } from "$lib/components/sliders/useTimeSlider.svelte";
+  import MinimapOverlay from "$lib/components/MinimapOverlay.svelte";
+  import UnallowedMask from "$lib/components/sliders/UnallowedMask.svelte";
+  import type { DayEntry } from "$lib/types";
 
   const explorer = getExplorerContext();
 
@@ -37,18 +37,20 @@
   });
 
   let barEl = $state<HTMLDivElement | null>(null);
- $effect(() => {
-     slider.setBarEl(barEl);
- });
+  $effect(() => {
+    slider.setBarEl(barEl);
+  });
 
-   const thumbLabel = $derived.by<string>(() => {
-    const shifted = new Date(slider.sliderValue + explorer.timezoneOffset * 60 * 1000);
+  const thumbLabel = $derived.by<string>(() => {
+    const shifted = new Date(
+      slider.sliderValue + explorer.timezoneOffset * 60 * 1000,
+    );
     return String(shifted.getUTCDate());
-   });
+  });
 
- // ── Derived – thumb fill: left→right based on time-of-day position ────────
- const thumbFillPercent = $derived.by<number>(() => {
-     const vr = explorer.viewRange;
+  // ── Derived – thumb fill: left→right based on time-of-day position ────────
+  const thumbFillPercent = $derived.by<number>(() => {
+    const vr = explorer.viewRange;
     if (!vr) return 0;
     const center = slider.sliderValue;
     const day =
@@ -59,7 +61,7 @@
   });
 
   const thumbStyle = $derived(
-    `background: linear-gradient(to right, var(--rewyt-selected-600) ${thumbFillPercent}%, rgb(255 255 255 / 60%) ${thumbFillPercent}%);`,
+    `background: linear-gradient(to right, var(--rewyt-selected) ${thumbFillPercent}%, rgb(255 255 255 / 60%) ${thumbFillPercent}%);`,
   );
 
   // ── Day labels ────────────────────────────────────────────────────────────
@@ -72,7 +74,9 @@
     let currentMonth = -1;
     const today = new Date(Date.now() + explorer.timezoneOffset * 60 * 1000);
     return [...explorer.days].reverse().map((day) => {
-      const shifted = new Date(day.dayStart + explorer.timezoneOffset * 60 * 1000);
+      const shifted = new Date(
+        day.dayStart + explorer.timezoneOffset * 60 * 1000,
+      );
       const month = shifted.getUTCMonth();
       const isNewMonth = month !== currentMonth;
       currentMonth = month;
@@ -80,64 +84,81 @@
       const label = isToday
         ? "Today"
         : isNewMonth
-          ? shifted.toLocaleString("en-US", { month: "short", day: "numeric", timeZone: "UTC" })
+          ? shifted.toLocaleString("en-US", {
+              month: "short",
+              day: "numeric",
+              timeZone: "UTC",
+            })
           : String(shifted.getUTCDate());
       return { day, label };
     });
   });
 </script>
 
-<div
-  bind:this={barEl}
-  class="relative h-9 w-full select-none"
->
+<div bind:this={barEl} class="relative h-9 w-full select-none">
   <!-- Day labels (z-0) -->
   {#each dayLabels as { day, label }}
-      <span
-          class="pointer-events-none absolute text-xs whitespace-nowrap text-muted-foreground font-medium overflow-visible!"
-          style="left: {toPixel(day.dayStart + 12 * MS_PER_HOUR)}px; top: 50%; transform: translate(-50%, -50%);"
-      >
+    <span
+      class="pointer-events-none absolute overflow-visible! text-xs font-medium whitespace-nowrap text-muted-foreground"
+      style="left: {toPixel(
+        day.dayStart + 12 * MS_PER_HOUR,
+      )}px; top: 50%; transform: translate(-50%, -50%);"
+    >
       {label}
     </span>
   {/each}
 
   <!-- Minimap overlay: above labels, below thumb. 1px bleed top + bottom. -->
-  <div class="pointer-events-none absolute inset-x-0 -top-px bottom-[-1px] z-20">
+  <div
+    class="pointer-events-none absolute inset-x-0 -top-px bottom-[-1px] z-20"
+  >
     <MinimapOverlay {minimapStart} {minimapEnd} barWidth={slider.barWidth} />
   </div>
 
   <!-- Unallowed region mask -->
-  <UnallowedMask leftPercent={leftUnallowedPercent} rightPercent={rightUnallowedPercent} />
+  <UnallowedMask
+    leftPercent={leftUnallowedPercent}
+    rightPercent={rightUnallowedPercent}
+  />
 
   <!-- Slider: full minimap width, value clamped to allowed range. -->
-  <div class="pointer-events-none absolute inset-y-0 z-50" style="left: -10px; right: -10px;">
-      <Slider.Root
-          type="single"
-          min={minimapStart}
-          max={minimapEnd}
-          step={sliderStep}
-          bind:value={slider.sliderValue}
-          onValueChange={(v) => {
-                        const clamped = Math.min(Math.max(v, allowedStart), allowedEnd);
-                        slider.onValueChange(clamped);
-                        }}
-          onpointerdown={slider.onPointerDown} 
-          onpointerup={slider.onPointerUp}
+  <div
+    class="pointer-events-none absolute inset-y-0 z-50"
+    style="left: -10px; right: -10px;"
+  >
+    <Slider.Root
+      type="single"
+      min={minimapStart}
+      max={minimapEnd}
+      step={sliderStep}
+      bind:value={slider.sliderValue}
+      onValueChange={(v) => {
+        const clamped = Math.min(Math.max(v, allowedStart), allowedEnd);
+        slider.onValueChange(clamped);
+      }}
+      onpointerdown={slider.onPointerDown}
+      onpointerup={slider.onPointerUp}
       class="pointer-events-auto relative flex h-full w-full touch-none items-center"
     >
-      <Slider.Track class="relative h-full w-full overflow-hidden rounded-full bg-transparent">
+      <Slider.Track
+        class="relative h-full w-full overflow-hidden rounded-full bg-transparent"
+      >
         <Slider.Range class="absolute h-full bg-transparent" />
       </Slider.Track>
 
       <Slider.Thumb
-          index={0}
-          class="block flex size-8 items-center bg-[var(--rewyt-selected-600)]! justify-center cursor-ew-resize rounded-full outline-none transition-opacity
-                {slider.thumbHidden ? 'opacity-0 pointer-events-none' : 'opacity-100'}"
-          style={thumbStyle}
+        index={0}
+        class="block flex size-8 cursor-ew-resize items-center justify-center rounded-full bg-[var(--rewyt-selected)]! shadow-sm transition-opacity outline-none
+                {slider.thumbHidden
+          ? 'pointer-events-none opacity-0'
+          : 'opacity-100'}"
+        style={thumbStyle}
       >
-          <span class="pointer-events-none select-none text-sm font-bold text-foreground tracking-wide">
-              {thumbLabel}
-          </span>
+        <span
+          class="pointer-events-none text-sm font-bold tracking-wide text-foreground select-none"
+        >
+          {thumbLabel}
+        </span>
       </Slider.Thumb>
     </Slider.Root>
   </div>

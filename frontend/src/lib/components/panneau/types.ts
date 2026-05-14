@@ -42,6 +42,20 @@ export interface BeadConfig {
   ringColors: [OklchRange, OklchRange, OklchRange];
 }
 
+export type PetalsResolved = {
+  size: number;
+  count: number;
+  strokeWidth: number;
+  color: string;
+};
+
+export type PetalsConfig = {
+  sizeRange: Range;
+  countRange: Range; // number of lines, e.g. [2, 4]
+  strokeWidthRange: Range; // e.g. [1, 3]
+  colorRange: OklchRange;
+};
+
 // Empty
 export interface EmptyResolved {}
 export interface EmptyConfig {}
@@ -55,9 +69,9 @@ export interface BasePrimitiveProps<TResolved> {
   onclick?: () => void;
 }
 
-export type AnyResolved = RectangleResolved | BeadResolved;
+export type AnyResolved = RectangleResolved | BeadResolved | PetalsResolved;
 
-export type AnyConfig = RectangleConfig | BeadConfig;
+export type AnyConfig = RectangleConfig | BeadConfig | PetalsConfig;
 
 export interface PrimitiveDescriptor<
   TConfig extends AnyConfig = AnyConfig,

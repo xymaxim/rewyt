@@ -31,65 +31,91 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
   let isSliding = $state(false);
 
   const sliderValue = $derived.by<number>(() => {
-  const min = getMin();
-  const max = getMax();
-  // Any slider dragging — use the global raw pointer, clamped to this slider's bounds.
-  const globalDrag = explorer.dragTime;
-  if (globalDrag !== null) return Math.min(Math.max(globalDrag, min), max);
-  // At rest — use viewRange center for initial positioning.
-  const vr = explorer.viewRange;
-  if (!vr) return getFallback?.() ?? min;
-  return Math.min(Math.max((vr.start + vr.end) / 2, min), max);
+    const min = getMin();
+    const max = getMax();
+    const globalDrag = explorer.dragTime;
+    if (globalDrag !== null) return Math.min(Math.max(globalDrag, min), max);
+    const vr = explorer.viewRange;
+    if (!vr) return getFallback?.() ?? min;
+    return Math.min(Math.max((vr.start + vr.end) / 2, min), max);
   });
 
   let bindableValue = $state(0);
-  $effect(() => { bindableValue = sliderValue; })
-  
+  $effect(() => {
+    bindableValue = sliderValue;
+  });
+
   const thumbHidden = $derived(explorer.viewRange === null);
 
   function onValueChange(value: number) {
-  if (!isSliding) return;
+    if (!isSliding) return;
 
-  const center = clampToSpan
-    ? Math.min(Math.max(value, getMin() + explorer.zoomLevel / 2), getMax() - explorer.zoomLevel / 2)
-    : value;
+    const center = clampToSpan
+      ? Math.min(
+          Math.max(value, getMin() + explorer.zoomLevel / 2),
+          getMax() - explorer.zoomLevel / 2,
+        )
+      : value;
 
     explorer.setDragTime(value);
-    //explorer.setSelectedTime(value);
     if (options.updateViewRange !== false) {
-     explorer.setViewRange(clampViewRange(
-      center,
-     explorer.zoomLevel,
-     explorer.days,
-     explorer.centeredOnMidnight,
-     ));
+      explorer.setViewRange(
+        clampViewRange(
+          center,
+          explorer.zoomLevel,
+          explorer.days,
+          explorer.centeredOnMidnight,
+        ),
+      );
     }
-}
+  }
 
-  function onPointerDown() { isSliding = true; }
-  function onPointerUp() { isSliding = false; }
+  function onPointerDown() {
+    isSliding = true;
+  }
+  function onPointerUp() {
+    isSliding = false;
+  }
 
   $effect(() => {
     if (!barEl) return;
-    const ro = new ResizeObserver((e) => { barWidth = e[0].contentRect.width; });
+    const ro = new ResizeObserver((e) => {
+      barWidth = e[0].contentRect.width;
+    });
     ro.observe(barEl);
     return () => ro.disconnect();
   });
 
   onMount(() => {
-    const handler = () => { isSliding = false; };
+    const handler = () => {
+      isSliding = false;
+    };
     window.addEventListener("pointerup", handler);
     return () => window.removeEventListener("pointerup", handler);
   });
 
   return {
-    get barEl() { return barEl; },
-    setBarEl(el) { barEl = el; },
-    get barWidth() { return barWidth; },
-    get isSliding() { return isSliding; },
-    get sliderValue() { return sliderValue; },
-    set sliderValue(v) { bindableValue = v; },
-    get thumbHidden() { return thumbHidden; },
+    get barEl() {
+      return barEl;
+    },
+    setBarEl(el) {
+      barEl = el;
+    },
+    get barWidth() {
+      return barWidth;
+    },
+    get isSliding() {
+      return isSliding;
+    },
+    get sliderValue() {
+      return sliderValue;
+    },
+    set sliderValue(v) {
+      bindableValue = v;
+    },
+    get thumbHidden() {
+      return thumbHidden;
+    },
     onValueChange,
     onPointerDown,
     onPointerUp,

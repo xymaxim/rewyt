@@ -1,5 +1,5 @@
 <script lang="ts">
-import { onMount } from "svelte";
+  import { onMount } from "svelte";
   import { getExplorerContext } from "$lib/explorer.svelte";
   import { useElementSize } from "$lib/hooks/useElementSize.svelte";
   import { pixelToTime } from "$lib/utils/timePixelUtils";
@@ -21,8 +21,12 @@ import { onMount } from "svelte";
   const hasBoth = $derived(hasA && hasB);
   const hasEither = $derived(hasA || hasB);
 
-  const aVisible = $derived(hasA && vr !== null && A! >= vr.start && A! <= vr.end);
-  const bVisible = $derived(hasB && vr !== null && B !== null && B >= vr.start && B <= vr.end);
+  const aVisible = $derived(
+    hasA && vr !== null && A! >= vr.start && A! <= vr.end,
+  );
+  const bVisible = $derived(
+    hasB && vr !== null && B !== null && B >= vr.start && B <= vr.end,
+  );
 
   const fill = $derived.by(() => {
     if (!vr || container.width === 0) return null;
@@ -31,8 +35,14 @@ import { onMount } from "svelte";
     if (hasBoth) {
       if (A! > vr.end && B! > vr.end) return null;
       if (A! < vr.start && B! < vr.start) return null;
-      const left = A! < vr.start ? 0 : ((A! - vr.start) / (vr.end - vr.start)) * container.width;
-      const right = B! > vr.end ? container.width : ((B! - vr.start) / (vr.end - vr.start)) * container.width;
+      const left =
+        A! < vr.start
+          ? 0
+          : ((A! - vr.start) / (vr.end - vr.start)) * container.width;
+      const right =
+        B! > vr.end
+          ? container.width
+          : ((B! - vr.start) / (vr.end - vr.start)) * container.width;
       return { left, right };
     }
 
@@ -54,7 +64,9 @@ import { onMount } from "svelte";
   // ── Drag handling ─────────────────────────────────────────────────────────
   let dragging = $state<"A" | "B" | null>(null);
 
-  function getThumbHitArea(mark: "A" | "B"): { left: number; right: number } | null {
+  function getThumbHitArea(
+    mark: "A" | "B",
+  ): { left: number; right: number } | null {
     if (!fill) return null;
     if (mark === "A" && fill.left !== null) {
       return { left: fill.left - thumbSize, right: fill.left };
@@ -66,6 +78,8 @@ import { onMount } from "svelte";
   }
 
   function onPointerDown(e: PointerEvent) {
+    // container.el.releasePointerCapture(e.pointerId);
+
     if (!container.el || !vr) return;
     const rect = container.el.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -74,7 +88,7 @@ import { onMount } from "svelte";
       const hit = getThumbHitArea("A");
       if (hit && x >= hit.left && x <= hit.right) {
         dragging = "A";
-        explorer.setIsSliding(true);
+        explorer.setIsSliding(false);
         container.el.setPointerCapture(e.pointerId);
         return;
       }
@@ -84,44 +98,46 @@ import { onMount } from "svelte";
       const hit = getThumbHitArea("B");
       if (hit && x >= hit.left && x <= hit.right) {
         dragging = "B";
-        explorer.setIsSliding(true);
+        explorer.setIsSliding(false);
         container.el.setPointerCapture(e.pointerId);
         return;
       }
     }
   }
 
-function onPointerMove(e: PointerEvent) {
-  if (!dragging || !container.el || !vr) return;
-  const rect = container.el.getBoundingClientRect();
-  const x = Math.min(Math.max(e.clientX - rect.left, 0), container.width);
-  const ts = pixelToTime(x, vr, container.width);
-  if (ts === null) return;
-
-  let clamped = ts;
-  if (dragging === "A" && B !== null) clamped = Math.min(ts, B);
-  if (dragging === "B" && A !== null) clamped = Math.max(ts, A);
-
-  explorer.assignMark(dragging, clamped);
-}
-
-function onPointerUp(e: PointerEvent) {
-  if (dragging && container.el) {
-    container.el.releasePointerCapture(e.pointerId);
-    const blockClick = (ev: MouseEvent) => {
-      ev.stopPropagation();
-      window.removeEventListener("click", blockClick, true);
-    };
-    window.addEventListener("click", blockClick, true);
+  function onPointerUp(e: PointerEvent) {
+    if (dragging && container.el) {
+      container.el.releasePointerCapture(e.pointerId);
+      const blockClick = (ev: MouseEvent) => {
+        ev.stopPropagation();
+        window.removeEventListener("click", blockClick, true);
+      };
+      window.addEventListener("click", blockClick, true);
+    }
+    dragging = null;
+    explorer.setIsSliding(false);
   }
-  dragging = null;
-  explorer.setIsSliding(false);
-}
+
+  function onPointerMove(e: PointerEvent) {
+    if (!dragging || !container.el || !vr) return;
+    const rect = container.el.getBoundingClientRect();
+    const x = Math.min(Math.max(e.clientX - rect.left, 0), container.width);
+    const ts = pixelToTime(x, vr, container.width);
+    if (ts === null) return;
+
+    let clamped = ts;
+    if (dragging === "A" && B !== null) clamped = Math.min(ts, B);
+    if (dragging === "B" && A !== null) clamped = Math.max(ts, A);
+
+    explorer.assignMark(dragging, clamped);
+  }
 
   onMount(() => {
-    const handler = () => { dragging = null; explorer.setIsSliding(false)};
+    const handler = () => {
+      dragging = null;
+      explorer.setIsSliding(false);
+    };
   });
-
 </script>
 
 <div
@@ -132,7 +148,6 @@ function onPointerUp(e: PointerEvent) {
   onpointerup={onPointerUp}
 >
   {#if fill !== null && vr !== null && hasEither}
-
     <!-- Interval fill -->
     {#if fill.left !== null && fill.right !== null}
       <div
@@ -147,17 +162,42 @@ function onPointerUp(e: PointerEvent) {
     {/if}
 
     <!-- Edge line (single mark only) -->
-      {#if aVisible && fill.left !== null}
-        <div class="absolute top-0 bottom-0 w-px bg-black -translate-x-px" style="left: {fill.left}px;"></div>
-      {/if}
-      {#if bVisible && fill.right !== null}
-        <div class="absolute top-0 bottom-0 w-px bg-black -translate-x-px" style="left: {fill.right}px;"></div>
-      {/if}
+    {#if aVisible && fill.left !== null}
+      <div
+        class="absolute top-0 bottom-0 flex -translate-x-px"
+        style="left: {fill.left}px; height: {thumbSize}px"
+      >
+        <div class="h-full w-px bg-black"></div>
+        <div
+          class="h-full rounded-l-xl"
+          style="
+                        width: {thumbSize}px;
+                        background: linear-gradient(to right, {color}, transparent);
+                        "
+        ></div>
+      </div>
+    {/if}
+    {#if bVisible && fill.right !== null}
+      <div
+        class="absolute top-0 bottom-0 flex -translate-x-px"
+        style="left: {fill.right}px; height: {thumbSize}px"
+      >
+        <div class="h-full w-px bg-black"></div>
+        <div
+          class="h-full -translate-x-full rounded-r-xl"
+          style="
+                        width: {thumbSize}px;
+                        transform: translateX(-1px);
+                        background: linear-gradient(to left, {color}, transparent);
+                        "
+        ></div>
+      </div>
+    {/if}
 
     <!-- A thumb: sits left of edge -->
     {#if aVisible && fill.left !== null}
       <div
-        class="absolute flex top-1/2 -translate-y-1/2 rounded-full cursor-ew-resize"
+        class="absolute top-1/2 flex -translate-y-1/2 cursor-ew-resize rounded-full"
         style="
           left: {fill.left - thumbSize - 1}px;
           width: {thumbSize}px;
@@ -165,14 +205,18 @@ function onPointerUp(e: PointerEvent) {
           background: var(--rewyt-interval-100);
         "
       >
-      <div class="flex flex-1 justify-center items-center text-base font-medium">A</div>
+        <div
+          class="flex flex-1 items-center justify-center text-base font-medium"
+        >
+          A
+        </div>
       </div>
     {/if}
 
     <!-- B thumb: sits right of edge -->
     {#if bVisible && fill.right !== null}
       <div
-        class="absolute flex top-1/2 -translate-y-1/2 rounded-full cursor-ew-resize"
+        class="absolute top-1/2 flex -translate-y-1/2 cursor-ew-resize rounded-full"
         style="
           left: {fill.right}px;
           width: {thumbSize}px;
@@ -180,9 +224,11 @@ function onPointerUp(e: PointerEvent) {
           background: var(--rewyt-interval-100);
         "
       >
-      <span class="flex flex-1 justify-center items-center text-base font-medium">B</span>
+        <span
+          class="flex flex-1 items-center justify-center text-base font-medium"
+          >B</span
+        >
       </div>
     {/if}
-
   {/if}
 </div>

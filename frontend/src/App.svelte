@@ -12,7 +12,7 @@
   import Toast from "./lib/components/Toast.svelte";
   import StartingPane from "./lib/components/StartingPane.svelte";
   import StartingProgress from "./lib/components/StartingProgress.svelte";
- 
+
   export const StreamStatus = {
     IDLE: "idle",
     LOADING: "loading",
@@ -50,6 +50,10 @@
 
   $effect(() => {
     explorer.setPlayheadTime(player.playheadTime?.getTime() ?? null);
+  });
+
+  $effect(() => {
+    explorer.setMpdStartTime(player.mpdStartTime?.getTime() ?? null);
   });
 
   $effect(() => {
@@ -124,6 +128,10 @@
     b: () => {
       if (explorer.playheadTime !== null)
         explorer.assignMark("B", explorer.playheadTime);
+    },
+    r: () => {
+      if (explorer.playheadTime !== null)
+        explorer.setSelectedTime(explorer.playheadTime);
     },
   };
 
@@ -215,7 +223,6 @@
     class:overflow-hidden={streamStatus === StreamStatus.LOADING ||
       streamStatus === StreamStatus.READY}
   >
-
     <div class="group relative flex w-full cursor-default! justify-center">
       {#if player.streamInfo}
         <div
@@ -244,7 +251,12 @@
             </div>
           {/if}
 
-          <div class="absolute z-10 rounded-2xl bg-[var(--rewyt-play-200)] {streamStatus === StreamStatus.STARTING ? 'opacity-0' : ''} transition duration-600">
+          <div
+            class="absolute z-10 rounded-2xl bg-[var(--rewyt-selected-lightest)] {streamStatus ===
+            StreamStatus.STARTING
+              ? 'opacity-0'
+              : ''} transition duration-600"
+          >
             {#key welcomeKey}
               <WelcomePane hiding={streamStatus !== StreamStatus.IDLE} />
             {/key}

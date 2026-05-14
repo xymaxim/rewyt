@@ -32,12 +32,12 @@ export function createExplorer(
 
   let timezoneOffset = $state<number>(localOffsetMinutes());
   let centeredOnMidnight = $state<boolean>(false);
-  let showTimelineViewRange = $state<boolean>(false);
   let streamStartTime = $state<number | null>(null);
 
   let zoomLevel = $state<ZoomLevel>(ZOOM_LEVELS["1d"]);
   let selectedTime = $state<Timestamp | null>(null);
   let playheadTime = $state<Timestamp | null>(null);
+  let mpdStartTime = $state<Timestamp | null>(null);
 
   let marks = $state<MarksState>({
     enabled: false,
@@ -46,9 +46,8 @@ export function createExplorer(
     B: null,
   });
 
-  let dragTime = $state<number | null>(null);
   let isSliding = $state(false);
-    
+
   // Derived
   const depthMs = depthHours * MS_PER_HOUR;
 
@@ -123,12 +122,25 @@ export function createExplorer(
   function setZoom(level: ZoomLevel): void {
     zoomLevel = level;
     if (viewRange === null) return;
-    const center =
+
+    let center: number;
+
+    if (
+      selectedTime !== null &&
+      selectedTime >= viewRange.start &&
+      selectedTime <= viewRange.end
+    ) {
+      center = selectedTime;
+    } else if (
       playheadTime !== null &&
       playheadTime >= viewRange.start &&
       playheadTime <= viewRange.end
-        ? playheadTime
-        : (viewRange.start + viewRange.end) / 2;
+    ) {
+      center = playheadTime;
+    } else {
+      center = (viewRange.start + viewRange.end) / 2;
+    }
+
     viewRange = clampViewRange(center, level, days, centeredOnMidnight);
   }
 
@@ -174,14 +186,13 @@ export function createExplorer(
     }
   }
 
-  function setDragTime(ts: number | null): void {
-    dragTime = ts;
+  function setMpdStartTime(time: Timestamp | null): void {
+    mpdStartTime = time;
   }
 
   function setIsSliding(v: boolean): void {
     isSliding = v;
   }
-
 
   // Marks
   function clearAllMarks(): void {
@@ -198,12 +209,6 @@ export function createExplorer(
     if (marks.A === null || marks.B === null) return null;
     const [a, b] = marks.A <= marks.B ? [marks.A, marks.B] : [marks.B, marks.A];
     return { a, b };
-  }
-
-
-  // Settings
-  function setShowTimelineViewRange(value: boolean): void {
-    showTimelineViewRange = value;
   }
 
   function destroy(): void {
@@ -238,9 +243,10 @@ export function createExplorer(
     get playheadTime() {
       return playheadTime;
     },
-    get dragTime() {
-      return dragTime;
+    get mpdStartTime() {
+      return mpdStartTime;
     },
+
     get isSliding() {
       return isSliding;
     },
@@ -253,9 +259,6 @@ export function createExplorer(
     },
     get centeredOnMidnight() {
       return centeredOnMidnight;
-    },
-    get showTimelineViewRange() {
-      return showTimelineViewRange;
     },
     get availableRange() {
       return availableRange;
@@ -271,12 +274,11 @@ export function createExplorer(
     setSelectedTime,
     clearSelectedTime,
     setPlayheadTime,
-    setDragTime,
+    setMpdStartTime,
     setIsSliding,
     clearAllMarks,
     assignMark,
     getInterval,
-    setShowTimelineViewRange,
     destroy,
   };
 }

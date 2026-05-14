@@ -84,7 +84,11 @@
 
 <div class="mr-5 flex items-center gap-2">
   {#if markA !== null}
-    <div class="flex bg-[var(--rewyt-interval-100)]/50 rounded-full size-6 items-center justify-center text-sm font-semibold">A</div>
+    <div
+      class="flex size-6 items-center justify-center rounded-full bg-[var(--rewyt-interval-100)]/50 text-sm font-semibold"
+    >
+      A
+    </div>
     <span
       title="Jump to A"
       class="text-timestamp cursor-pointer whitespace-nowrap"
@@ -99,7 +103,11 @@
   <span class="text-gray-600">—</span>
 
   {#if markB !== null}
-    <div class="flex bg-[var(--rewyt-interval-100)]/50 rounded-full size-6 items-center justify-center text-sm font-semibold">B</div>
+    <div
+      class="flex size-6 items-center justify-center rounded-full bg-[var(--rewyt-interval-100)]/50 text-sm font-semibold"
+    >
+      B
+    </div>
     <span
       title="Jump to B"
       class="text-timestamp cursor-pointer whitespace-nowrap"
@@ -110,7 +118,7 @@
         : `${formatDateTime(markB, explorer.timezoneOffset, false)}`}
     </span>
   {:else}
-    <span class="text-base text-gray-400">Not picked</span>
+    <span class="text-sm text-gray-400">Not picked</span>
   {/if}
 
   <Button

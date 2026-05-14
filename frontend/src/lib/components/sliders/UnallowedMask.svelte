@@ -6,9 +6,14 @@
     offsetWidth?: string;
   }
 
-  const { leftPercent, rightPercent, fadeWidth = 10, offsetWidth = "1rem" }: Props = $props();
+  const {
+    leftPercent,
+    rightPercent,
+    fadeWidth = 10,
+    offsetWidth = "1rem",
+  }: Props = $props();
 
-  const fadeColor = "rgb(255 255 255 / 30%)"
+  const fadeColor = "rgb(255 255 255 / 30%)";
 </script>
 
 {#if leftPercent > 0}

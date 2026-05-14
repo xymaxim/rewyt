@@ -7,9 +7,7 @@
     color?: string;
   }
 
-  const {
-    color = "var(--rewyt-interval-200)",
-  }: Props = $props();
+  const { color = "var(--rewyt-interval-200)" }: Props = $props();
 
   const explorer = getExplorerContext();
   const container = useElementSize();
@@ -17,7 +15,7 @@
 
   const edgeWidth = 1;
   const edgeColor = "bg-black";
-      
+
   const computed = $derived.by(() => {
     if (container.width === 0) return null;
 
@@ -57,7 +55,10 @@
   });
 </script>
 
-<div bind:this={container.el} class="pointer-events-none absolute h-full inset-0 z-10 items-center">
+<div
+  bind:this={container.el}
+  class="pointer-events-none absolute inset-0 z-10 h-full items-center"
+>
   {#if computed !== null}
     {#if computed.left !== null && computed.right !== null}
       <div
@@ -76,15 +77,20 @@
     {#if computed.showA}
       {@const thumbOffset = !computed.showB ? Math.floor(edgeWidth / 2) : 0}
       {#if !computed.showB}
-        <div class="absolute {edgeColor} top-0 bottom-0 {edgeWidth > 1 ? '-translate-x-1/2' : ''}"
-        style="
+        <div
+          class="absolute {edgeColor} top-0 bottom-0 {edgeWidth > 1
+            ? '-translate-x-1/2'
+            : ''}"
+          style="
           width: {edgeWidth}px;
           left: {computed.left}px;
         "
-        ></div>
+        >
+          <div class="b-rose-200 h-2 w-2">xx</div>
+        </div>
       {/if}
       <div
-        class="absolute rounded-full -translate-y-1/2"
+        class="absolute -translate-y-1/2 rounded-full"
         style="
           left: {computed.left! - 2 * radius - thumbOffset}px;
           width: {container.height}px;
@@ -98,8 +104,12 @@
     {#if computed.showB}
       {@const thumbOffset = !computed.showA ? Math.ceil(edgeWidth / 2) : 0}
       {#if !computed.showA}
-        <div class="absolute  {edgeColor} top-0 bottom-0 {edgeWidth > 1 ? '-translate-x-1/2' : ''}"
-        style="left: {computed.right}px; width: {edgeWidth}px"></div>
+        <div
+          class="absolute {edgeColor} top-0 bottom-0 {edgeWidth > 1
+            ? '-translate-x-1/2'
+            : ''}"
+          style="left: {computed.right}px; width: {edgeWidth}px"
+        ></div>
       {/if}
       <div
         class="absolute rounded-full"
@@ -114,5 +124,4 @@
       ></div>
     {/if}
   {/if}
-
 </div>
