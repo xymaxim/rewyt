@@ -15,8 +15,6 @@
 
   const explorer = getExplorerContext();
 
-  // const sliderStep = MS_PER_MINUTE;
-
   const currentDay = $derived.by(() => {
     const vr = explorer.viewRange;
     if (!vr) return explorer.days[0] ?? null;
@@ -118,16 +116,14 @@
 <div bind:this={barEl} class="relative h-9 w-full select-none">
   {#each hourTicks as tick}
     <span
-      class="pointer-events-none absolute z-0 text-xs font-medium whitespace-nowrap text-muted-foreground"
+      class="pointer-events-none absolute z-10 text-xs font-medium whitespace-nowrap text-muted-foreground"
       style="left: {tick.px}px; top: 50%; transform: translate(-50%, -50%);"
     >
       {tick.label}
     </span>
   {/each}
 
-  <div
-    class="pointer-events-none absolute inset-x-0 -top-px bottom-[-1px] z-20"
-  >
+  <div class="pointer-events-none absolute inset-x-0 top-0 bottom-0">
     <MinimapOverlay
       minimapStart={dayStart}
       minimapEnd={dayEnd}
@@ -163,8 +159,8 @@
 
       <Slider.Thumb
         index={0}
-        class="relative flex size-8 cursor-ew-resize items-center justify-center rounded-full
-               bg-[var(--rewyt-selected)] shadow-sm transition-opacity outline-none
+        class="relative flex size-9 cursor-ew-resize items-center justify-center rounded-full
+               bg-[var(--rewyt-selected)] shadow-xs transition-opacity outline-none
                {slider.thumbHidden
           ? 'pointer-events-none opacity-0'
           : 'opacity-100'}"

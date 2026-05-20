@@ -272,11 +272,11 @@
       <RewindSlider {hoverPx} {isRewound} {onRewind} />
     {:else}
       <div
-        class="flex h-5 justify-center gap-1 py-1 text-sm text-muted-foreground"
+        class="flex h-full items-center justify-center gap-1 text-sm text-muted-foreground"
       >
         <span>Click above or slide</span>
         <span
-          class="inline-flex size-5 items-center rounded-full bg-[var(--rewyt-selected)]/50"
+          class="inline-flex size-5 items-center rounded-full bg-[var(--rewyt-selected-light)]"
         ></span>
         <span>to rewind</span>
       </div>

@@ -37,17 +37,8 @@
   let ytdlpStdout = $state<string>("");
   let unlistenStdout: (() => void) | null = null;
   let showStdoutLog = $state(false);
-  let welcomeKey = $state(0);
 
   // Effects: player-explorer wiring
-  $effect(() => {
-    if (streamStatus === StreamStatus.IDLE) {
-      untrack(() => {
-        welcomeKey++;
-      });
-    }
-  });
-
   $effect(() => {
     explorer.setPlayheadTime(player.playheadTime?.getTime() ?? null);
   });
@@ -252,14 +243,12 @@
           {/if}
 
           <div
-            class="absolute z-10 rounded-2xl bg-[var(--rewyt-selected-lightest)] {streamStatus ===
-            StreamStatus.STARTING
-              ? 'opacity-0'
-              : ''} transition duration-600"
+            class="absolute z-10 h-full w-[640px]
+                     {streamStatus === StreamStatus.STARTING
+              ? 'scale-0'
+              : ''} transition duration-400"
           >
-            {#key welcomeKey}
-              <WelcomePane hiding={streamStatus !== StreamStatus.IDLE} />
-            {/key}
+            <WelcomePane />
           </div>
         </div>
       </div>

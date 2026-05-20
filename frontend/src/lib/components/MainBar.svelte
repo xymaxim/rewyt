@@ -259,9 +259,15 @@
               title="Change zoom"
               variant="ghost"
               size="icon"
-              class="relative h-9! w-10 justify-center rounded-full bg-[var(--color-view)]! text-xs font-black"
+              class="relative h-9! w-10 justify-center rounded-full bg-neutral-200! text-xs font-black"
             >
-              <span class="z-20 flex tracking-wider">{zoomKey}</span>
+              <span
+                class="z-20 flex tracking-wider {isOpen
+                  ? 'opacity-0'
+                  : ''} transition-opacity"
+              >
+                {zoomKey}
+              </span>
             </Button>
           </Expandable.Trigger>
           <Expandable.Content>

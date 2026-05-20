@@ -153,28 +153,32 @@
       <div
         class="absolute top-1/2 -translate-y-1/2 rounded-xl"
         style="
-          left: {fill.left}px;
-          width: {fill.right - fill.left}px;
+          left: {fill.left + 1}px;
+          width: {fill.right - fill.left - 2}px;
           height: {container.height}px;
           background: {color};
         "
       ></div>
     {/if}
 
-    <!-- Edge line (single mark only) -->
+    <!-- Edge line -->
     {#if aVisible && fill.left !== null}
       <div
         class="absolute top-0 bottom-0 flex -translate-x-px"
         style="left: {fill.left}px; height: {thumbSize}px"
       >
-        <div class="h-full w-px bg-black"></div>
         <div
-          class="h-full rounded-l-xl"
-          style="
-                        width: {thumbSize}px;
-                        background: linear-gradient(to right, {color}, transparent);
-                        "
+          class="h-full w-[2px] rounded-full bg-[var(--rewyt-interval-200)]"
         ></div>
+        {#if fill.right === null}
+          <div
+            class="h-full rounded-l-xl"
+            style="
+                         width: {thumbSize}px;
+                         background: linear-gradient(to right, {color}, transparent);
+                         "
+          ></div>
+        {/if}
       </div>
     {/if}
     {#if bVisible && fill.right !== null}
@@ -182,28 +186,33 @@
         class="absolute top-0 bottom-0 flex -translate-x-px"
         style="left: {fill.right}px; height: {thumbSize}px"
       >
-        <div class="h-full w-px bg-black"></div>
         <div
-          class="h-full -translate-x-full rounded-r-xl"
-          style="
-                        width: {thumbSize}px;
-                        transform: translateX(-1px);
-                        background: linear-gradient(to left, {color}, transparent);
-                        "
+          class="h-full w-[2px] rounded-full bg-[var(--rewyt-interval-200)]"
         ></div>
+
+        {#if fill.left === null}
+          <div
+            class="h-full -translate-x-full rounded-r-xl"
+            style="
+                         width: {thumbSize}px;
+                         transform: translateX(-2px);
+                         background: linear-gradient(to left, {color}, transparent);
+                         "
+          ></div>
+        {/if}
       </div>
     {/if}
 
-    <!-- A thumb: sits left of edge -->
+    <!-- A thumb -->
     {#if aVisible && fill.left !== null}
       <div
         class="absolute top-1/2 flex -translate-y-1/2 cursor-ew-resize rounded-full"
         style="
-          left: {fill.left - thumbSize - 1}px;
-          width: {thumbSize}px;
-          height: {thumbSize}px;
-          background: var(--rewyt-interval-100);
-        "
+                   left: {fill.left - thumbSize - 1}px;
+                   width: {thumbSize}px;
+                   height: {thumbSize}px;
+                   background: var(--rewyt-interval-100);
+                   "
       >
         <div
           class="flex flex-1 items-center justify-center text-base font-medium"
@@ -213,12 +222,12 @@
       </div>
     {/if}
 
-    <!-- B thumb: sits right of edge -->
+    <!-- B thumb -->
     {#if bVisible && fill.right !== null}
       <div
         class="absolute top-1/2 flex -translate-y-1/2 cursor-ew-resize rounded-full"
         style="
-          left: {fill.right}px;
+          left: {fill.right + 1}px;
           width: {thumbSize}px;
           height: {thumbSize}px;
           background: var(--rewyt-interval-100);

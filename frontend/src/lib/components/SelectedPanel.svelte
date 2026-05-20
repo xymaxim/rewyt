@@ -52,14 +52,19 @@
 
   function seekOrRewind(time: number) {
     explorer.setSelectedTime(time);
-    explorer.setViewRange(
-      clampViewRange(
-        time,
-        explorer.zoomLevel,
-        explorer.days,
-        explorer.centeredOnMidnight,
-      ),
-    );
+
+    const vr = explorer.viewRange;
+    if (!vr || time <= vr.start || time >= vr.end) {
+      explorer.setViewRange(
+        clampViewRange(
+          time,
+          explorer.zoomLevel,
+          explorer.days,
+          explorer.centeredOnMidnight,
+        ),
+      );
+    }
+
     if (
       seekableRange &&
       time >= seekableRange.start &&
@@ -74,14 +79,7 @@
   function stepTime(direction: 1 | -1) {
     if (explorer.selectedTime === null) return;
     const newTime = explorer.selectedTime + direction * stepMs;
-    explorer.setSelectedTime(newTime);
-    const vr = explorer.viewRange;
-    if (!vr) return;
-    if (newTime <= vr.start || newTime >= vr.end) {
-      explorer.setViewRange(
-        clampViewRange(newTime, vr.end - vr.start, explorer.days),
-      );
-    }
+    seekOrRewind(newTime);
   }
 
   function copySelectedTimestamp() {

@@ -96,10 +96,9 @@
 </script>
 
 <div bind:this={barEl} class="relative h-9 w-full select-none">
-  <!-- Day labels (z-0) -->
   {#each dayLabels as { day, label }}
     <span
-      class="pointer-events-none absolute overflow-visible! text-xs font-medium whitespace-nowrap text-muted-foreground"
+      class="pointer-events-none absolute z-10 overflow-visible! text-xs font-medium whitespace-nowrap text-muted-foreground"
       style="left: {toPixel(
         day.dayStart + 12 * MS_PER_HOUR,
       )}px; top: 50%; transform: translate(-50%, -50%);"
@@ -108,20 +107,15 @@
     </span>
   {/each}
 
-  <!-- Minimap overlay: above labels, below thumb. 1px bleed top + bottom. -->
-  <div
-    class="pointer-events-none absolute inset-x-0 -top-px bottom-[-1px] z-20"
-  >
+  <div class="pointer-events-none absolute inset-x-0 top-0 bottom-0">
     <MinimapOverlay {minimapStart} {minimapEnd} barWidth={slider.barWidth} />
   </div>
 
-  <!-- Unallowed region mask -->
   <UnallowedMask
     leftPercent={leftUnallowedPercent}
     rightPercent={rightUnallowedPercent}
   />
 
-  <!-- Slider: full minimap width, value clamped to allowed range. -->
   <div
     class="pointer-events-none absolute inset-y-0 z-50"
     style="left: -10px; right: -10px;"
@@ -148,7 +142,7 @@
 
       <Slider.Thumb
         index={0}
-        class="block flex size-8 cursor-ew-resize items-center justify-center rounded-full bg-[var(--rewyt-selected)]! shadow-sm transition-opacity outline-none
+        class="block flex size-9 cursor-ew-resize items-center justify-center rounded-full bg-[var(--rewyt-selected)]! shadow-xs transition-opacity outline-none
                 {slider.thumbHidden
           ? 'pointer-events-none opacity-0'
           : 'opacity-100'}"
