@@ -24,7 +24,6 @@
   let isSliding = $state(false);
   let barEl = $state<HTMLDivElement | null>(null);
 
-  // ── Constants ──────────────────────────────────────────────────────────
   const thumbSize = 40;
   const thumbActiveWidth = thumbSize - 8;
   const thumbSlidingWidth = thumbActiveWidth - 4;
@@ -32,7 +31,6 @@
   const thumbColorDefault = "var(--rewyt-selected)";
   const thumbColorActive = "#DAA520";
 
-  // ── Range Calculations ──────────────────────────────────────────────────
   const rangeStart = $derived(explorer.viewRange?.start ?? 0);
   const rangeEnd = $derived(explorer.viewRange?.end ?? 0);
   const spanMs = $derived(rangeEnd - rangeStart);
@@ -55,7 +53,6 @@
     slider.setBarEl(barEl);
   });
 
-  // ── Percentage & Position Calculations ──────────────────────────────────
   const allowedStartPercent = $derived(
     spanMs > 0 ? ((allowedStart - rangeStart) / spanMs) * 100 : 0,
   );
@@ -79,14 +76,12 @@
       : 0,
   );
 
-  // ── Resting State (Thumb) ───────────────────────────────────────────────
   const snappedValue = $derived(snapTime(slider.sliderValue, spanMs));
   const label = $derived(
     formatHoverTime(snappedValue, spanMs, explorer.timezoneOffset),
   );
   const isLabelFlipped = $derived(thumbPercent > 85);
 
-  // ── Active State (Hover or Sliding) ─────────────────────────────────────
   const isActive = $derived(
     (explorer.isSliding && explorer.selectedTime !== null) ||
       timelineHoverPx !== null,
@@ -130,17 +125,13 @@
       slider.barWidth
     );
   });
-  // const activeCirclePx = $derived.by<number | null>(() => {
-  //     if (activeTs === null || spanMs === 0 || slider.barWidth === 0) return null;
-  //     return ((activeTs - rangeStart) / spanMs) * slider.barWidth;
-  // });
+
   const isActiveLabelFlipped = $derived(
     activeCirclePx !== null &&
       slider.barWidth > 0 &&
       activeCirclePx / slider.barWidth > 0.85,
   );
 
-  // ── UI Helpers ──────────────────────────────────────────────────────────
   const getThumbWidth = () => {
     return thumbSize;
     if (explorer.isSliding) return thumbActiveWidth;
@@ -162,7 +153,6 @@
       : `margin-left: ${showRewindButton ? margin : labelOffset}px`;
   };
 
-  // ── Event Handlers ──────────────────────────────────────────────────────
   function onPointerDown() {
     isSliding = true;
     slider.onPointerDown();
@@ -187,7 +177,6 @@
 
 {#if explorer.viewRange !== null}
   <div bind:this={barEl} class="relative flex h-full w-full items-center">
-    <!-- Active state: hover or sliding circle + label -->
     {#if isActive && activeCirclePx !== null && activeLabel !== null}
       <div
         class="pointer-events-none absolute top-1/2 z-50 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full"
@@ -212,13 +201,11 @@
       </div>
     {/if}
 
-    <!-- Resting state: thumb + rewind button + label -->
     {#if !isActive}
       <div
         class="pointer-events-none absolute top-1/2 z-40 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
         style="left: {thumbPx}px; width: {thumbSize}px; height: {thumbSize}px;"
       >
-        <!-- Rewind button -->
         {#if !isRewound}
           <div
             class="pointer-events-auto absolute top-1/2 flex h-10 w-10 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full transition-transform hover:scale-110"
@@ -238,7 +225,6 @@
           </div>
         {/if}
 
-        <!-- Label -->
         <span
           class="pointer-events-none absolute top-1/2 -translate-y-1/2 text-base whitespace-nowrap select-none"
           class:left-full={!isLabelFlipped}
@@ -250,7 +236,6 @@
       </div>
     {/if}
 
-    <!-- Slider track -->
     <div
       class="pointer-events-none absolute inset-y-0"
       style="

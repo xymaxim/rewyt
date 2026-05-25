@@ -21,10 +21,10 @@
   const hasBoth = $derived(hasA && hasB);
   const hasEither = $derived(hasA || hasB);
 
-  const aVisible = $derived(
+  const isAVisible = $derived(
     hasA && vr !== null && A! >= vr.start && A! <= vr.end,
   );
-  const bVisible = $derived(
+  const isBVisible = $derived(
     hasB && vr !== null && B !== null && B >= vr.start && B <= vr.end,
   );
 
@@ -46,12 +46,12 @@
       return { left, right };
     }
 
-    if (hasA && aVisible) {
+    if (hasA && isAVisible) {
       const px = ((A! - vr.start) / (vr.end - vr.start)) * container.width;
       return { left: px, right: null };
     }
 
-    if (hasB && bVisible) {
+    if (hasB && isBVisible) {
       const px = ((B! - vr.start) / (vr.end - vr.start)) * container.width;
       return { left: null, right: px };
     }
@@ -61,7 +61,6 @@
 
   const thumbSize = $derived(container.height);
 
-  // ── Drag handling ─────────────────────────────────────────────────────────
   let dragging = $state<"A" | "B" | null>(null);
 
   function getThumbHitArea(
@@ -84,7 +83,7 @@
     const rect = container.el.getBoundingClientRect();
     const x = e.clientX - rect.left;
 
-    if (aVisible) {
+    if (isAVisible) {
       const hit = getThumbHitArea("A");
       if (hit && x >= hit.left && x <= hit.right) {
         dragging = "A";
@@ -94,7 +93,7 @@
       }
     }
 
-    if (bVisible) {
+    if (isBVisible) {
       const hit = getThumbHitArea("B");
       if (hit && x >= hit.left && x <= hit.right) {
         dragging = "B";
@@ -162,7 +161,7 @@
     {/if}
 
     <!-- Edge line -->
-    {#if aVisible && fill.left !== null}
+    {#if isAVisible && fill.left !== null}
       <div
         class="absolute top-0 bottom-0 flex -translate-x-px"
         style="left: {fill.left}px; height: {thumbSize}px"
@@ -181,7 +180,7 @@
         {/if}
       </div>
     {/if}
-    {#if bVisible && fill.right !== null}
+    {#if isBVisible && fill.right !== null}
       <div
         class="absolute top-0 bottom-0 flex -translate-x-px"
         style="left: {fill.right}px; height: {thumbSize}px"
@@ -204,7 +203,7 @@
     {/if}
 
     <!-- A thumb -->
-    {#if aVisible && fill.left !== null}
+    {#if isAVisible && fill.left !== null}
       <div
         class="absolute top-1/2 flex -translate-y-1/2 cursor-ew-resize rounded-full"
         style="
@@ -223,7 +222,7 @@
     {/if}
 
     <!-- B thumb -->
-    {#if bVisible && fill.right !== null}
+    {#if isBVisible && fill.right !== null}
       <div
         class="absolute top-1/2 flex -translate-y-1/2 cursor-ew-resize rounded-full"
         style="

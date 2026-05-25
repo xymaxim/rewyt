@@ -170,3 +170,9 @@
     </DropdownMenu.Content>
   </DropdownMenu.Root>
 </div>
+
+<style>
+  :global([data-tabs-content]) {
+    outline-style: none;
+  }
+</style>

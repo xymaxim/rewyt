@@ -236,7 +236,7 @@
         <div class="absolute inset-0 flex items-center justify-center">
           {#if streamStatus === StreamStatus.STARTING}
             <div
-              class="pointer-events-none absolute rounded-2xl bg-[var(--rewyt-play-200)]"
+              class="pointer-events-none absolute rounded-4xl bg-[var(--rewyt-selected-light)]"
             >
               <StartingPane />
             </div>

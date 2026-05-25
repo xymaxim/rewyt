@@ -189,7 +189,7 @@
       <span class="text-sm text-gray-400">Not playing</span>
     {/if}
 
-    <div class="play-toolbar__group items-center gap-1!">
+    <div class="flex h-10 items-center gap-0 gap-1!">
       <Expandable.Root
         trigger="click"
         closeOnClickOutside={true}
@@ -375,19 +375,3 @@
     class="relative flex h-9 w-full flex-row justify-end gap-1 rounded-2xl bg-neutral-200/0 px-2"
   ></div>
 </div>
-
-<style>
-  @reference "tailwindcss";
-
-  .play-toolbar {
-    @apply inline-flex h-10! flex-row items-center gap-0 rounded-xl px-3;
-  }
-
-  .play-toolbar :global(button[data-slot="button"]) {
-    @apply size-9 rounded-full bg-[var(--rewyt-play-light)] hover:bg-[var(--rewyt-play-light)]/50;
-  }
-
-  .play-toolbar__group {
-    @apply flex h-10 items-center gap-0;
-  }
-</style>

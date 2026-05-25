@@ -33,17 +33,12 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
   const sliderValue = $derived.by<number>(() => {
     const min = getMin();
     const max = getMax();
-    // Any slider dragging — use the global raw pointer, clamped to this slider's bounds.
-    const globalDrag = explorer.selectedTime;
-    if (globalDrag !== null) return globalDrag;
-    // if (globalDrag !== null) return Math.min(Math.max(globalDrag, min), max);
 
+    if (explorer.selectedTime !== null) return explorer.selectedTime;
     if (explorer.mpdStartTime !== null) return explorer.mpdStartTime;
 
-    // If fallback is provided, use it
     if (getFallback) return Math.min(Math.max(getFallback(), min), max);
 
-    // Otherwise use viewRange center for initial positioning
     const vr = explorer.viewRange;
     return Math.min(Math.max((vr.start + vr.end) / 2, min), max);
   });
@@ -65,7 +60,6 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
         )
       : value;
 
-    // explorer.setDragTime(value);
     explorer.setSelectedTime(value);
     if (options.updateViewRange !== false) {
       explorer.setViewRange(

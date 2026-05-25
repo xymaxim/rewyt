@@ -11,16 +11,13 @@
 
   const sliderStep = 10 * MS_PER_MINUTE;
 
-  // ── Derived – full range (all days) ──────────────────────────────────────
   const minimapStart = $derived(explorer.days.at(-1)?.dayStart ?? 0);
   const minimapEnd = $derived(explorer.days.at(0)?.dayEnd ?? 0);
   const minimapSpan = $derived(minimapEnd - minimapStart);
 
-  // ── Derived – allowed range ───────────────────────────────────────────────
   const allowedStart = $derived(explorer.availableRange?.start ?? minimapStart);
   const allowedEnd = $derived(explorer.availableRange?.end ?? minimapEnd);
 
-  // ── Unallowed mask percents (relative to full minimap span) ───────────────
   const leftUnallowedPercent = $derived(
     minimapSpan > 0 ? ((allowedStart - minimapStart) / minimapSpan) * 100 : 0,
   );
@@ -28,7 +25,6 @@
     minimapSpan > 0 ? ((minimapEnd - allowedEnd) / minimapSpan) * 100 : 0,
   );
 
-  // ── Hook: full minimap range for track, allowed range for clamping ────────
   const slider = useTimeSlider({
     getMin: () => minimapStart,
     getMax: () => minimapEnd,
@@ -48,7 +44,6 @@
     return String(shifted.getUTCDate());
   });
 
-  // ── Derived – thumb fill: left→right based on time-of-day position ────────
   const thumbFillPercent = $derived.by<number>(() => {
     const vr = explorer.viewRange;
     if (!vr) return 0;
@@ -64,7 +59,6 @@
     `background: linear-gradient(to right, var(--rewyt-selected) ${thumbFillPercent}%, rgb(255 255 255 / 60%) ${thumbFillPercent}%);`,
   );
 
-  // ── Day labels ────────────────────────────────────────────────────────────
   function toPixel(ts: number): number {
     if (minimapSpan === 0 || slider.barWidth === 0) return 0;
     return ((ts - minimapStart) / minimapSpan) * slider.barWidth;
