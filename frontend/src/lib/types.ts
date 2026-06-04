@@ -2,7 +2,7 @@ export type Timestamp = number;
 export type ZoomLevel = number; // span duration in ms
 
 export const ZOOM_LEVELS = {
-  "5m": 5 * 60 * 1000,
+  "10m": 10 * 60 * 1000,
   "1h": 1 * 60 * 60 * 1000,
   "2h": 2 * 60 * 60 * 1000,
   "12h": 12 * 60 * 60 * 1000,

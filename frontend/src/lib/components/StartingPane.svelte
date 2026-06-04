@@ -23,6 +23,7 @@
         ringProportions: [0.2, 0.4, 1.0],
         ringColors: [OKLCH_RANGE, OKLCH_RANGE, OKLCH_RANGE],
       },
+
       resolve: resolveBead,
     },
     {

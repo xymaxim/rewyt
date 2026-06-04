@@ -85,8 +85,9 @@ export function getDateTimeParts(
   const absOffset = Math.abs(offsetMinutes);
   const offsetH = pad(Math.floor(absOffset / 60));
   const offsetM = absOffset % 60;
-  // const offset = offsetM === 0 ? `${sign}${offsetH}` : `${sign}${offsetH}:${pad(offsetM)}`;
-  const offset = `${sign}${offsetH}:${pad(offsetM)}`;
+  const offset =
+    offsetM === 0 ? `${sign}${offsetH}` : `${sign}${offsetH}:${pad(offsetM)}`;
+  // const offset = `${sign}${offsetH}:${pad(offsetM)}`;
 
   return { date, time, offset };
 }

@@ -25,7 +25,7 @@
   });
 </script>
 
-<Card.Root class="mt-2 gap-0 rounded-lg bg-[var(--background)]">
+<Card.Root class="mt-2 gap-0 rounded-2xl bg-[var(--background)]">
   <Card.Header>
     <Card.Title class="flex justify-between text-base">
       Start stream playback

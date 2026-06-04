@@ -14,7 +14,7 @@
   -webkit-font-smoothing: antialiased;
 
   --radius: 0.625rem;
-  --background: #f4f4f5;
+  --background: #f4f4f4;
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -81,8 +81,13 @@
   --rewyt-play: var(--rewyt-play-800);
   --rewyt-play-light: color-mix(in oklch, var(--rewyt-play), white 30%);
 
-  --rewyt-selected: var(--rewyt-selected-950);
-  --rewyt-selected-light: var(--rewyt-selected-500);
+  --rewyt-selected: #d0e758;
+  --rewyt-selected-light: #d2eb89;
+  --rewyt-selected-lighter: #ddf0a3;
+  --rewyt-selected-lightest: #ecf6cb;
+  --rewyt-selected-dark: #aadb24;
+  --rewyt-selected-darker: #8cb41d;
+  --rewyt-selected-darkest: #6d8c17;
 
   --rewyt-interval: var(--rewyt-interval-300);
   --rewyt-interval-light: var(--rewyt-interval-100);
@@ -158,6 +163,8 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-view: var(--rewyt-selected);
 }
 
 @keyframes shimmer {
@@ -179,7 +186,7 @@
 }
 
 @utility selection-toolbar__item {
-  @apply inline-flex h-10! items-center gap-1 rounded-xl! px-3 py-1;
+  @apply inline-flex h-10! items-center gap-1 rounded-2xl! px-3 py-1;
 }
 
 @utility selection-toolbar__item--button {
@@ -225,5 +232,15 @@ button[data-state="off"]:hover {
 }
 
 .text-timestamp {
-  @apply font-medium whitespace-nowrap text-muted-foreground tabular-nums transition-colors hover:text-foreground;
+  @apply text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:text-foreground;
+}
+
+@keyframes pulse-play {
+  0%,
+  100% {
+    background-color: var(--rewyt-play-700);
+  }
+  50% {
+    background-color: var(--rewyt-play-950);
+  }
 }

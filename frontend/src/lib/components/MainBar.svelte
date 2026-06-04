@@ -1,19 +1,27 @@
 <script lang="ts">
+  import { getContext } from "svelte";
   import { Button } from "$lib/components/ui/button/index.js";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
   import { Switch } from "$lib/components/ui/switch/index.js";
+  import { ZOOM_LEVELS, type ZoomLevelKey } from "$lib/types";
+  import * as Expandable from "$lib/components/expandable";
+  import TimelineZoomControl from "./TimelineZoomControl.svelte";
   import {
     ArrowUpRight,
+    ArrowDown,
     Camera,
     Circle,
+    FastForward,
     Pause,
     Play,
+    Rewind,
     Radio,
     RotateCcw,
     Settings,
+    ZoomIn,
   } from "lucide-svelte";
   import { getExplorerContext } from "../explorer.svelte";
   import { clampViewRange } from "../utils/timelineUtils";
@@ -27,7 +35,7 @@
   interface Props {
     isPlaying: boolean;
     playingTime: Date | null;
-    rewindDisabled: boolean;
+    isRewound: boolean;
     onTogglePlayPause: () => void;
     onStep: (seconds: number) => void;
     onRewind: (isoTime: string) => void;
@@ -39,7 +47,7 @@
   const {
     isPlaying,
     playingTime,
-    rewindDisabled,
+    isRewound,
     onReplay,
     onRewind,
     onRewindToLive,
@@ -50,7 +58,7 @@
 
   const explorer = getExplorerContext();
 
-  // Derived: check if playhead is outside current view
+  // Derived
   const isPlayheadOutOfView = $derived.by(() => {
     if (playingTime === null || explorer.viewRange === null) return false;
     const pt = explorer.playheadTime;
@@ -63,7 +71,6 @@
   let playheadSnapshot = $state<number | null>(null);
   let pendingOffsetValue = $state<string>("UTC+00:00");
 
-  // Playhead
   function jumpToPlayhead() {
     if (playingTime === null) return;
     explorer.setViewRange(
@@ -74,9 +81,14 @@
         explorer.centeredOnMidnight,
       ),
     );
+    if (
+      explorer.selectedTime < explorer.viewRange.start ||
+      explorer.selectedTime > explorer.viewRange.end
+    ) {
+      explorer.setSelectedTime(explorer.playheadTime);
+    }
   }
 
-  // Timezone dialog
   function openTimezoneDialog() {
     playheadSnapshot = explorer.playheadTime;
     pendingOffsetValue =
@@ -100,149 +112,187 @@
     const d = new Date(playheadSnapshot + offsetMinutes * 60 * 1000);
     return `${String(d.getUTCHours()).padStart(2, "0")}:${String(d.getUTCMinutes()).padStart(2, "0")}`;
   }
+
+  const zoomKey = $derived(
+    (Object.entries(ZOOM_LEVELS).find(
+      ([, v]) => v === explorer.zoomLevel,
+    )?.[0] ?? "1d") as ZoomLevelKey,
+  );
 </script>
 
-<div class="mt-1 grid w-full" style="grid-template-columns: 1fr auto 1fr;">
-  <!-- Left -->
-  <div></div>
-
-  <!-- Center -->
-  <div class="play-toolbar">
+<div class="grid w-full gap-1" style="grid-template-columns: auto 1fr;">
+  <div class="flex gap-2">
     {#if explorer.isRewinding}
       <div
-        class="flex w-48 items-center justify-center gap-0.5 text-muted-foreground"
+        class="flex w-50 w-70 items-center justify-center gap-0.5 text-muted-foreground"
       >
         <Circle size={6} strokeWidth={5} fill="none" />
         <Circle size={6} strokeWidth={5} fill="none" />
         <Circle size={6} strokeWidth={5} fill="none" />
       </div>
     {:else if playingTime !== null}
-      <div
-        class="flex cursor-pointer items-center"
-        title="Jump to playhead"
-        onclick={jumpToPlayhead}
-      >
-        <span
-          class="text-timestamp relative inline-block w-48 text-lg font-semibold! {isPlayheadOutOfView
+      <div class="flex w-70 cursor-pointer items-center gap-4">
+        {#if isPlaying}
+          <div
+            class="flex size-10 items-center justify-center rounded-full bg-rose-200"
+          >
+            <Pause strokeWidth={2} />
+          </div>
+        {:else if explorer.isSliding}
+          <div
+            class="flex size-10 items-center justify-center rounded-full bg-[var(--rewyt-selected-light)]"
+          >
+            {#if explorer.selectedTime <= explorer.playheadTime}
+              <Rewind strokeWidth={2} />
+            {:else}
+              <FastForward strokeWidth={2} />
+            {/if}
+          </div>
+        {:else}
+          <div
+            class="flex size-10! h-[42px] w-11 items-center justify-center rounded-full bg-rose-200"
+          >
+            <Play strokeWidth={2} size={20} />
+          </div>
+        {/if}
+        <div
+          class="relative inline-block inline-flex items-center justify-start! gap-2 text-xl
+                     {isPlayheadOutOfView
             ? 'text-gray-300!'
             : 'text-foreground!'}"
+          title="Jump to playhead"
+          onclick={jumpToPlayhead}
         >
-          {formatDateTime(
-            playingTime.getTime(),
-            explorer.timezoneOffset,
-            false,
-          )}
-          <span class="text-xs">{formatOffset(explorer.timezoneOffset)}</span>
+          <span class="flex items-center font-normal tabular-nums">
+            {formatDateTime(
+              playingTime.getTime(),
+              explorer.timezoneOffset,
+              false,
+            )}
+          </span>
+          <span
+            class="flex h-9 w-10 items-center justify-center rounded-full bg-neutral-200 text-sm"
+            onclick={openTimezoneDialog}
+          >
+            {formatOffset(explorer.timezoneOffset)}
+          </span>
           {#if isPlayheadOutOfView}
             <span
-              class="absolute top-0 right-0 left-0 mx-auto h-7 w-7 items-center rounded-full bg-[var(--rewyt-play-200)] p-0.5 ring-2 ring-[var(--background)]"
+              class="absolute top-1/2 left-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--rewyt-play-200)] p-0.5 ring-2 ring-[var(--background)]"
             >
-              <ArrowUpRight class="h-full w-full text-foreground" />
+              <ArrowUpRight strokeWidth={2} class="text-foreground" />
             </span>
           {/if}
-        </span>
+        </div>
       </div>
     {:else}
       <span class="text-sm text-gray-400">Not playing</span>
     {/if}
 
-    <div class="play-toolbar__group ml-4">
-      <Button
-        title={isPlaying ? "Pause" : "Play"}
-        variant="ghost"
-        size="icon"
-        class="p-0! {isPlaying ? '!bg-[var(--rewyt-play-light)]' : ''}"
-        onclick={onTogglePlayPause}
+    <div class="flex h-10 items-center gap-0 gap-1!">
+      <Expandable.Root
+        trigger="click"
+        closeOnClickOutside={true}
+        class="flex items-center gap-2"
       >
-        {#if isPlaying}<Pause class="size-4.5" />{:else}<Play
-            class="size-4.5"
-          />{/if}
-      </Button>
-      <Button title="Repeat" variant="ghost" size="icon" onclick={onReplay}>
-        <RotateCcw class="size-4.5" />
-      </Button>
-      <ActionButton
-        title="Take screenshot"
-        action={() => onScreenshot(explorer.playheadTime)}
-        notification={{ message: "Screenshot saved" }}
-        variant="ghost"
-        size="icon"
-      >
-        <Camera class="size-4.5" />
-      </ActionButton>
+        {@const context = getContext("expandable")}
+        <Expandable.Trigger class="gap-0! transition-none">
+          <div
+            title="Mark interval"
+            class="flex size-9 w-10 items-center justify-center rounded-full bg-[var(--rewyt-interval-200)]/50! text-sm font-bold tracking-tighter transition-all {context.open
+              ? ' -rotate-30 opacity-50'
+              : ''}"
+          >
+            <span class="{context.open ? 'opacity-0' : ''} transition-opacity"
+              >AB</span
+            >
+          </div>
+        </Expandable.Trigger>
+        <Expandable.Content class="px-1 transition-all ease-in-out">
+          <div
+            class="flex items-center px-0 transition-opacity {!context.open
+              ? 'opacity-0'
+              : ''}"
+          >
+            <Button
+              title="Mark A"
+              variant="ghost"
+              size="icon"
+              class="flex size-9 rounded-full bg-[var(--rewyt-interval-200)]/50! text-sm font-bold tracking-wider"
+              onclick={() => {
+                if (explorer.playheadTime !== null)
+                  explorer.assignMark("A", explorer.playheadTime);
+              }}
+            >
+              A
+            </Button>
+            <Button
+              title="Mark A"
+              variant="ghost"
+              size="icon"
+              class="flex size-9 rounded-full bg-[var(--rewyt-interval-200)]/50! text-sm font-bold [word-spacing:10px]!"
+              onclick={() => {
+                if (explorer.playheadTime !== null)
+                  explorer.assignMark("B", explorer.playheadTime);
+              }}
+            >
+              B
+            </Button>
+          </div>
+        </Expandable.Content>
+      </Expandable.Root>
+
+      <div class="flex items-center transition-all ease-in-out">
+        <Expandable.Root
+          open={true}
+          trigger="click"
+          closeOnClickOutside={true}
+          class="items-center"
+        >
+          {@const isOpen = getContext("expandable").open}
+          <Expandable.Trigger
+            class="justify-end! transition-transform ease-in-out {isOpen
+              ? '-rotate-30'
+              : ''}"
+          >
+            <Button
+              title="Change zoom"
+              variant="ghost"
+              size="icon"
+              class="relative h-9! w-10 justify-center rounded-full bg-neutral-200! text-xs font-black"
+            >
+              <span
+                class="z-20 flex tracking-wider {isOpen
+                  ? 'opacity-0'
+                  : ''} transition-opacity"
+              >
+                {zoomKey}
+              </span>
+            </Button>
+          </Expandable.Trigger>
+          <Expandable.Content>
+            <div class="flex h-9 items-center bg-neutral-200/0 px-2">
+              <TimelineZoomControl />
+            </div>
+          </Expandable.Content>
+        </Expandable.Root>
+      </div>
     </div>
-
-    <div class="play-toolbar__group">
-      <Button
-        title="Mark A"
-        variant="ghost"
-        size="icon"
-        class="text-base font-bold"
-        onclick={() => {
-          if (explorer.playheadTime !== null)
-            explorer.assignMark("A", explorer.playheadTime);
-        }}>A</Button
-      >
-      <Button
-        title="Mark B"
-        variant="ghost"
-        size="icon"
-        class="text-base font-bold"
-        onclick={() => {
-          if (explorer.playheadTime !== null)
-            explorer.assignMark("B", explorer.playheadTime);
-        }}>B</Button
-      >
-    </div>
-  </div>
-
-  <!-- Right -->
-  <div class="flex flex-row items-center justify-end gap-1">
-    <Button
-      title="Go to live"
-      variant="ghost"
-      class="hover:bg-transparent hover:text-[var(--rewyt-play)]"
-      onclick={onRewindToLive}><Radio /></Button
-    >
-
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         {#snippet child({ props })}
-          <Button {...props} title="Settings" variant="ghost" size="lg">
+          <Button
+            {...props}
+            title="Settings"
+            variant="ghost"
+            size="lg"
+            class="rounded-full bg-neutral-200"
+          >
             <Settings />
           </Button>
         {/snippet}
       </DropdownMenu.Trigger>
       <DropdownMenu.Content align="end" class="w-64 rounded-2xl!">
-        <DropdownMenu.Item
-          class="flex cursor-pointer items-center justify-between gap-2"
-          onclick={openTimezoneDialog}
-        >
-          Change timezone...
-          <span class="text-xs font-medium text-muted-foreground"
-            >{formatOffset(explorer.timezoneOffset)}</span
-          >
-        </DropdownMenu.Item>
-
-        <div class="flex items-center space-x-2">
-          <DropdownMenu.Item
-            class="flex w-full items-center justify-between"
-            onSelect={(e) => e.preventDefault()}
-          >
-            <Label
-              for="timelineviewrange-toggle"
-              class="cursor-pointer font-normal">Show timeline scrub bar</Label
-            >
-            <Switch
-              id="timelineviewrange-toggle"
-              checked={explorer.showTimelineViewRange}
-              onCheckedChange={(v) => explorer.setShowTimelineViewRange(v)}
-            />
-          </DropdownMenu.Item>
-        </div>
-
-        <DropdownMenu.Separator />
-
         <DropdownMenu.Group>
           <DropdownMenu.Label
             class="cursor-pointer text-xs font-medium text-muted-foreground"
@@ -320,20 +370,8 @@
       </Dialog.Content>
     </Dialog.Root>
   </div>
+
+  <div
+    class="relative flex h-9 w-full flex-row justify-end gap-1 rounded-2xl bg-neutral-200/0 px-2"
+  ></div>
 </div>
-
-<style>
-  @reference "tailwindcss";
-
-  .play-toolbar {
-    @apply inline-flex h-10! min-w-120 flex-row items-center gap-1 rounded-xl px-3 py-1;
-  }
-
-  .play-toolbar :global(button[data-slot="button"]) {
-    @apply h-8 w-10 rounded-full bg-neutral-200 hover:bg-[var(--rewyt-play-light)]/50;
-  }
-
-  .play-toolbar__group {
-    @apply flex items-center gap-1;
-  }
-</style>

@@ -1,55 +1,46 @@
 <script lang="ts">
-  import { onDestroy } from "svelte";
-  import { Undo } from "lucide-svelte";
-  import { getExplorerContext } from "../explorer.svelte";
-  import { MS_PER_HOUR } from "../utils/dateUtils";
+  import { getExplorerContext } from "$lib/explorer.svelte";
+  import { MS_PER_HOUR } from "$lib/utils/dateUtils";
+  import { formatTime } from "$lib/utils/dateTimeUtils";
   import { useElementSize } from "$lib/hooks/useElementSize.svelte";
-  import { pixelToTime, timeToPixel } from "../utils/timePixelUtils";
+  import { pixelToTime, timeToPixel } from "$lib/utils/timePixelUtils";
   import {
     buildTicks,
     findDay,
-    formatHoverTime,
     getStripeBackground,
     snapTime,
-  } from "../utils/timelineUtils";
-  import TimelineViewRange from "./TimelineViewRange.svelte";
-  import IntervalFrame from "./IntervalFrame.svelte";
-  import TimelineNeedle from "./TimelineNeedle.svelte";
-  import TimelineViewControl from "./TimelineViewControl.svelte";
+  } from "$lib/utils/timelineUtils";
+  import IntervalSlider from "$lib/components/sliders/IntervalSlider.svelte";
+  import RewindSlider from "$lib/components/sliders/RewindSlider.svelte";
+
+  import {
+    ArrowUpRight,
+    Camera,
+    Circle,
+    Pause,
+    Play,
+    Radio,
+    RotateCcw,
+    Settings,
+    ZoomIn,
+  } from "lucide-svelte";
 
   interface Props {
     seekableRange: { start: number; end: number } | null;
+    mpdStartTime: number;
+    isRewound: boolean;
     onRewind: (interval: string) => void;
-    rewindDisabled: boolean;
   }
 
-  let { seekableRange, onRewind, rewindDisabled }: Props = $props();
+  let { seekableRange, mpdStartTime, isRewound, onRewind }: Props = $props();
 
-  // Context
   const explorer = getExplorerContext();
   const bar = useElementSize();
 
-  // State
   let timelineEl = $state<HTMLDivElement | null>(null);
-  let playheadEl = $state<HTMLDivElement | null>(null);
-  let isHovering = $state(false);
-  let isHoveringButton = $state(false);
-  let ctrlHeld = $state(false);
-  let shiftHeld = $state(false);
+  let hoverPx = $state<number | null>(null);
 
-  // Hover tracking
-  let hoverLabelEl = $state<HTMLDivElement | null>(null);
-  let hoverPx: number | null = null;
-  let hoverPy: number | null = null;
-  let rafId: number | null = null;
-
-  // Constants
   const notAvailableMessage = "Outside rewind range";
-
-  // Derived
-  const showScrubBar = $derived(
-    shiftHeld && isHovering && !explorer.showTimelineViewRange,
-  );
 
   const range = $derived(
     explorer.viewRange && bar.width > 0 ? explorer.viewRange : null,
@@ -61,7 +52,18 @@
     const day = findDay(center, explorer.days);
     const dayStart =
       day?.dayStart ?? Math.floor(center / MS_PER_HOUR) * MS_PER_HOUR;
-    return buildTicks(range, bar.width, dayStart, explorer.timezoneOffset);
+    return buildTicks(range, bar.width, dayStart, explorer.timezoneOffset).map(
+      (tick) => {
+        if (!tick.major || tick.label !== "00:00")
+          return { ...tick, dayLabel: null };
+        const ts = pixelToTime(tick.px, range, bar.width);
+        return {
+          ...tick,
+          dayLabel:
+            ts !== null ? formatDayLabel(ts, explorer.timezoneOffset) : null,
+        };
+      },
+    );
   });
 
   const { stripeWidthPx, stripeOffsetPx, stripeGradient } = $derived.by(() =>
@@ -96,12 +98,6 @@
     );
   });
 
-  const selectedTimePx = $derived.by<number | null>(() => {
-    const t = explorer.selectedTime;
-    if (t === null || range === null) return null;
-    return timeToPixel(t, range, bar.width);
-  });
-
   const unavailableLeftPx = $derived.by<number | null>(() => {
     const ar = explorer.availableRange;
     if (!ar || !range) return null;
@@ -116,107 +112,55 @@
     return timeToPixel(Math.max(ar.end, range.start), range, bar.width);
   });
 
-  // Helpers
+  const playheadPx = $derived.by<number | null>(() => {
+    if (range === null) return null;
+    const t = explorer.playheadTime;
+    if (t === null) return null;
+    return timeToPixel(t, range, bar.width);
+  });
+
+  const playheadLabelFlipped = $derived(
+    playheadPx !== null && bar.width > 0 && playheadPx / bar.width > 0.85,
+  );
+
   function isAvailable(ts: number): boolean {
     const ar = explorer.availableRange;
     if (!ar) return true;
     return ts >= ar.start && ts <= ar.end;
   }
 
-  // Hover tracking
-  function tick() {
-    if (hoverLabelEl) {
-      if (
-        hoverPx !== null &&
-        hoverPy !== null &&
-        !isHoveringButton &&
-        !shiftHeld
-      ) {
-        hoverLabelEl.style.display = "block";
-        hoverLabelEl.style.left = `${hoverPx}px`;
-        hoverLabelEl.style.top = `${hoverPy}px`;
-
-        if (range) {
-          const spanMs = range.end - range.start;
-          const ts = snapTime(pixelToTime(hoverPx, range, bar.width), spanMs);
-          const label = formatHoverTime(ts, spanMs, explorer.timezoneOffset);
-          hoverLabelEl.textContent = label;
-        }
-      } else {
-        hoverLabelEl.style.display = "none";
-      }
-    }
-    rafId = requestAnimationFrame(tick);
+  function formatDayLabel(ts: number, offsetMinutes: number): string | null {
+    const shifted = new Date(ts + offsetMinutes * 60 * 1000);
+    if (shifted.getUTCHours() !== 0 || shifted.getUTCMinutes() !== 0)
+      return null;
+    const now = new Date(Date.now() + offsetMinutes * 60 * 1000);
+    const isToday = now.toDateString() === shifted.toDateString();
+    if (isToday) return "Today";
+    return shifted.toLocaleString("en-US", {
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC",
+    });
   }
 
-  function startHoverTracking() {
-    if (!rafId) rafId = requestAnimationFrame(tick);
-  }
-
-  function stopHoverTracking() {
-    if (rafId) {
-      cancelAnimationFrame(rafId);
-      rafId = null;
-    }
-  }
-
-  // Effects
-  $effect(() => {
-    if (!playheadEl || range === null) return;
-    const t = explorer.playheadTime;
-    if (t === null) {
-      playheadEl.style.display = "none";
+  function onPointerMove(e: PointerEvent) {
+    if (!timelineEl) return;
+    if (explorer.isSliding) {
+      hoverPx = null;
       return;
     }
-    const px = timeToPixel(t, range, bar.width);
-    if (px === null) {
-      playheadEl.style.display = "none";
-    } else {
-      playheadEl.style.display = "block";
-      playheadEl.style.transform = `translateX(${px}px)`;
-    }
-  });
-
-  // Event handlers
-  function onMouseMove(e: MouseEvent) {
-    const rect = timelineEl.getBoundingClientRect();
-    const px = e.clientX - rect.left;
-    const py = e.clientY - rect.top;
+    const px = e.clientX - timelineEl.getBoundingClientRect().left;
     const ts = range ? pixelToTime(px, range, bar.width) : null;
-    const avail = ts && isAvailable(ts);
-    hoverPx = avail ? px : null;
-    hoverPy = avail ? py : null;
+    hoverPx = ts && isAvailable(ts) ? px : null;
   }
 
-  function onMouseEnter() {
-    isHovering = true;
-    startHoverTracking();
-    window.addEventListener("keydown", onKeyDown);
-    window.addEventListener("keyup", onKeyUp);
-  }
-
-  function onMouseLeave(e: MouseEvent) {
+  function onPointerLeave() {
     hoverPx = null;
-    hoverPy = null;
-    isHovering = false;
-    shiftHeld = false;
-    ctrlHeld = false;
-    stopHoverTracking();
-    window.removeEventListener("keydown", onKeyDown);
-    window.removeEventListener("keyup", onKeyUp);
-  }
-
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key === "Shift") shiftHeld = true;
-    if (e.key === "Control") ctrlHeld = true;
-  }
-  function onKeyUp(e: KeyboardEvent) {
-    if (e.key === "Shift") shiftHeld = false;
-    if (e.key === "Control") ctrlHeld = false;
   }
 
   function onClick(e: MouseEvent) {
-    if (!timelineEl || range === null || showScrubBar) return;
+    if (explorer.isSliding) return;
+    if (!timelineEl || range === null) return;
     const spanMs = range.end - range.start;
     const ts = Math.round(
       snapTime(
@@ -233,58 +177,41 @@
     if (!e.ctrlKey)
       onRewind(new Date(ts).toISOString(), explorer.pauseAfterRewind);
     hoverPx = null;
-    hoverPy = null;
   }
 
-  onDestroy(() => {
-    stopHoverTracking();
-    window.removeEventListener("keydown", onKeyDown);
-    window.removeEventListener("keyup", onKeyUp);
+  $effect(() => {
+    if (explorer.isSliding) hoverPx = null;
   });
 </script>
 
-<div
-  bind:this={bar.el}
-  class="relative w-full pb-[15px] outline-hidden select-none"
-  onmouseenter={onMouseEnter}
-  onmouseleave={onMouseLeave}
-  role="region"
->
-  <TimelineViewControl />
-
+<div bind:this={bar.el} class="relative w-full pb-0 outline-hidden select-none">
   <div class="relative h-6 w-full">
     {#each ticks.filter((t) => t.major) as tick}
       <span
-        class="absolute text-sm whitespace-nowrap text-foreground"
+        class="absolute text-sm whitespace-nowrap"
+        class:text-foreground={!tick.dayLabel}
+        class:text-muted-foreground={!!tick.dayLabel}
         class:text-gray-300={!isAvailable(
           pixelToTime(tick.px, range!, bar.width),
         )}
         style="left: {tick.px}px; transform: translateX(-50%);"
-        >{tick.label}</span
+        >{tick.dayLabel ?? tick.label}</span
       >
     {/each}
   </div>
 
   <div
     bind:this={timelineEl}
-    class="group relative h-[60px] w-full rounded-md transition-[filter]"
-    class:cursor-rewind={!ctrlHeld && isHovering}
-    class:cursor-rewind-ctrl={ctrlHeld && isHovering}
+    class="group relative h-12 w-full cursor-pointer rounded-2xl"
     style="background: {stripeGradient} {stripeOffsetPx}px 0 / {stripeWidthPx}px 100%;"
-    class:blur-sm={showScrubBar}
-    class:pointer-events-none={showScrubBar}
-    onmousemove={onMouseMove}
-    onmouseleave={() => {
-      hoverPx = null;
-      hoverPy = null;
-    }}
+    onpointermove={onPointerMove}
+    onpointerleave={onPointerLeave}
     onclick={onClick}
   >
     {#if seekableLeft !== null && seekableRight !== null}
       <div
-        class="pointer-events-none absolute top-0 bottom-0"
-        style="left: {seekableLeft}px; width: {seekableRight -
-          seekableLeft}px; background: rgba(0,0,0,0.08);"
+        class="pointer-events-none absolute top-0 bottom-0 rounded-xl bg-[var(--rewyt-play-300)]/60"
+        style="left: {seekableLeft}px; width: {seekableRight - seekableLeft}px"
       ></div>
     {/if}
 
@@ -304,100 +231,61 @@
       ></div>
     {/if}
 
-    <IntervalFrame barWidth={bar.width} />
-
     {#each ticks as tick}
       <div
-        class="absolute z-90 w-px bg-black/30"
-        style="left: {tick.px}px; height: {tick.major
-          ? 10
-          : 6}px; width: {tick.major ? 1 : 1}px;"
+        class="absolute z-30 bg-black/30"
+        style="left: {tick.px}px; height: {tick.major ? 10 : 6}px; width: 1px;"
       ></div>
     {/each}
 
-    <div
-      class="pointer-events-none absolute w-full overflow-visible rounded-full"
-      style="inset: -15px 0"
-    >
-      {#if selectedTimePx !== null}
-        {#if !rewindDisabled}
-          <button
-            type="button"
-            class="pointer-events-auto absolute top-[50px]! z-110 flex size-8 cursor-pointer items-center justify-center rounded-full bg-[var(--rewyt-selected-light)] text-black shadow-md transition-opacity hover:opacity-90 focus-visible:outline-hidden"
-            style="left: {selectedTimePx}px; inset-block: 0; margin-block: auto; transform: translateX(-50%);"
-            onclick={(e) => {
-              e.stopPropagation();
-              isHoveringButton = false;
-              if (explorer.selectedTime !== null) {
-                onRewind(new Date(explorer.selectedTime).toISOString());
-              }
-            }}
-            onmouseenter={() => (isHoveringButton = true)}
-            onmouseleave={() => (isHoveringButton = false)}
-            title="Rewind to selected time"
-          >
-            <Undo class="size-5" />
-          </button>
-        {/if}
+    {#if explorer.marks.A || explorer.marks.B}
+      <div class="absolute h-7! w-full">
+        <IntervalSlider />
+      </div>
+    {/if}
 
-        <TimelineNeedle
-          px={selectedTimePx}
-          color="var(--rewyt-selected)"
-          style="z-index: 100;"
-        />
-      {/if}
-
-      <div
-        bind:this={playheadEl}
-        class="needle-play pointer-events-none absolute top-0 bottom-0 z-100 w-[3px] rounded-full"
-        style="left: 0; background: var(--rewyt-play); will-change: transform;"
-      ></div>
-
-      <div
-        bind:this={hoverLabelEl}
-        class="pointer-events-none absolute z-100 rounded-md bg-[var(--rewyt-selected-light)] px-1.5 text-sm font-semibold tabular-nums"
-        style="display: none; transform: translate(-50%, -50%); margin-top: -8px;"
-      ></div>
-    </div>
-
-    {#if explorer.selectedTime === null}
-      <div
-        class="pointer-events-none absolute inset-0 flex items-center justify-center opacity-100 transition-opacity group-hover:opacity-0"
-      >
-        <span
-          class="z-30 z-200 rounded-md bg-neutral-50 px-4 py-0.5 text-sm text-gray-400"
+    <div class="pointer-events-none absolute inset-0 w-full rounded-full">
+      {#if playheadPx !== null}
+        <div
+          class="pointer-events-none absolute bottom-0 z-50 size-5! h-full rounded-full"
+          style="left: 0; background: var(--rewyt-play-950); will-change: transform; transform: translateX(calc({playheadPx}px - 50%));"
         >
-          Pick a time to rewind
-        </span>
+          <div
+            class="absolute bottom-1/2 left-1/2 size-0.75 -translate-x-1/2 translate-y-1/2 rotate-30 rounded-full bg-black"
+          />
+          <div
+            class="absolute top-1/2 -translate-y-1/2 whitespace-nowrap"
+            class:left-full={!playheadLabelFlipped}
+            class:ml-2={!playheadLabelFlipped}
+            class:right-full={playheadLabelFlipped}
+            class:mr-2={playheadLabelFlipped}
+          >
+            {formatTime(explorer.playheadTime, explorer.timezoneOffset)}
+          </div>
+        </div>
+      {/if}
+    </div>
+  </div>
+
+  <div class="relative h-[40px] w-full">
+    {#if explorer.selectedTime !== null || hoverPx !== null}
+      <RewindSlider {hoverPx} {isRewound} {onRewind} />
+    {:else}
+      <div
+        class="flex h-full items-center justify-center gap-1 text-sm text-muted-foreground"
+      >
+        <span>Click above or slide</span>
+        <span
+          class="inline-flex size-5 items-center rounded-full bg-[var(--rewyt-selected-light)]"
+        ></span>
+        <span>to rewind</span>
       </div>
     {/if}
   </div>
-  {#if showScrubBar}
-    <div
-      class="pointer-events-auto absolute inset-x-4 top-1/2 z-30 mt-1 -translate-y-1/2"
-    >
-      <TimelineViewRange
-        showControls={false}
-        class="overflow-visible rounded-lg border-1 border-gray-300/60 bg-white/70"
-      />
-    </div>
-  {/if}
 </div>
 
 <style>
   @reference "tailwindcss";
-  .cursor-rewind {
-    cursor:
-      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='10' fill='%2306b6d4'/><circle cx='12' cy='12' r='5' fill='oklch(0.89 0.1 156)'/></svg>")
-        12 12,
-      auto;
-  }
-  .cursor-rewind-ctrl {
-    cursor:
-      url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><circle cx='12' cy='12' r='10' fill='%2306b6d4'/><circle cx='12' cy='12' r='3' fill='oklch(0.89 0.1 156)'/></svg>")
-        12 12,
-      auto;
-  }
   .unavailable-back {
     @apply cursor-not-allowed rounded-md backdrop-blur-md backdrop-grayscale;
     background: --alpha(var(--background) / 70%);

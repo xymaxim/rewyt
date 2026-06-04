@@ -24,7 +24,7 @@
 
   let {
     primitives,
-    angle: propAngle = 0,
+    angle = $bindable(0),
     width = 640,
     height = 360,
     cy: propCy,
@@ -58,7 +58,6 @@
   // State
   let seed = $state(propSeed);
   let ready = $state(false);
-  let angle = $state(propAngle);
 
   // Derived
   const cx = $derived(width / 2);
@@ -74,7 +73,7 @@
       rotationSpeeds: primitives.map(() => {
         let value = Math.floor(randBetween(rotationSpeedRange));
         while (value === 0) value = Math.floor(randBetween(rotationSpeedRange));
-        return value;
+        return 0;
       }),
     };
   });
@@ -106,11 +105,6 @@
     return primitives.map(
       ({ config, resolve }) => resolve(config as any) as AnyResolved,
     );
-  });
-
-  // Effects
-  $effect(() => {
-    if (!playing) angle = propAngle;
   });
 
   onMount(() => {

@@ -37,19 +37,14 @@
   let ytdlpStdout = $state<string>("");
   let unlistenStdout: (() => void) | null = null;
   let showStdoutLog = $state(false);
-  let welcomeKey = $state(0);
 
   // Effects: player-explorer wiring
   $effect(() => {
-    if (streamStatus === StreamStatus.IDLE) {
-      untrack(() => {
-        welcomeKey++;
-      });
-    }
+    explorer.setPlayheadTime(player.playheadTime?.getTime() ?? null);
   });
 
   $effect(() => {
-    explorer.setPlayheadTime(player.playheadTime?.getTime() ?? null);
+    explorer.setMpdStartTime(player.mpdStartTime?.getTime() ?? null);
   });
 
   $effect(() => {
@@ -124,6 +119,10 @@
     b: () => {
       if (explorer.playheadTime !== null)
         explorer.assignMark("B", explorer.playheadTime);
+    },
+    r: () => {
+      if (explorer.playheadTime !== null)
+        explorer.setSelectedTime(explorer.playheadTime);
     },
   };
 
@@ -237,16 +236,19 @@
         <div class="absolute inset-0 flex items-center justify-center">
           {#if streamStatus === StreamStatus.STARTING}
             <div
-              class="pointer-events-none absolute rounded-2xl bg-[var(--rewyt-play-200)]"
+              class="pointer-events-none absolute rounded-4xl bg-[var(--rewyt-selected-light)]"
             >
               <StartingPane />
             </div>
           {/if}
 
-          <div class="absolute z-10 rounded-2xl bg-[var(--rewyt-play-200)] {streamStatus === StreamStatus.STARTING ? 'opacity-0' : ''} transition duration-600">
-            {#key welcomeKey}
-              <WelcomePane hiding={streamStatus !== StreamStatus.IDLE} />
-            {/key}
+          <div
+            class="absolute z-10 h-full w-[640px]
+                     {streamStatus === StreamStatus.STARTING
+              ? 'scale-0'
+              : ''} transition duration-400"
+          >
+            <WelcomePane />
           </div>
         </div>
       </div>

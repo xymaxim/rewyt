@@ -1,16 +1,16 @@
 <script lang="ts">
-  import { getExplorerContext } from "../explorer.svelte";
-  import TimelineViewRange from "./TimelineViewRange.svelte";
-  import DaySelector from "./DaySelector.svelte";
-  import MainBar from "./MainBar.svelte";
-  import ProgressBar from "./ProgressBar.svelte";
-  import SelectionToolbar from "./SelectionToolbar.svelte";
-  import Timeline from "./Timeline.svelte";
+  import { getExplorerContext } from "$lib/explorer.svelte";
+  import MainBar from "$lib/components/MainBar.svelte";
+  import DaySlider from "$lib/components/sliders/DaySlider.svelte";
+  import DaysSlider from "$lib/components/sliders/DaysSlider.svelte";
+  import Timeline from "$lib/components/Timeline.svelte";
+  import TimelineToolbar from "$lib/components/TimelineToolbar.svelte";
 
   interface Props {
     isMpdLoaded: boolean;
     isPlayingInterval: boolean;
     lastRewindTarget: number | null;
+    mpdStartTime: number;
     playingTime: Date | null;
     seekableRange: { start: number; end: number } | null;
     videoEl: HTMLVideoElement | null;
@@ -29,6 +29,7 @@
     isMpdLoaded,
     isPlayingInterval,
     lastRewindTarget,
+    mpdStartTime,
     playingTime,
     seekableRange,
     videoEl,
@@ -49,7 +50,7 @@
   let isPlaying = $state(false);
 
   // Derived
-  const rewindDisabled = $derived(
+  const isRewound = $derived(
     lastRewindTarget !== null &&
       explorer.selectedTime !== null &&
       lastRewindTarget === explorer.selectedTime,
@@ -75,14 +76,10 @@
       Loading stream...
     </p>
   {:else}
-    <ProgressBar />
-
-    <DaySelector />
-
     <MainBar
       {isPlaying}
       {playingTime}
-      {rewindDisabled}
+      {isRewound}
       {onReplay}
       {onRewindToLive}
       {onRewind}
@@ -91,21 +88,33 @@
       {onTogglePlayPause}
     />
 
-    <Timeline {seekableRange} {onRewind} {rewindDisabled} />
+    <Timeline
+      {seekableRange}
+      mpdStartTime={mpdStartTime.getTime()}
+      {isRewound}
+      {onRewind}
+    />
 
-    {#if explorer.showTimelineViewRange}
-      <TimelineViewRange />
-    {/if}
+    <div class="mt-1 mb-2 flex gap-2">
+      <div class="relative w-[60%] rounded-2xl bg-neutral-200 px-[1rem]">
+        <DaysSlider />
+      </div>
+      <div class="relative w-[40%] rounded-2xl bg-neutral-200 px-[1rem]">
+        <DaySlider />
+      </div>
+    </div>
 
-    {#if explorer.selectedTime !== null}
-      <SelectionToolbar
-        {isPlayingInterval}
-        {seekableRange}
-        {onSeekTo}
-        {onPlayInterval}
-        {onStopInterval}
-        {onRewind}
-      />
-    {/if}
+    <div class="flex h-10 items-center justify-center">
+      {#if explorer.selectedTime !== null}
+        <TimelineToolbar
+          {isPlayingInterval}
+          {seekableRange}
+          {onSeekTo}
+          {onPlayInterval}
+          {onStopInterval}
+          {onRewind}
+        />
+      {/if}
+    </div>
   {/if}
 </div>

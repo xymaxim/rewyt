@@ -3,6 +3,8 @@ import type {
   RectangleResolved,
   BeadConfig,
   BeadResolved,
+  PetalsConfig,
+  PetalsResolved,
   EmptyConfig,
   EmptyResolved,
   OklchRange,
@@ -32,6 +34,15 @@ export function resolveBead(config: BeadConfig): BeadResolved {
 
 export function resolveEmpty(config: EmptyConfig): EmptyResolved {
   return {};
+}
+
+export function resolvePetals(config: PetalsConfig): PetalsResolved {
+  return {
+    size: randBetween(config.sizeRange),
+    count: Math.round(randBetween(config.countRange)),
+    strokeWidth: randBetween(config.strokeWidthRange),
+    color: resolveOklch(config.colorRange),
+  };
 }
 
 // Helper functions

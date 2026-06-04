@@ -1,124 +1,127 @@
 <script lang="ts">
   import { getExplorerContext } from "../explorer.svelte.js";
   import { timeToPixel } from "../utils/timePixelUtils.ts";
+  import { useElementSize } from "$lib/hooks/useElementSize.svelte";
 
   interface Props {
-    barWidth: number;
+    color?: string;
   }
 
-  const { barWidth }: Props = $props();
+  const { color = "var(--rewyt-interval-200)" }: Props = $props();
 
-  interface FrameGeometry {
-    left: number;
-    width: number;
-    borderLeft: boolean;
-    borderRight: boolean;
-  }
-
-  // Constants
-  const OPEN_END_WIDTH = 50;
-
-  // Context
   const explorer = getExplorerContext();
+  const container = useElementSize();
+  const radius = $derived(container.height / 2);
 
-  // Derived
-  const frame = $derived.by<FrameGeometry | null>(() => {
-    if (barWidth === 0) return null;
+  const edgeWidth = 1;
+  const edgeColor = "bg-black";
+
+  const computed = $derived.by(() => {
+    if (container.width === 0) return null;
+
     const { A, B } = explorer.marks;
     if (A === null && B === null) return null;
+
     const vr = explorer.viewRange;
     if (!vr) return null;
 
-    const aInView = A !== null ? timeToPixel(A, vr, barWidth) : null;
-    const bInView = B !== null ? timeToPixel(B, vr, barWidth) : null;
+    const aInView = A !== null ? timeToPixel(A, vr, container.width) : null;
+    const bInView = B !== null ? timeToPixel(B, vr, container.width) : null;
 
-    // Both marks set
+    const showA = A !== null && A >= vr.start && A <= vr.end;
+    const showB = B !== null && B >= vr.start && B <= vr.end;
+
     if (A !== null && B !== null) {
       if (A > vr.end && B > vr.end) return null;
       if (A < vr.start && B < vr.start) return null;
+
       const left = A < vr.start ? 0 : (aInView ?? 0);
-      const right = B > vr.end ? barWidth : (bInView ?? barWidth);
-      return {
-        left,
-        width: right - left,
-        borderLeft: A >= vr.start,
-        borderRight: B <= vr.end,
-      };
+      const right = B > vr.end ? container.width : (bInView ?? container.width);
+
+      return { left, right, showA, showB };
     }
 
-    // Only A set — extends right, right side always open
     if (A !== null) {
-      if (aInView === null) return null;
-      return {
-        left: aInView,
-        width: Math.min(aInView + OPEN_END_WIDTH, barWidth) - aInView,
-        borderLeft: true,
-        borderRight: false,
-      };
+      if (!showA) return null;
+      return { left: aInView!, right: null, showA, showB: false };
     }
 
-    // Only B set — extends left, left side always open
     if (B !== null) {
-      if (bInView === null) return null;
-      const left = Math.max(bInView - OPEN_END_WIDTH, 0);
-      return {
-        left,
-        width: bInView - left,
-        borderLeft: false,
-        borderRight: true,
-      };
+      if (!showB) return null;
+      return { left: null, right: bInView!, showA: false, showB };
     }
 
     return null;
   });
-
-  const borderRadius = $derived.by(() => {
-    if (!frame) return "0";
-    const tl = frame.borderLeft ? "12px" : "0";
-    const tr = frame.borderRight ? "12px" : "0";
-    const br = frame.borderRight ? "12px" : "0";
-    const bl = frame.borderLeft ? "12px" : "0";
-    return `${tl} ${tr} ${br} ${bl}`;
-  });
-
-  const maskImage = $derived.by(() => {
-    if (!explorer.marks.A)
-      return "linear-gradient(to right, transparent, white 30%)";
-    if (!explorer.marks.B)
-      return "linear-gradient(to left, transparent, white 30%)";
-    return "none";
-  });
 </script>
 
-{#if frame !== null}
-  <div
-    class="drop-shadow-md] absolute z-10 rounded-lg"
-    style="
-                left: {frame.left}px;
-                width: {frame.width}px;
-                top: -2px;
-                bottom: -2px;
-                "
-  >
-    <div
-      class="absolute flex h-full w-full"
-      style="
-               border-radius: {borderRadius};
-               border-top: 0px solid var(--rewyt-interval);
-               border-bottom: 0px solid var(--rewyt-interval);
-               border-left: {frame.borderLeft
-        ? '4px'
-        : '0'} solid var(--rewyt-interval);
-               border-right: {frame.borderRight
-        ? '4px'
-        : '0'} solid var(--rewyt-interval);
-               mask-image: {maskImage};
-               "
-    >
+<div
+  bind:this={container.el}
+  class="pointer-events-none absolute inset-0 z-10 h-full items-center"
+>
+  {#if computed !== null}
+    {#if computed.left !== null && computed.right !== null}
       <div
-        class="pointer-events-none absolute inline-flex h-full w-full rounded-[8px]"
-        style="background: var(--rewyt-interval); opacity: 0.2;"
+        class="absolute rounded-xl bg-[var(--rewyt-interval-300)]!"
+        style="
+          left: calc({computed.left}px);
+          width: {computed.right - computed.left}px;
+          height: {container.height}px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: {color};
+        "
       ></div>
-    </div>
-  </div>
-{/if}
+    {/if}
+
+    {#if computed.showA}
+      {@const thumbOffset = !computed.showB ? Math.floor(edgeWidth / 2) : 0}
+      {#if !computed.showB}
+        <div
+          class="absolute {edgeColor} top-0 bottom-0 {edgeWidth > 1
+            ? '-translate-x-1/2'
+            : ''}"
+          style="
+          width: {edgeWidth}px;
+          left: {computed.left}px;
+        "
+        >
+          <div class="b-rose-200 h-2 w-2">xx</div>
+        </div>
+      {/if}
+      <div
+        class="absolute -translate-y-1/2 rounded-full"
+        style="
+          left: {computed.left! - 2 * radius - thumbOffset}px;
+          width: {container.height}px;
+          height: {container.height}px;
+          top: 50%;
+          background: {color};
+        "
+      ></div>
+    {/if}
+
+    {#if computed.showB}
+      {@const thumbOffset = !computed.showA ? Math.ceil(edgeWidth / 2) : 0}
+      {#if !computed.showA}
+        <div
+          class="absolute {edgeColor} top-0 bottom-0 {edgeWidth > 1
+            ? '-translate-x-1/2'
+            : ''}"
+          style="left: {computed.right}px; width: {edgeWidth}px"
+        ></div>
+      {/if}
+      <div
+        class="absolute rounded-full"
+        style="
+          left: {computed.right! + thumbOffset}px;
+          width: {container.height}px;
+          height: {container.height}px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: {color};
+        "
+      ></div>
+    {/if}
+  {/if}
+</div>
