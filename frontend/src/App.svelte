@@ -208,7 +208,7 @@
 
   <div
     class="flex h-[362px] w-full min-w-[640px] cursor-default justify-center rounded-lg
-              {streamStatus === StreamStatus.IDLE ||
+               {streamStatus === StreamStatus.IDLE ||
     streamStatus === StreamStatus.STARTING
       ? 'bg-gradient-to-t from-neutral-200 to-transparent to-80%'
       : ''}"
@@ -245,16 +245,14 @@
             </div>
           {/if}
 
-          <div
-            class="absolute z-10 h-full w-[640px]
-                     {streamStatus === StreamStatus.STARTING
-              ? 'scale-0'
-              : ''} transition duration-400"
-          >
-            <WelcomePane />
-          </div>
+          {#if streamStatus === StreamStatus.IDLE}
+            <div class="absolute z-10 h-full w-[640px] transition duration-400">
+              <WelcomePane />
+            </div>
+          {/if}
         </div>
       </div>
+
       {#if explorer.isRewinding}
         <div
           class="absolute inset-0 z-20 flex items-center justify-center rounded-lg bg-black/40"
