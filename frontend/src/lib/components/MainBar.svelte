@@ -135,6 +135,7 @@
         {#if isPlaying}
           <div
             class="flex size-10 items-center justify-center rounded-full bg-rose-200"
+            onclick={onTogglePlayPause}
           >
             <Pause strokeWidth={2} />
           </div>
@@ -151,6 +152,7 @@
         {:else}
           <div
             class="flex size-10! h-[42px] w-11 items-center justify-center rounded-full bg-rose-200"
+            onclick={onTogglePlayPause}
           >
             <Play strokeWidth={2} size={20} />
           </div>
