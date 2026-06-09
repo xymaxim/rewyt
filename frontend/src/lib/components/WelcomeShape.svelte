@@ -53,7 +53,7 @@
     {width}
     {height}
     viewBox="0 0 {width} {height}"
-    class="-rotate-10 transform-gpu backface-hidden"
+    class="-rotate-10"
   >
     <defs>
       {#each rings as ring, index}
@@ -105,4 +105,9 @@
     max-width: 100%;
     height: auto;
   }
+  svg text, textPath {
+    shape-rendering: geometricPrecision;
+    text-rendering: geometricPrecision;
+}
+
 </style>

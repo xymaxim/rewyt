@@ -1,13 +1,12 @@
 //go:build !youtube
 
-package main
+package services
 
 import (
 	"context"
 	"log"
 
 	"github.com/xymaxim/ypb/stream"
-
 	"rewyt/local"
 )
 

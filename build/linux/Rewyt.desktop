@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Rewyt
+Exec=Rewyt
+Icon=Rewyt
+Categories=Development;
+Terminal=false
+Keywords=wails
+Version=1.0
+StartupNotify=false

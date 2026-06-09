@@ -3,34 +3,39 @@ package main
 import (
 	"embed"
 
-	"github.com/wailsapp/wails/v2"
-	"github.com/wailsapp/wails/v2/pkg/options"
-	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
+	"rewyt/services"
+	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
 //go:embed all:frontend/dist
 var assets embed.FS
 
-func main() {
-	// Create an instance of the app structure
-	app := NewApp()
+func init() {
+	application.RegisterEvent[string]("stream-stdout")
+}
 
-	// Create application with options
-	err := wails.Run(&options.App{
-		Title:  "Rewyt",
-		Width:  1024,
-		Height: 768,
-		AssetServer: &assetserver.Options{
-			Assets: assets,
+func main() {
+	streamService := services.NewStreamService()
+	
+	app := application.New(application.Options{
+		Name: "Rewyt",
+		Services: []application.Service{
+			application.NewService(streamService),
 		},
-		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup:        app.startup,
-		Bind: []interface{}{
-			app,
+		Assets: application.AssetOptions{
+			Handler: application.AssetFileServerFS(assets),
 		},
 	})
 
+	app.Window.NewWithOptions(application.WebviewWindowOptions{
+		Title:            "Rewyt",
+		Width:            1024,
+		Height:           768,
+		BackgroundColour: application.NewRGBA(27, 38, 54, 255),
+	})
+
+	err := app.Run()
 	if err != nil {
-		println("Error:", err.Error())
+		panic(err)
 	}
 }

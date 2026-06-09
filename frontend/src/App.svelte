@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, untrack } from "svelte";
-  import { CancelStreamStart, StartStream } from "../wailsjs/go/main/App";
-  import { EventsOn } from "../wailsjs/runtime/runtime";
+  import { StartStream, CancelStreamStart } from "../bindings/rewyt/services/streamservice";
+  import { Events } from "@wailsio/runtime";
   import { Button } from "$lib/components/ui/button/index.js";
   import { createExplorer, setExplorerContext } from "./lib/explorer.svelte";
   import { createPlayer } from "./lib/player.svelte";
@@ -62,7 +62,7 @@
     streamStatus = StreamStatus.STARTING;
     ytdlpStdout = "";
     showStdoutLog = false;
-    unlistenStdout = EventsOn("stream-stdout", (chunk: string) => {
+    unlistenStdout = Events.On("stream-stdout", (chunk: string) => {
       ytdlpStdout += chunk;
     });
 
