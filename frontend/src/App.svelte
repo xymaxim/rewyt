@@ -62,8 +62,8 @@
     streamStatus = StreamStatus.STARTING;
     ytdlpStdout = "";
     showStdoutLog = false;
-    unlistenStdout = Events.On("stream-stdout", (chunk: string) => {
-      ytdlpStdout += chunk;
+    unlistenStdout = Events.On("stream-stdout", (event) => {
+      ytdlpStdout += event.data;
     });
 
     explorerCell.current.destroy();
