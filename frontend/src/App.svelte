@@ -308,10 +308,4 @@
       {/if}
     </div>
   {/if}
-
-  {#if streamStatus === StreamStatus.IDLE && !hasLoadedStream}
-    <div class="fixed bottom-4 flex w-full gap-4 text-sm text-muted-foreground">
-      <span>Version YYYY.MM.DD</span>
-    </div>
-  {/if}
 </main>
