@@ -46,10 +46,6 @@
         <h3 class="font-semibold">Timeline</h3>
         <ul class="mt-2 space-y-1">
           <li class="flex items-center justify-between">
-            <span>Show scrub bar</span>
-            <Kbd.Root class="text-sm">Shift + Hover</Kbd.Root>
-          </li>
-          <li class="flex items-center justify-between">
             <span>Select time without rewind</span>
             <Kbd.Root class="text-sm">Ctrl + Click</Kbd.Root>
           </li>
