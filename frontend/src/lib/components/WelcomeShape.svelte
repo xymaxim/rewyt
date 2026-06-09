@@ -49,12 +49,7 @@
   class="flex items-center justify-center"
   style="width: {width}px; height: {height}px;"
 >
-  <svg
-    {width}
-    {height}
-    viewBox="0 0 {width} {height}"
-    class="-rotate-10"
-  >
+  <svg {width} {height} viewBox="0 0 {width} {height}" class="-rotate-10">
     <defs>
       {#each rings as ring, index}
         {@const mx = index === 2 ? 10 : 1.2}
@@ -105,9 +100,9 @@
     max-width: 100%;
     height: auto;
   }
-  svg text, textPath {
+  svg text,
+  textPath {
     shape-rendering: geometricPrecision;
     text-rendering: geometricPrecision;
-}
-
+  }
 </style>

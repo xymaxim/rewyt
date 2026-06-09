@@ -1,6 +1,9 @@
 <script lang="ts">
   import { onMount, untrack } from "svelte";
-  import { StartStream, CancelStreamStart } from "../bindings/rewyt/services/streamservice";
+  import {
+    StartStream,
+    CancelStreamStart,
+  } from "../bindings/rewyt/services/streamservice";
   import { Events } from "@wailsio/runtime";
   import { Button } from "$lib/components/ui/button/index.js";
   import { createExplorer, setExplorerContext } from "./lib/explorer.svelte";
