@@ -6,18 +6,17 @@ This is a desktop app to rewatch past moments of live streams beyond YouTube's l
 
 Built with [Go](https://go.dev/), [Svelte](https://github.com/sveltejs/svelte/),
 [Shaka Player](https://github.com/shaka-project/shaka-player/), and packaged
-with [Wails](https://github.com/wailsapp/wails/).
-
-Available on Linux, macOS, and Windows.
+with [Wails](https://github.com/wailsapp/wails/). Available on Linux, macOS, and Windows.
 
 ![Main screenshot](images/screenshot.png)
+
 ## Overview
 
 The app is built on a Go backend with a Svelte frontend. It uses our
-**[ypb](https://github.com/xymaxim/ypb)** to locate moments in a live stream and
+[ypb](https://github.com/xymaxim/ypb) to locate moments in a live stream and
 generate dynamic MPEG-DASH manifests. A proxy layer delivers media segments and
-gracefully handles connection errors. **[Shaka
-Player](https://github.com/shaka-project/shaka-player)** plays the video with
+gracefully handles connection errors. [Shaka
+Player](https://github.com/shaka-project/shaka-player) plays the video with
 adaptive streaming from YouTube through the stream proxy.
 
 ## Installation
