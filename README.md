@@ -27,6 +27,14 @@ app** via container, accessible through your browser. See the [Installation
 guide](https://xymaxim.github.io/rewyt/guides/install/install.html) for setup
 instructions.
 
+## Etymology
+
+1. *(v.)* to rewind and rewatch YouTube live streams
+2. *(n.)* from Anglo-Saxon "rewyt",
+   [meaning](https://archive.org/details/analectaanglosax00tho/page/240/mode/2up?q=rewyt)
+   *navigation*, *voyage*, reflecting the act of exploring and revisiting
+   moments.
+
 ## Credits
 
 The font used in the application is [Geist](https://vercel.com/font). The
