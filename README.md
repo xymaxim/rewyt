@@ -10,6 +10,16 @@ with [Wails](https://github.com/wailsapp/wails/).
 
 Available on Linux, macOS, and Windows.
 
+![Main screenshot](images/screenshot.png)
+
+## Etymology
+
+1. *verb* — to rewind and rewatch YouTube live streams
+2. *noun* — from Anglo-Saxon "rewyt",
+   [meaning](https://archive.org/details/analectaanglosax00tho/page/240/mode/2up?q=rewyt)
+   *navigation*, *voyage*, reflecting the act of exploring and revisiting
+   moments.
+
 ## Overview
 
 The app is built on a Go backend with a Svelte frontend. It uses our
