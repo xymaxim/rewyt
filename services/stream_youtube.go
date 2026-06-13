@@ -1,6 +1,6 @@
 //go:build !local
 
-package main
+package services
 
 import (
 	"context"
