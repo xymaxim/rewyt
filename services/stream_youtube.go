@@ -1,4 +1,4 @@
-//go:build youtube
+//go:build !local
 
 package main
 
@@ -7,15 +7,12 @@ import (
 	"log"
 
 	"github.com/xymaxim/ypb/stream"
-	"rewyt/youtube"
 )
 
 func newStream(ctx context.Context, videoID string, port int, onPrint func([]byte)) (stream.Streamer, error) {
 	log.Printf("running new stream on port %d type=youtube v=%s", port, videoID)
-	cfg := youtube.Config{
-		VideoID:     videoID,
-		Port:        port,
-		OnPrint:     onPrint,
+	cfg := &stream.StreamConfig{
+		OnPrint: onPrint,
 	}
-	return youtube.NewStream(ctx, cfg)
+	return stream.NewStream(ctx, videoID, port, cfg)
 }
