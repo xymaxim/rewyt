@@ -2,11 +2,9 @@ module rewyt
 
 go 1.25.5
 
-replace github.com/xymaxim/ypb => /home/ms/projects/go/ypb
-
 require (
 	github.com/wailsapp/wails/v3 v3.0.0-alpha.98
-	github.com/xymaxim/ypb v0.0.0-00010101000000-000000000000
+	github.com/xymaxim/ypb v0.0.0-20260611144921-982d606b4b92
 )
 
 require (
