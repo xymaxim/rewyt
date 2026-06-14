@@ -9,11 +9,6 @@ on:
 jobs:
   build-linux:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - goos: linux
-            goarch: amd64
 
     steps:
       - name: Checkout code
@@ -42,7 +37,38 @@ jobs:
         run: wails3 build
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
-          name: Rewyt-${{ matrix.goos }}-${{ matrix.goarch }}
+          name: Rewyt-linux-amd64.zip
           path: bin/
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: 'stable'
+
+      - name: Install Wails v3 CLI
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
+
+      - name: Verify installation
+        run: wails3 doctor
+        
+      - name: Build
+        run: wails3 build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: Rewyt-windows-amd64.zip
+          path: bin/
+          
