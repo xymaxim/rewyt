@@ -1,12 +1,16 @@
+<img src="images/icon.svg" alt="Rewyt icon" width="100px" align="center" />
+
 # Rewyt
 
 _Rewind and play YouTube live streams_
 
-This is a desktop app to rewatch past moments of live streams beyond YouTube's limits.
+Rewyt is a desktop app for rewatching past moments of live streams beyond
+YouTube's limits.
 
 Built with [Go](https://go.dev/), [Svelte](https://github.com/sveltejs/svelte/),
 [Shaka Player](https://github.com/shaka-project/shaka-player/), and packaged
-with [Wails](https://github.com/wailsapp/wails/). Available on Linux, macOS, and Windows.
+with [Wails](https://github.com/wailsapp/wails/). Available on Linux, macOS, and
+Windows.
 
 ![Main screenshot](images/screenshot.png)
 
