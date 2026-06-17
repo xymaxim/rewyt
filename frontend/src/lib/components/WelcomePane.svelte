@@ -1,7 +1,8 @@
 <script lang="ts">
-  import WelcomeShape from "$lib/components/WelcomeShape.svelte";
+  import WelcomeRows from "$lib/components/WelcomeRows.svelte";
 </script>
 
-<div class="flex h-full w-full items-center justify-center">
-  <WelcomeShape width={500} height={300} aspect={1.4} ratios={[1, 0.65, 0.3]} />
+<div class="flex-col h-full w-full items-center justify-center rounded-2xl px-10 py-20 bg-[#F0CD8B]">
+  <div class="flex-1 w-full"><WelcomeRows /></div>
+  <div class="mt-4 flex-1 w-full text-4xl font-extrabold text-neutral-800">Rewind. Play. Highlight</div>
 </div>
