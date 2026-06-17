@@ -179,6 +179,7 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    --ring: 0 0% 0% / 0%;
   }
   body {
     @apply bg-background text-foreground;
