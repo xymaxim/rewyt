@@ -55,9 +55,9 @@ jobs:
       # Prepare deployment directories
       - name: Prepare pages
         run: |
-          mkdir -p gh-pages/website
+          mkdir -p gh-pages
           mkdir -p gh-pages/docs
-          cp -r website/build/* gh-pages/website/
+          cp -r website/build/* gh-pages/
           cp -r docs/book/* gh-pages/docs/
 
       # Deploy to GitHub Pages
