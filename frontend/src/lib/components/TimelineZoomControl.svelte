@@ -14,7 +14,7 @@
 
 <div class="relative flex items-center justify-between">
   <div
-    class="absolute h-6 w-full rounded-full bg-neutral-200"
+    class="absolute h-6 w-full bg-neutral-200"
     style="clip-path: polygon(2% 50%, 98% 0%, 98% 100%);"
   />
   {#each zoomKeys.toReversed() as key}
