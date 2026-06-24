@@ -7,6 +7,8 @@ Available on Linux, macOS, and Windows. Built on top of
 [ypb](https://github.com/xymaxim/ypb) and
 [yt-dlp](https://github.com/yt-dlp/yt-dlp/).
 
+![Main screenshot](./welcome-files/screenshot.png)
+
 ## Get started
 
 - [**Quickstart**](quickstart.md) — Get up and running with Rewyt
