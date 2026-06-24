@@ -13,6 +13,7 @@
   import ExplorerPane from "./lib/components/ExplorerPane.svelte";
   import WelcomePane from "./lib/components/WelcomePane.svelte";
   import Toast from "./lib/components/Toast.svelte";
+  import DependencyNotice from "./lib/components/DependencyNotice.svelte";
   import StartingPane from "./lib/components/StartingPane.svelte";
   import StartingProgress from "./lib/components/StartingProgress.svelte";
 
@@ -270,7 +271,9 @@
     </div>
   </div>
 
-  {#if streamStatus === StreamStatus.STARTING}
+  {#if streamStatus === StreamStatus.IDLE}
+    <DependencyNotice />
+  {:else if streamStatus === StreamStatus.STARTING}
     <StartingProgress
       onCancel={onCancelStreamStart}
       stdout={ytdlpStdout}

@@ -15,12 +15,11 @@ func init() {
 }
 
 func main() {
-	streamService := services.NewStreamService()
-	
 	app := application.New(application.Options{
 		Name: "Rewyt",
 		Services: []application.Service{
-			application.NewService(streamService),
+			application.NewService(services.NewStreamService()),
+			application.NewService(services.NewDependenciesService()),
 		},
 		Assets: application.AssetOptions{
 			Handler: application.AssetFileServerFS(assets),
