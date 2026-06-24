@@ -229,7 +229,7 @@
               A
             </Button>
             <Button
-              title="Mark A"
+              title="Mark B"
               variant="ghost"
               size="icon"
               class="flex size-9 rounded-full bg-[var(--rewyt-interval-200)]/50! text-sm font-bold [word-spacing:10px]!"
