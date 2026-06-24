@@ -6,6 +6,7 @@ on:
     paths:
       - 'website/**'
       - 'docs/**'
+  workflow_dispatch:
 
 concurrency:
   group: pages
@@ -24,7 +25,11 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - run: cd website && bun install --frozen-lockfile && bun run build
+      - run: |
+          cd website
+          bun install --frozen-lockfile
+          bun svelte sync
+          bun run build
 
       # Build docs
       - name: Setup mdBook
