@@ -57,7 +57,7 @@ jobs:
         run: |
           mkdir -p gh-pages/website
           mkdir -p gh-pages/docs
-          cp -r website/dist/* gh-pages/website/
+          cp -r website/build/* gh-pages/website/
           cp -r docs/book/* gh-pages/docs/
 
       # Deploy to GitHub Pages
