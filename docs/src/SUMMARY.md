@@ -12,6 +12,9 @@
 
 - [Overview](overview.md)
 
+- [How-to guides]()
+  - [Highlight and download excerpts](guides/download.md)
+
 # About
 
 - [Disclaimer](disclaimer.md)
