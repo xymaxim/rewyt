@@ -21,6 +21,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      # Install frontend deps
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - run: cd frontend && npm install
+
       # Build website
       - uses: oven-sh/setup-bun@v2
         with:
