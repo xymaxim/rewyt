@@ -28,7 +28,7 @@ jobs:
       - run: |
           cd website
           bun install --frozen-lockfile
-          bun svelte sync
+          bunx svelte-kit sync
           bun run build
 
       # Build docs
