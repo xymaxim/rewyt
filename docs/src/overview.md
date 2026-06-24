@@ -6,7 +6,7 @@ Player](https://github.com/shaka-project/shaka-player), and packaged with
 
 <figure>
 <img
-src="./images/overview.svg"
+src="./overview-files/overview.svg"
 alt="Schematic overview of the Rewyt app" />
 <figcaption aria-hidden="true"><i>Schematic overview of the Rewyt app</i></figcaption>
 </figure>
