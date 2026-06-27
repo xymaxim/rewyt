@@ -38,6 +38,18 @@
   let playValue = $state(rewindValue);
   let animationValue = $state(rewindValue);
 
+  let containerEl: HTMLDivElement;
+  let containerWidth = $state(720);
+
+  $effect(() => {
+    if (!containerEl) return;
+    const ro = new ResizeObserver(([entry]) => {
+      containerWidth = entry.contentRect.width;
+    });
+    ro.observe(containerEl);
+    return () => ro.disconnect();
+  });
+
   const OKLCH_RANGE: OklchRange = {
     l: [0.8, 0.9],
     c: [0.1, 0.15],
@@ -98,22 +110,6 @@
 
   function shuffle(arr: PrimitiveDescriptor[]): PrimitiveDescriptor[] {
     return [...arr].sort(() => Math.random() - 0.5);
-
-    // const hasAdjacentEmpty = (shuffled: PrimitiveDescriptor[]) => {
-    //     for (let i = 0; i < shuffled.length - 1; i++) {
-    //         if (shuffled[i].component === Empty && shuffled[i + 1].component === Empty) {
-    //             return true;
-    //         }
-    //     }
-    //     return false;
-    // };
-    //
-    // let shuffled: PrimitiveDescriptor[];
-    // do {
-    //     shuffled = [...arr].sort(() => Math.random() - 0.5);
-    // } while (hasAdjacentEmpty(shuffled));
-    //
-    // return shuffled;
   }
 
   const primitives = $derived.by(() => {
@@ -156,9 +152,10 @@
   }
 </script>
 
-<div class="flex flex-col items-center gap-4">
+<div class="flex w-full flex-col items-center gap-4 px-4">
   <div
-    class="relative rounded-2xl {rewinding
+    bind:this={containerEl}
+    class="relative w-full max-w-[720px] rounded-2xl {rewinding
       ? 'bg-[var(--color-rewind-lightest)]/50'
       : 'bg-[var(--color-rewind-lightest)]'} transition-colors"
   >
@@ -168,9 +165,9 @@
         : '[&_svg]:overflow-visible'}"
       {primitives}
       bind:angle={animationValue}
-      width={720}
-      height={342}
-      rx={300}
+      width={containerWidth}
+      height={containerWidth * (342 / 720)}
+      rx={containerWidth * (300 / 720)}
       aspect={16 / 8}
       nudge={[1.0, 3.0]}
       {seed}
@@ -200,7 +197,7 @@
     </button>
   </div>
 
-  <div class="mt-2 flex w-[720px]">
+  <div class="mt-2 flex w-full max-w-[720px]">
     <Slider.Root
       type="single"
       bind:value={rewindValue}

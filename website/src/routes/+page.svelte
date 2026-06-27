@@ -35,11 +35,11 @@
       class:opacity-0={rewinding || playing}
       class:scale-50={rewinding || playing}
     >
-      <h1 class="mb-4 text-center text-5xl font-normal">
+      <h1 class="mb-4 text-center text-3xl font-normal sm:text-5xl">
         <p>Rewind and play</p>
         <p>YouTube live streams</p>
       </h1>
-      <p class="text-center font-medium">
+      <p class="text-center font-medium text-sm sm:text-base">
         Rewyt is a desktop app to rewatch past moments<br />
         of live streams beyond YouTube's limits
       </p>
