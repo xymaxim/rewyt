@@ -166,7 +166,7 @@
       {primitives}
       bind:angle={animationValue}
       width={containerWidth}
-      height={containerWidth * (342 / 720)}
+      height={containerWidth * (342 / 720) * 1.5}
       rx={containerWidth * (300 / 720)}
       aspect={16 / 8}
       nudge={[1.0, 3.0]}
