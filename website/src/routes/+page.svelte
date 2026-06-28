@@ -24,17 +24,16 @@
   <div class="relative mt-8 flex justify-center">
     <LandingPane bind:playing bind:rewinding />
     <div
-      class="pointer-events-none absolute inset-x-0 top-[-40px] bottom-0 flex flex-col items-center justify-center gap-2 transition"
+      class="pointer-events-none absolute inset-x-0 top-[-40px] bottom-0 flex flex-col items-center justify-center gap-0 sm:gap-2 transition"
       class:opacity-0={rewinding || playing}
       class:scale-50={rewinding || playing}
     >
-      <h1 class="mb-4 text-center text-3xl font-normal sm:text-5xl">
+      <h1 class="mb-4 text-center font-normal text-3xl sm:text-5xl">
         <p>Rewind and play</p>
         <p>YouTube live streams</p>
       </h1>
-      <p class="text-center font-medium text-sm sm:text-base">
-        Rewyt is a desktop app for rewatching past moments<br />
-        of live streams beyond YouTube's limits
+      <p class="text-center text-normal px-6">
+        Rewyt is a desktop app for rewatching live streams beyond YouTube's limits
       </p>
     </div>
   </div>
