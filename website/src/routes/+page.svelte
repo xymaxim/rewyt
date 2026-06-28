@@ -10,20 +10,13 @@
   <header
     class="relative z-10 mt-4 flex w-full max-w-screen-xl justify-between px-4"
   >
-    <div class="flex items-center gap-2 font-bold">
-      <div class="flex items-center gap-0">
-        <div
-          class="relative flex size-6 rounded-full bg-[var(--color-rewind-light)]"
-        ></div>
-        <div class="flex size-3 rounded-full bg-[var(--color-play-700)]"></div>
-      </div>
-      Rewyt
-    </div>
+
+<div class="flex items-center font-extrabold">Rewyt</div>
     <nav class="flex items-center gap-6 text-sm font-medium">
       <a class="flex items-center gap-2"
         ><Sparkles size={16} class="text-orange-400" /> Live picks</a
       >
-      <a href="https://xymaxim.github.io/rewyt/">Docs</a>
+      <a href="https://xymaxim.github.io/rewyt/docs/">Docs</a>
       <a href="https://github.com/xymaxim/rewyt/">Source</a>
     </nav>
   </header>
