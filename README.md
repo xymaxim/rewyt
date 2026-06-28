@@ -17,11 +17,12 @@ Windows.
 ## Overview
 
 The app is built on a Go backend with a Svelte frontend. It uses our
-[ypb](https://github.com/xymaxim/ypb) to locate moments in a live stream and
-generate dynamic MPEG-DASH manifests. A proxy layer delivers media segments and
-gracefully handles connection errors. [Shaka
+[ypb](https://github.com/xymaxim/ypb) to locate moments in a live stream,
+generate dynamic MPEG-DASH manifests, and act as a stream proxy that delivers
+media segments while gracefully handling connection errors. [Shaka
 Player](https://github.com/shaka-project/shaka-player) plays the video with
-adaptive streaming from YouTube through the stream proxy.
+adaptive streaming from YouTube through the stream proxy. See more details
+[here](https://xymaxim.github.io/rewyt/docs/overview.html).
 
 ## Installation
 
