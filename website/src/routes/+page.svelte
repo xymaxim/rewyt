@@ -11,7 +11,7 @@
     class="relative z-10 mt-4 flex w-full max-w-screen-xl justify-between px-4"
   >
 
-<div class="flex items-center font-extrabold">Rewyt</div>
+<div class="flex items-center font-bold">Rewyt</div>
     <nav class="flex items-center gap-6 text-sm font-medium">
       <a class="flex items-center gap-2"
         ><Sparkles size={16} class="text-orange-400" /> Live picks</a
@@ -42,13 +42,13 @@
   <div class="mt-12 flex flex-col items-center gap-4">
     <div class="flex items-center gap-4">
       <a
-        href="https://xymaxim.github.io/rewyt/quickstart.html"
+        href="https://xymaxim.github.io/rewyt/docs/guides/install/desktop.html"
         class="flex cursor-pointer items-center gap-1 rounded-2xl bg-neutral-200 px-4 py-2.5 text-sm font-semibold transition hover:scale-105 active:scale-95"
       >
         Download <ArrowRight />
       </a>
       <a
-        href="https://xymaxim.github.io/rewyt/quickstart.html"
+        href="https://xymaxim.github.io/rewyt/docs/quickstart.html"
         class="cursor-pointer rounded-2xl px-4 py-3 text-sm font-semibold transition hover:scale-105 active:scale-95"
         >Get Started</a
       >
@@ -56,7 +56,7 @@
     <div class="flex flex-col items-center gap-2">
       <p class="text-sm">Available for Linux, macOS, and Windows</p>
       <p class="text-muted-foreground text-xs">
-        Read <a class="text-foreground cursor-pointer font-medium">this</a> before
+        Read <a href="https://xymaxim.github.io/rewyt/docs/disclaimer.html" class="text-foreground cursor-pointer font-medium">this</a> before
         using
       </p>
     </div>
