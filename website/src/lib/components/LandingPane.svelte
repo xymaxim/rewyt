@@ -197,7 +197,7 @@
     </button>
   </div>
 
-  <div class="mt-2 flex w-full max-w-[720px]">
+  <div class="flex w-full max-w-[720px] mt-2 px-4">
     <Slider.Root
       type="single"
       bind:value={rewindValue}
