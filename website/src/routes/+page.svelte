@@ -40,7 +40,7 @@
         <p>YouTube live streams</p>
       </h1>
       <p class="text-center font-medium text-sm sm:text-base">
-        Rewyt is a desktop app to rewatch past moments<br />
+        Rewyt is a desktop app for rewatching past moments<br />
         of live streams beyond YouTube's limits
       </p>
     </div>
