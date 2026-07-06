@@ -25,7 +25,7 @@ func (s *DependenciesService) CheckDependency(ctx context.Context, name string) 
 }
 
 func (s *DependenciesService) CheckAllDependencies(ctx context.Context) []DependencyStatus {
-    deps := []string{"yt-dlp", "ffmpeg", "xxx", "xyz"}
+    deps := []string{"yt-dlp", "ffmpeg"}
     results := make([]DependencyStatus, 0, len(deps))
     for _, dep := range deps {
         results = append(results, s.CheckDependency(ctx, dep))
