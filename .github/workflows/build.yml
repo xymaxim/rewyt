@@ -113,3 +113,56 @@ jobs:
         with:
           name: Rewyt-${{ steps.version.outputs.version }}-windows-x86_64.zip
           path: bin/
+
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: 'stable'
+
+      - name: Install Wails v3 CLI
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@latest
+
+      - name: Get version
+        id: version
+        run: |
+          echo "ref_type: ${{ github.ref_type }}"
+          echo "ref_name: ${{ github.ref_name }}"
+
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            VERSION=${{ github.ref_name }}
+            VERSION=${VERSION#v}
+          else
+            VERSION=$(git describe --tags --abbrev=0 2>/dev/null | sed 's/^v//' || echo "dev")
+          fi
+
+          echo "version before dirty check: $VERSION"
+
+          if [ -n "$(git status --porcelain)" ]; then
+            COMMIT=$(git rev-parse --short HEAD)
+            VERSION="${VERSION}-${COMMIT}"
+          fi
+
+          echo "final version: $VERSION"
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Build
+        run: wails3 build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: Rewyt-${{ steps.version.outputs.version }}-macos-universal.zip
+          path: bin/
