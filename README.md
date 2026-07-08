@@ -28,7 +28,7 @@ adaptive streaming from YouTube through the stream proxy. See more details
 
 Rewyt comes as a (1) **desktop app** via pre-built binaries or (2) **web
 app** via container, accessible through your browser. See the [Installation
-guide](https://xymaxim.github.io/rewyt/guides/install/install.html) for setup
+guide](https://xymaxim.github.io/rewyt/docs/guides/install/install.html) for setup
 instructions.
 
 ## Etymology
