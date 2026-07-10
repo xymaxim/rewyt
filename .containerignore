@@ -1,0 +1,11 @@
+.git
+.vscode
+
+build/
+docs/
+local/
+website/
+
+frontend/node_modules/
+frontend/dev/
+frontend/dist/
