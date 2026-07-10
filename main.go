@@ -7,7 +7,7 @@ import (
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
-//go:embed all:frontend/dist
+//go:embed frontend/dist
 var assets embed.FS
 
 func init() {
@@ -17,6 +17,10 @@ func init() {
 func main() {
 	app := application.New(application.Options{
 		Name: "Rewyt",
+		Server: application.ServerOptions{
+			Host: "localhost",
+			Port: 3000,
+		},
 		Services: []application.Service{
 			application.NewService(services.NewStreamService()),
 			application.NewService(services.NewDependenciesService()),
