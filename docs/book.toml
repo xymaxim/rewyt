@@ -5,4 +5,4 @@ title = "Rewyt documentation"
 no-section-label = true
 
 [preprocessor.variables.variables]
-release_version = "v2026.4.26"
+release_version = "2026.4.26"
