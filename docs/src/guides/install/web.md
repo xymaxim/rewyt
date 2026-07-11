@@ -1,5 +1,7 @@
 # Web app
 
+A ready-to-run container image is available on GitHub Container Registry, with all dependencies bundled and accessible through your browser for easy installation and use.
+
 ## Prerequisites
 
 No additional dependencies required: the container image includes all necessary
@@ -32,32 +34,35 @@ Pull the latest container image from GitHub Container Registry:
 podman pull ghcr.io/xymaxim/rewyt
 ```
 
-## Usage
+## Run the app
 
-### Basic commands
-
-Run `rewyt` commands directly with the container:
+Start the app in server mode and expose it on port 3000:
 
 ```shell
-podman run --rm ghcr.io/xymaxim/rewyt version
+podman run --name rewyt -p 3000:3000 ghcr.io/xymaxim/rewyt:latest
 ```
 
-### Recommended aliases
+Then open it in your browser:
+    
+    http://localhost:3000
 
-For easier usage, add these aliases to your shell configuration file:
+To run it in the background, add `-d`:
 
 ```shell
-# General command
-alias rewyt='podman run --rm ghcr.io/xymaxim/rewyt'
+podman run -d --name rewyt -p 3000:3000 ghcr.io/xymaxim/rewyt:latest
 ```
 
-> [!IMPORTANT]
-> On SELinux-enabled systems add `:Z` to the volume mount to avoid permission
-> errors.
+## Useful alias
+
+For easier usage, add this alias to your shell configuration file:
+
+```shell
+alias rewyt='podman run --name rewyt -p 3000:3000 ghcr.io/xymaxim/rewyt:latest'
+```
 
 ## Update the image
 
-To update `rewyt` and all dependecies to the latest version:
+To update `rewyt` to the latest version:
 
 ```shell
 podman pull ghcr.io/xymaxim/rewyt
