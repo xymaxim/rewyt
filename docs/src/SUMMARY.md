@@ -13,7 +13,8 @@
 - [Overview](overview.md)
 
 - [How-to guides]()
-  - [Highlight and download excerpts](guides/download.md)
+  - [Highlight and download excerpts](guides/download-excerpts.md)
+  - [Download excerpts with container images](guides/download-excerpts-container.md)
 
 # About
 
