@@ -27,9 +27,13 @@ You'll need [Podman](https://podman.io/getting-started/installation) or
 Pull and run the container:
 
 ```shell
-podman pull ghcr.io/xymaxim/rewyt
-podman run --rm -p 8080:8080 ghcr.io/xymaxim/rewyt
+podman run --rm -p 3000:3000 ghcr.io/xymaxim/rewyt
 ```
+
+Open the app in your browser:
+
+    http://localhost:3000
+
 > See [Web app](guides/install/web.md) for more details.
 
 ## Verify installation
