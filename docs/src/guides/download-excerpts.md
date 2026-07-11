@@ -19,7 +19,7 @@ Rewyt doesn't download excerpts directly, you need [ypb](https://github.com/xyma
    Use the **A** and **B** buttons (or `a` and `b` keyboard shortcuts) to mark the start and end of your excerpt on the timeline.
 
    <figure>
-   <img src="./download-files/download-highlight.png"/>
+   <img src="./download-excerpts-files/download-highlight.png"/>
    <figcaption aria-hidden="true">Highlighting an excerpt on the timeline</figcaption>
    </figure>
 
@@ -32,7 +32,7 @@ Rewyt doesn't download excerpts directly, you need [ypb](https://github.com/xyma
    `2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00`
 
    <figure>
-   <img src="./download-files/download-copy-timestamp.png"/>
+   <img src="./download-excerpts-files/download-copy-timestamp.png"/>
    <figcaption aria-hidden="true">Copying the timestamp of the highlighted excerpt</figcaption>
    </figure>
 
@@ -46,7 +46,7 @@ Rewyt doesn't download excerpts directly, you need [ypb](https://github.com/xyma
    
 By the end, you will have a downloaded file in your working directory when done.
    
-## Next steps
+## See also
 
 See [Create a time-lapse
 video](https://xymaxim.github.io/ypb/tutorials/timelapse.html) to turn your excerpt into a time-lapse.
