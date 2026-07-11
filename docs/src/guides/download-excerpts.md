@@ -9,9 +9,6 @@ Rewyt doesn't download excerpts directly, you need [ypb](https://github.com/xyma
 - Rewyt installed locally or in a container
 - [ypb](https://xymaxim.github.io/ypb/guides/install/install.html) installed
 
-> [!NOTE]
-> The Rewyt container includes `ypb` out of the box.
-
 ## Steps
 
 1. **Highlight an excerpt**
