@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-49f51407.js";
+            window.path_to_searchindex_js = "searchindex-1d0d2265.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-5c2563fe.js"></script>
+        <script src="toc-3107a95e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -328,6 +328,7 @@ release</a> page.</p>
 <p>Download the binary for your platform and unzip it to your working directory.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="web-app-1"><a class="header" href="#web-app-1">Web app</a></h1>
+<p>A ready-to-run container image is available on GitHub Container Registry, with all dependencies bundled and accessible through your browser for easy installation and use.</p>
 <h2 id="prerequisites-1"><a class="header" href="#prerequisites-1">Prerequisites</a></h2>
 <p>No additional dependencies required: the container image includes all necessary
 components (ypb, yt-dlp, additional dependencies).</p>
@@ -346,23 +347,22 @@ podman machine start
 <p>Pull the latest container image from GitHub Container Registry:</p>
 <pre><code class="language-shell">podman pull ghcr.io/xymaxim/rewyt
 </code></pre>
-<h2 id="usage"><a class="header" href="#usage">Usage</a></h2>
-<h3 id="basic-commands"><a class="header" href="#basic-commands">Basic commands</a></h3>
-<p>Run <code>rewyt</code> commands directly with the container:</p>
-<pre><code class="language-shell">podman run --rm ghcr.io/xymaxim/rewyt version
+<h2 id="run-the-app"><a class="header" href="#run-the-app">Run the app</a></h2>
+<p>Start the app in server mode and expose it on port 3000:</p>
+<pre><code class="language-shell">podman run --name rewyt -p 3000:3000 ghcr.io/xymaxim/rewyt:latest
 </code></pre>
-<h3 id="recommended-aliases"><a class="header" href="#recommended-aliases">Recommended aliases</a></h3>
-<p>For easier usage, add these aliases to your shell configuration file:</p>
-<pre><code class="language-shell"># General command
-alias rewyt='podman run --rm ghcr.io/xymaxim/rewyt'
+<p>Then open it in your browser:</p>
+<pre><code>http://localhost:3000
 </code></pre>
-<blockquote class="blockquote-tag blockquote-tag-important">
-<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p>
-<p>On SELinux-enabled systems add <code>:Z</code> to the volume mount to avoid permission
-errors.</p>
-</blockquote>
+<p>To run it in the background, add <code>-d</code>:</p>
+<pre><code class="language-shell">podman run -d --name rewyt -p 3000:3000 ghcr.io/xymaxim/rewyt:latest
+</code></pre>
+<h2 id="useful-alias"><a class="header" href="#useful-alias">Useful alias</a></h2>
+<p>For easier usage, add this alias to your shell configuration file:</p>
+<pre><code class="language-shell">alias rewyt='podman run --name rewyt -p 3000:3000 ghcr.io/xymaxim/rewyt:latest'
+</code></pre>
 <h2 id="update-the-image"><a class="header" href="#update-the-image">Update the image</a></h2>
-<p>To update <code>rewyt</code> and all dependecies to the latest version:</p>
+<p>To update <code>rewyt</code> to the latest version:</p>
 <pre><code class="language-shell">podman pull ghcr.io/xymaxim/rewyt
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -443,7 +443,7 @@ manifests and stream video from YouTube through the stream proxy.</p>
 <p><strong>Highlight an excerpt</strong></p>
 <p>Use the <strong>A</strong> and <strong>B</strong> buttons (or <code>a</code> and <code>b</code> keyboard shortcuts) to mark the start and end of your excerpt on the timeline.</p>
 <figure>
-<img src="guides/download-files/download-highlight.png" />
+<img src="guides/download-excerpts-files/download-highlight.png" />
 <figcaption aria-hidden="true">Highlighting an excerpt on the timeline</figcaption>
 </figure>
 </li>
@@ -454,7 +454,7 @@ then select <strong>Copy timestamp</strong>. This copies a timestamp that tells 
 exactly which part of the stream to download, for example:</p>
 <p><code>2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00</code></p>
 <figure>
-<img src="guides/download-files/download-copy-timestamp.png" />
+<img src="guides/download-excerpts-files/download-copy-timestamp.png" />
 <figcaption aria-hidden="true">Copying the timestamp of the highlighted excerpt</figcaption>
 </figure>
 </li>
@@ -466,9 +466,32 @@ exactly which part of the stream to download, for example:</p>
 </li>
 </ol>
 <p>By the end, you will have a downloaded file in your working directory when done.</p>
-<h2 id="next-steps"><a class="header" href="#next-steps">Next steps</a></h2>
+<h2 id="see-also"><a class="header" href="#see-also">See also</a></h2>
 <p>See <a href="https://xymaxim.github.io/ypb/tutorials/timelapse.html">Create a time-lapse
 video</a> to turn your excerpt into a time-lapse.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="download-excerpts-with-container-images"><a class="header" href="#download-excerpts-with-container-images">Download excerpts with container images</a></h1>
+<p>This guide shows you how to download a highlighted live stream excerpt when Rewyt and <a href="https://xymaxim.github.io/ypb/">ypb</a> are run from container images.</p>
+<h2 id="prerequisites-3"><a class="header" href="#prerequisites-3">Prerequisites</a></h2>
+<ul>
+<li><a href="https://podman.io/getting-started/installation">Podman</a> or <a href="https://docs.docker.com/get-docker/">Docker</a></li>
+<li>Rewyt running from a <a href="https://xymaxim.github.io/rewyt/docs/guides/install/web.html">container image</a></li>
+<li>ypb available as a <a href="https://xymaxim.github.io/ypb/guides/install/container.html">container image</a></li>
+</ul>
+<h2 id="highlight-the-excerpt"><a class="header" href="#highlight-the-excerpt">Highlight the excerpt</a></h2>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>For highlighting excerpts in Rewyt, see <a href="#highlight-and-download-excerpts">Highlight and download excerpts</a>.</p>
+</blockquote>
+<p>Highlight the excerpt and copy its timestamp, for example:</p>
+<pre><code class="language-text">2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00
+</code></pre>
+<h2 id="download-the-excerpt"><a class="header" href="#download-the-excerpt">Download the excerpt</a></h2>
+<p>Run <code>ypb</code> from its container image, mounting the current directory so the downloaded file is saved locally:</p>
+<pre><code class="language-shell">podman run --rm -v .:/content ghcr.io/xymaxim/ypb download \
+  2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00 abcdefgh123
+</code></pre>
+<p>The file is saved in your current working directory.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="usage-disclaimer"><a class="header" href="#usage-disclaimer">Usage disclaimer</a></h1>
 <p>This app unfortunately violates YouTube’s <a href="https://www.youtube.com/t/terms">Terms of

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>Highlight and download excerpts - Rewyt documentation</title>
+        <title>Download excerpts with container images - Rewyt documentation</title>
 
 
         <!-- Custom HTML head -->
@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-49f51407.js";
+            window.path_to_searchindex_js = "../searchindex-1d0d2265.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-5c2563fe.js"></script>
+        <script src="../toc-3107a95e.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -174,56 +174,34 @@
 
                 <div id="mdbook-content" class="content">
                     <main>
-                        <h1 id="highlight-and-download-excerpts"><a class="header" href="#highlight-and-download-excerpts">Highlight and download excerpts</a></h1>
-<p>This guide shows you how to highlight a live stream excerpt and download it as a video file.</p>
+                        <h1 id="download-excerpts-with-container-images"><a class="header" href="#download-excerpts-with-container-images">Download excerpts with container images</a></h1>
+<p>This guide shows you how to download a highlighted live stream excerpt when Rewyt and <a href="https://xymaxim.github.io/ypb/">ypb</a> are run from container images.</p>
 <h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
-<p>Rewyt doesn’t download excerpts directly, you need <a href="https://github.com/xymaxim/ypb">ypb</a> for that.</p>
 <ul>
-<li>Rewyt installed locally or in a container</li>
-<li><a href="https://xymaxim.github.io/ypb/guides/install/install.html">ypb</a> installed</li>
+<li><a href="https://podman.io/getting-started/installation">Podman</a> or <a href="https://docs.docker.com/get-docker/">Docker</a></li>
+<li>Rewyt running from a <a href="https://xymaxim.github.io/rewyt/docs/guides/install/web.html">container image</a></li>
+<li>ypb available as a <a href="https://xymaxim.github.io/ypb/guides/install/container.html">container image</a></li>
 </ul>
+<h2 id="highlight-the-excerpt"><a class="header" href="#highlight-the-excerpt">Highlight the excerpt</a></h2>
 <blockquote class="blockquote-tag blockquote-tag-note">
 <p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
-<p>The Rewyt container includes <code>ypb</code> out of the box.</p>
+<p>For highlighting excerpts in Rewyt, see <a href="./download-excerpts.html">Highlight and download excerpts</a>.</p>
 </blockquote>
-<h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
-<ol>
-<li>
-<p><strong>Highlight an excerpt</strong></p>
-<p>Use the <strong>A</strong> and <strong>B</strong> buttons (or <code>a</code> and <code>b</code> keyboard shortcuts) to mark the start and end of your excerpt on the timeline.</p>
-<figure>
-<img src="./download-files/download-highlight.png" />
-<figcaption aria-hidden="true">Highlighting an excerpt on the timeline</figcaption>
-</figure>
-</li>
-<li>
-<p><strong>Copy the timestamp</strong></p>
-<p>Open the <strong>Highlight</strong> tab at the bottom of the interface. Click <strong>More</strong>,
-then select <strong>Copy timestamp</strong>. This copies a timestamp that tells ypb
-exactly which part of the stream to download, for example:</p>
-<p><code>2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00</code></p>
-<figure>
-<img src="./download-files/download-copy-timestamp.png" />
-<figcaption aria-hidden="true">Copying the timestamp of the highlighted excerpt</figcaption>
-</figure>
-</li>
-<li>
-<p><strong>Download the excerpt</strong></p>
-<p>Run the download command with the copied timestamp and the YouTube video ID:</p>
-<pre><code class="language-bash">ypb download 2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00 abcdefgh123
+<p>Highlight the excerpt and copy its timestamp, for example:</p>
+<pre><code class="language-text">2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00
 </code></pre>
-</li>
-</ol>
-<p>By the end, you will have a downloaded file in your working directory when done.</p>
-<h2 id="next-steps"><a class="header" href="#next-steps">Next steps</a></h2>
-<p>See <a href="https://xymaxim.github.io/ypb/tutorials/timelapse.html">Create a time-lapse
-video</a> to turn your excerpt into a time-lapse.</p>
+<h2 id="download-the-excerpt"><a class="header" href="#download-the-excerpt">Download the excerpt</a></h2>
+<p>Run <code>ypb</code> from its container image, mounting the current directory so the downloaded file is saved locally:</p>
+<pre><code class="language-shell">podman run --rm -v .:/content ghcr.io/xymaxim/ypb download \
+  2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00 abcdefgh123
+</code></pre>
+<p>The file is saved in your current working directory.</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../overview.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../guides/download-excerpts.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -237,7 +215,7 @@ video</a> to turn your excerpt into a time-lapse.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../overview.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../guides/download-excerpts.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
