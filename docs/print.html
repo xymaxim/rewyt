@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-36fc2cb3.js";
+            window.path_to_searchindex_js = "searchindex-ebb0b815.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-3107a95e.js"></script>
@@ -209,8 +209,10 @@ app</a>.</p>
 <p>You’ll need <a href="https://podman.io/getting-started/installation">Podman</a> or
 <a href="https://docs.docker.com/get-docker/">Docker</a>.</p>
 <p>Pull and run the container:</p>
-<pre><code class="language-shell">podman pull ghcr.io/xymaxim/rewyt
-podman run --rm -p 8080:8080 ghcr.io/xymaxim/rewyt
+<pre><code class="language-shell">podman run --rm -p 3000:3000 ghcr.io/xymaxim/rewyt
+</code></pre>
+<p>Open the app in your browser:</p>
+<pre><code>http://localhost:3000
 </code></pre>
 <blockquote>
 <p>See <a href="#web-app-1">Web app</a> for more details.</p>
