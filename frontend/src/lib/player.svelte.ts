@@ -96,7 +96,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
             mpdStartTime = new Date(json.metadata.startActualTime);
             isMpdLoaded = true;
             const data = new TextEncoder().encode(
-              rewriteManifestBaseUrl(json.mpd),
+              sanitizeManifest(rewriteManifestBaseUrl(json.mpd)),
             );
             cachedManifest = { uri, data };
             return {
@@ -111,6 +111,26 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
         return shaka.util.AbortableOperation.notAbortable(promise);
       },
     );
+  }
+
+  function sanitizeManifest(mpd: string): string {
+    return stripUnwantedAdaptationSets(rewriteManifestBaseUrl(mpd));
+  }
+
+  function stripUnwantedAdaptationSets(mpd: string): string {
+    const doc = new DOMParser().parseFromString(mpd, "application/xml");
+    const sets = Array.from(doc.getElementsByTagName("AdaptationSet"));
+
+    for (const set of sets) {
+      const mimeType = set.getAttribute("mimeType") ?? "";
+      const codecs = set.getAttribute("codecs") ?? "";
+
+      if (codecs.startsWith("av01")) {
+        set.parentNode?.removeChild(set);
+      }
+    }
+
+    return new XMLSerializer().serializeToString(doc);
   }
 
   // Lifecycle
@@ -174,6 +194,39 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     shakaPlayer = null;
   }
 
+  async function loadManifest(uri: string) {
+    if (!shakaPlayer) return;
+
+    const tracks = shakaPlayer.getVariantTracks();
+    const activeTrack = tracks.find((t) => t.active);
+    const wasManualChoice = !shakaPlayer.getConfiguration().abr.enabled;
+
+    await shakaPlayer.load(uri);
+
+    if (wasManualChoice && activeTrack) {
+      shakaPlayer.configure({ abr: { enabled: false } });
+
+      const newTracks = shakaPlayer.getVariantTracks();
+
+      const matchingTrack =
+        newTracks.find(
+          (t) => t.originalVideoId === activeTrack.originalVideoId,
+        ) ??
+        newTracks.find((t) => t.height === activeTrack.height) ??
+        newTracks
+          .filter((t) => t.height != null)
+          .sort(
+            (a, b) =>
+              Math.abs((a.height ?? 0) - (activeTrack.height ?? 0)) -
+              Math.abs((b.height ?? 0) - (activeTrack.height ?? 0)),
+          )[0];
+
+      if (matchingTrack) {
+        shakaPlayer.selectVariantTrack(matchingTrack, /* clearBuffer= */ true);
+      }
+    }
+  }
+
   // Playback controls
   async function rewind(isoTime: string, pause = false) {
     isRewinding = true;
@@ -181,7 +234,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
 
     try {
       const uri = `live:///mpd/${encodeURIComponent(isoTime)}`;
-      await shakaPlayer?.load(uri);
+      await loadManifest(uri);
       const videoEl = getVideoEl();
       if (!videoEl) return;
       pause ? videoEl.pause() : videoEl.play();
@@ -197,7 +250,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     isRewinding = true;
     cachedManifest = null;
     try {
-      await shakaPlayer?.load("live:///mpd/now", 0).catch(console.error);
+      await loadManifest("live:///mpd/now").catch(console.error);
       lastRewindTarget = mpdStartTime?.getTime() ?? null;
       const videoEl = getVideoEl();
       if (!videoEl) return;
@@ -297,6 +350,8 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
 
     init,
     destroy,
+
+    loadManifest,
 
     rewind,
     rewindToLive,
