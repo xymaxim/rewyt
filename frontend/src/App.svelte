@@ -264,7 +264,7 @@
 
       <video
         bind:this={videoEl}
-        class="block h-auto max-h-full w-auto max-w-full"
+        class="block h-full w-auto max-w-full"
         class:hidden={streamStatus !== StreamStatus.READY}
         muted
       ></video>
