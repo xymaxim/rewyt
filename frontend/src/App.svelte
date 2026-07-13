@@ -32,10 +32,10 @@
 
   let explorer = $derived(explorerCell.current);
 
-  let player = $state(createPlayer(() => videoEl));
+  let videoEl: HTMLVideoElement | null = null;
 
   // State
-  let videoEl = $state<HTMLVideoElement | null>(null);
+  let player = $state(createPlayer(() => videoEl));
   let streamStatus = $state<StreamStatus>(StreamStatus.IDLE);
   let hasLoadedStream = $state(false);
   let ytdlpStdout = $state<string>("");
