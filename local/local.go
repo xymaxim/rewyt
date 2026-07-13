@@ -19,7 +19,7 @@ import (
 const (
 	timescale       = 10000
 	segmentDuration = 10 // seconds
-	videoTitle      = "Test live stream video created with FFMPEG"
+	videoTitle      = "Sample live stream video created with FFMPEG"
 )
 
 const fakeStdoutText = `From fairest creatures we desire increase,
@@ -43,6 +43,7 @@ const mpdTemplate = `<?xml version="1.0" encoding="UTF-8"?>
      type="dynamic"
      availabilityStartTime="{{availabilityStartTime}}">
    <ProgramInformation>
+     <Title>{{videoTitle}}</Title>
    </ProgramInformation>
    <BaseURL>http://localhost:8080</BaseURL>
    <Period id="0">
@@ -223,8 +224,8 @@ func mpdHandler(mpdDelay int) http.HandlerFunc {
 
 		mpd := strings.ReplaceAll(
 			mpdTemplate,
-			"{{currentTime}}",
-			time.Now().UTC().Format(time.RFC3339),
+			"{{videoTitle}}",
+			videoTitle,
 		)
 		mpd = strings.ReplaceAll(
 			mpd,
