@@ -48,10 +48,13 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
         const sr = shakaPlayer.seekRange();
         const newStart = mpdStartTime.getTime() + sr.start * 1000;
         const newEnd = mpdStartTime.getTime() + sr.end * 1000;
-        if (
-          seekableRange?.start !== newStart ||
-          seekableRange?.end !== newEnd
-        ) {
+
+        const hasStartShifted =
+          !seekableRange || Math.abs(seekableRange.start - newStart) > 1000;
+        const hasEndShifted =
+          !seekableRange || Math.abs(seekableRange.end - newEnd) > 1000;
+
+        if (hasStartShifted || hasEndShifted) {
           seekableRange = { start: newStart, end: newEnd };
         }
       }
