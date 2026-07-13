@@ -109,3 +109,8 @@ When you're happy with your selection, click the rewind button to jump there.
 
 You can combine both methods: use the sliders to get close to a moment before
 rewinding, then click the timeline to rewind to the exact moment.
+
+## Next steps
+
+Learn how to save a specific part of a stream: [Highlight and
+download excerpts](https://xymaxim.github.io/rewyt/docs/guides/download-excerpts.html).
