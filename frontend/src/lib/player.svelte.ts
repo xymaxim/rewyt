@@ -9,7 +9,7 @@ export interface StreamInfo {
   actualStartTime: Date;
 }
 
-const PLAYER_CONFIG = {
+const playerConfig = {
   streaming: {
     bufferingGoal: 30,
     rebufferingGoal: 10,
@@ -178,7 +178,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
       ],
     });
 
-    shakaPlayer.configure(PLAYER_CONFIG);
+    shakaPlayer.configure(playerConfig);
     await shakaPlayer.load("live:///mpd/now");
 
     animFrameId = requestAnimationFrame(tick);
