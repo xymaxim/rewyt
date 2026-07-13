@@ -18,6 +18,7 @@ const PLAYER_CONFIG = {
   manifest: {
     disableAudio: true,
   },
+  preferredVideo: [{ codec: "vp9" }, { codec: "avc1" }],
 };
 
 export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
