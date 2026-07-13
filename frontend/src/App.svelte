@@ -313,3 +313,9 @@
     </div>
   {/if}
 </main>
+
+<style>
+  :global(.shaka-content-title) {
+    display: none !important;
+  }
+</style>
