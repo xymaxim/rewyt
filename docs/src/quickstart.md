@@ -42,6 +42,12 @@ Open the app to see a welcome screen, where you can verify that your
 installation is complete. If something's missing, you'll see a warning
 describing what's needed. Otherwise, you're ready to go.
 
+## Initial setup
+
+If you need to pass options to `yt-dlp` (for example, cookies to bypass sign-in
+checks), add them to your [yt-dlp config
+file](https://github.com/yt-dlp/yt-dlp#configuration) before continuing.
+
 ## Rewatch a specific moment
 
 ### Open a live stream
