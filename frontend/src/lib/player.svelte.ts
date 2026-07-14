@@ -15,9 +15,6 @@ const playerConfig = {
     rebufferingGoal: 10,
     bufferBehind: 30,
   },
-  manifest: {
-    disableAudio: true,
-  },
   preferredVideo: [{ codec: "vp9" }, { codec: "avc1" }],
 };
 
