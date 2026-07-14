@@ -4,7 +4,7 @@ go 1.25.5
 
 require (
 	github.com/wailsapp/wails/v3 v3.0.0-alpha.98
-	github.com/xymaxim/ypb v0.0.0-20260615113651-1f8a6566cdf7
+	github.com/xymaxim/ypb v0.0.0-20260713202957-39042585fad5
 )
 
 require (
