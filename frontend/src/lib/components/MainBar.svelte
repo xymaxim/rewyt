@@ -4,6 +4,7 @@
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
   import * as Dialog from "$lib/components/ui/dialog/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
+  import { Input } from "$lib/components/ui/input/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
   import { Switch } from "$lib/components/ui/switch/index.js";
   import { ZOOM_LEVELS, type ZoomLevelKey } from "$lib/types";
@@ -16,6 +17,7 @@
     Circle,
     FastForward,
     Pause,
+    Pen,
     Play,
     Rewind,
     Radio,
@@ -71,6 +73,10 @@
   let playheadSnapshot = $state<number | null>(null);
   let pendingOffsetValue = $state<string>("UTC+00:00");
 
+  let jumpToTimeDialogOpen = $state(false);
+  let jumpToTimeValue = $state<string>("");
+  let jumpToTimeError = $state<string | null>(null);
+
   function jumpToPlayhead() {
     if (playingTime === null) return;
     explorer.setViewRange(
@@ -105,6 +111,56 @@
 
   function cancelTimezone() {
     timezoneDialogOpen = false;
+  }
+
+  function toIsoWithOffset(ms: number, offsetMinutes: number): string {
+    const shifted = new Date(ms + offsetMinutes * 60 * 1000);
+    const pad = (n: number) => String(n).padStart(2, "0");
+    const sign = offsetMinutes >= 0 ? "+" : "-";
+    const abs = Math.abs(offsetMinutes);
+    const offH = pad(Math.floor(abs / 60));
+    const offM = pad(abs % 60);
+    return (
+      `${shifted.getUTCFullYear()}-${pad(shifted.getUTCMonth() + 1)}-${pad(shifted.getUTCDate())}` +
+      `T${pad(shifted.getUTCHours())}:${pad(shifted.getUTCMinutes())}:${pad(shifted.getUTCSeconds())}` +
+      `${sign}${offH}:${offM}`
+    );
+  }
+
+  function openJumpToTimeDialog() {
+    jumpToTimeValue =
+      playingTime !== null
+        ? toIsoWithOffset(playingTime.getTime(), explorer.timezoneOffset)
+        : "";
+    jumpToTimeError = null;
+    jumpToTimeDialogOpen = true;
+    if (isPlaying) onTogglePlayPause();
+  }
+
+  function confirmJumpToTime() {
+    const value = jumpToTimeValue.trim();
+    const parsed = new Date(value);
+    if (value === "" || Number.isNaN(parsed.getTime())) {
+      jumpToTimeError =
+        "Enter a valid ISO timestamp, e.g. 2026-01-02T10:20:30+00:00";
+      return;
+    }
+    const ts = parsed.getTime();
+    explorer.setSelectedTime(ts);
+    explorer.setViewRange(
+      clampViewRange(
+        ts,
+        explorer.zoomLevel,
+        explorer.days,
+        explorer.centeredOnMidnight,
+      ),
+    );
+    onRewind(value, true);
+    jumpToTimeDialogOpen = false;
+  }
+
+  function cancelJumpToTime() {
+    jumpToTimeDialogOpen = false;
   }
 
   function formatSnapshotTime(offsetMinutes: number): string {
@@ -192,6 +248,14 @@
     {/if}
 
     <div class="flex h-10 items-center gap-0 gap-1!">
+      <Button
+        title="Jump to time"
+        size="lg"
+        class="text-normal size-10! rounded-full bg-[var(--rewyt-selected-light)]"
+        onclick={openJumpToTimeDialog}
+      >
+        <Pen size={20} />
+      </Button>
       <Expandable.Root
         trigger="click"
         closeOnClickOutside={true}
@@ -368,6 +432,36 @@
         <Dialog.Footer>
           <Button variant="ghost" onclick={cancelTimezone}>Cancel</Button>
           <Button variant="ghost" onclick={confirmTimezone}>OK</Button>
+        </Dialog.Footer>
+      </Dialog.Content>
+    </Dialog.Root>
+
+    <Dialog.Root bind:open={jumpToTimeDialogOpen}>
+      <Dialog.Content class="max-w-sm [&_button[data-dialog-close]]:hidden">
+        <Dialog.Header>
+          <Dialog.Title>Jump to time</Dialog.Title>
+        </Dialog.Header>
+
+        <div class="flex flex-col gap-2">
+          <Input
+            id="jump-to-time-input"
+            bind:value={jumpToTimeValue}
+            placeholder="2026-01-02T10:20:30+00:00"
+            onkeydown={(e) => {
+              if (e.key !== "Enter" || e.repeat) return;
+              e.preventDefault();
+              e.stopPropagation();
+              confirmJumpToTime();
+            }}
+          />
+          {#if jumpToTimeError}
+            <p class="text-sm text-destructive">{jumpToTimeError}</p>
+          {/if}
+        </div>
+
+        <Dialog.Footer>
+          <Button variant="ghost" onclick={cancelJumpToTime}>Cancel</Button>
+          <Button variant="ghost" onclick={confirmJumpToTime}>Rewind</Button>
         </Dialog.Footer>
       </Dialog.Content>
     </Dialog.Root>
