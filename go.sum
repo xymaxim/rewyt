@@ -103,8 +103,6 @@ github.com/wailsapp/wails/webview2 v1.0.24 h1:uULnjCSaRfMlU84mS3kjLgPsRosEOIusVK
 github.com/wailsapp/wails/webview2 v1.0.24/go.mod h1:sdf+s0nAdxlzVWf9SCxC15XaxnQPJeY+uU1Ucn3jHQM=
 github.com/xanzy/ssh-agent v0.3.3 h1:+/15pJfg/RsTxqYcX6fHqOXZwwMP+2VyYWJeWM2qQFM=
 github.com/xanzy/ssh-agent v0.3.3/go.mod h1:6dzNDKs0J9rVPHPhaGCukekBHKqfl+L3KghI1Bc68Uw=
-github.com/xymaxim/ypb v0.0.0-20260711231348-16aa6ccfa113 h1:w1BDtef5vzaaN6kJPZIUB5tifvpVkGcZaNFTmzr/xXQ=
-github.com/xymaxim/ypb v0.0.0-20260711231348-16aa6ccfa113/go.mod h1:yXFWcHJNkXremKtdN90I4c4HANsMQxHNy5fkkwqEkJs=
 github.com/xymaxim/ypb v0.0.0-20260713202957-39042585fad5 h1:nhTtFBsnix3QRcyMMjZXU5YqmvlswmztmtX4yTV/yJQ=
 github.com/xymaxim/ypb v0.0.0-20260713202957-39042585fad5/go.mod h1:yXFWcHJNkXremKtdN90I4c4HANsMQxHNy5fkkwqEkJs=
 golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
