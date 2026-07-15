@@ -202,10 +202,11 @@ func infoHandler(videoID string, streamStart int) http.HandlerFunc {
 func mpdHandler(mpdDelay int) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		interval := r.PathValue("interval")
+		now := time.Now().UTC()
 
 		var t time.Time
 		if interval == "now" {
-			t = time.Now().UTC()
+			t = now
 		} else {
 			var err error
 			t, err = time.Parse(time.RFC3339, interval)
@@ -216,6 +217,22 @@ func mpdHandler(mpdDelay int) http.HandlerFunc {
 				)
 				return
 			}
+		}
+
+		if t.After(now) {
+			http.Error(w,
+				"interval time cannot be in the future",
+				http.StatusBadRequest,
+			)
+			return
+		}
+
+		if t.Before(now.Add(-167 * time.Hour)) {
+			http.Error(w,
+				"interval time is too far in the past",
+				http.StatusBadRequest,
+			)
+			return
 		}
 
 		slog.Info("request manifest", "interval", interval)
@@ -230,12 +247,12 @@ func mpdHandler(mpdDelay int) http.HandlerFunc {
 		mpd = strings.ReplaceAll(
 			mpd,
 			"{{currentTime}}",
-			time.Now().UTC().Format(time.RFC3339),
+			now.Format(time.RFC3339),
 		)
 		mpd = strings.ReplaceAll(
 			mpd,
 			"{{availabilityStartTime}}",
-			time.Now().UTC().Add(-segmentDuration*time.Second).Format(time.RFC3339),
+			now.Add(-segmentDuration*time.Second).Format(time.RFC3339),
 		)
 		mpd = strings.ReplaceAll(mpd, "{{timescale}}", strconv.Itoa(timescale))
 		mpd = strings.ReplaceAll(
