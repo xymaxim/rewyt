@@ -231,15 +231,17 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
 
   // Playback controls
   async function rewind(isoTime: string, pause = false): Promise<boolean> {
+    const videoEl = getVideoEl();
+
     isRewinding = true;
     lastRewindTarget = new Date(isoTime).getTime();
     rewindError = null;
+    videoEl?.pause();
 
     try {
       const uri = `live:///mpd/${encodeURIComponent(isoTime)}`;
       await fetchManifest(uri);
       await loadManifest(uri);
-      const videoEl = getVideoEl();
       if (videoEl) pause ? videoEl.pause() : videoEl.play();
       return true;
     } catch (err) {
@@ -261,6 +263,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     isRewinding = true;
     cachedManifest = null;
     rewindError = null;
+    getVideoEl()?.pause();
     try {
       await fetchManifest("live:///mpd/now");
       await loadManifest("live:///mpd/now");
