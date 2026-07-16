@@ -11,12 +11,14 @@
     hoverPx?: number | null;
     isRewound: boolean;
     onRewind: (isoTime: string, pauseAfterRewind?: boolean) => void;
+    onTimeChange?: () => void;
   }
 
   const {
     hoverPx: timelineHoverPx = null,
     isRewound,
     onRewind,
+    onTimeChange,
   }: Props = $props();
 
   const explorer = getExplorerContext();
@@ -47,6 +49,7 @@
     getMax: () => allowedEnd,
     getFallback: () => explorer.selectedTime ?? allowedStart,
     updateViewRange: false,
+    onTimeChange,
   });
 
   $effect(() => {

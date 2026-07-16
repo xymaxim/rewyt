@@ -9,9 +9,10 @@
 
   interface Props {
     tickStepHours?: number;
+    onTimeChange?: () => void;
   }
 
-  const { tickStepHours = 4 }: Props = $props();
+  const { tickStepHours = 4, onTimeChange }: Props = $props();
 
   const explorer = getExplorerContext();
 
@@ -74,6 +75,7 @@
     getMax: () => dayEnd,
     getFallback: () => allowedStart + (allowedEnd - allowedStart) / 2,
     clampToSpan: true,
+    onTimeChange,
   });
 
   let barEl = $state<HTMLDivElement | null>(null);

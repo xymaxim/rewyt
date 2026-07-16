@@ -9,6 +9,12 @@
 
   const explorer = getExplorerContext();
 
+  interface Props {
+    onTimeChange?: () => void;
+  }
+
+  const { onTimeChange }: Props = $props();
+
   const sliderStep = 10 * MS_PER_MINUTE;
 
   const minimapStart = $derived(explorer.days.at(-1)?.dayStart ?? 0);
@@ -30,6 +36,7 @@
     getMax: () => minimapEnd,
     getFallback: () => allowedStart,
     clampToSpan: false,
+    onTimeChange,
   });
 
   let barEl = $state<HTMLDivElement | null>(null);

@@ -209,16 +209,20 @@
 
   <div
     class="flex h-[362px] w-full min-w-[640px] cursor-default justify-center rounded-lg
-             {streamStatus === StreamStatus.IDLE ||
+               {streamStatus === StreamStatus.IDLE ||
     streamStatus === StreamStatus.STARTING
       ? 'bg-gradient-to-t from-neutral-200 to-transparent to-80%'
       : ''}"
-    class:bg-black={streamStatus === StreamStatus.LOADING ||
-      streamStatus === StreamStatus.READY}
+    class:bg-black={(streamStatus === StreamStatus.LOADING ||
+      streamStatus === StreamStatus.READY) &&
+      !player.rewindError}
     class:overflow-hidden={streamStatus === StreamStatus.LOADING ||
       streamStatus === StreamStatus.READY}
   >
-    <div class="group relative flex w-full cursor-default! justify-center">
+    <div
+      class="group relative flex w-full cursor-default! justify-center"
+      class:rewind-error={!!player.rewindError}
+    >
       {#if player.streamInfo}
         <div
           class="absolute top-0 right-0 left-0 z-10 flex flex-col gap-0.5 px-4 py-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
@@ -262,10 +266,25 @@
         </div>
       {/if}
 
+      {#if player.rewindError}
+        <div
+          class="items-left absolute inset-0 z-30 flex flex-col justify-center gap-3 rounded-lg bg-[#f4e2e0] px-10 text-center"
+        >
+          <span class="text-xl font-semibold">Oops! Rewind failed</span>
+          <p class="max-w-xl text-left text-sm">
+            <span class="text-sm">Error:</span>
+            {player.rewindError}
+          </p>
+          <p class="max-w-xl text-left text-base">
+            Try rewinding again or choose another time.
+          </p>
+        </div>
+      {/if}
       <video
         bind:this={videoEl}
         class="block h-full w-auto max-w-full"
-        class:hidden={streamStatus !== StreamStatus.READY}
+        class:hidden={streamStatus !== StreamStatus.READY ||
+          !!player.rewindError}
         muted
       ></video>
     </div>
@@ -299,6 +318,7 @@
           playingTime={player.playheadTime}
           seekableRange={player.seekableRange}
           {videoEl}
+          onClearRewindError={() => player.clearRewindError()}
           onPlayInterval={(a, b) => player.playInterval(a, b)}
           onReplay={() => player.replay()}
           onRewind={(isoTime, pause) => player.rewind(isoTime, pause)}
@@ -316,6 +336,9 @@
 
 <style>
   :global(.shaka-content-title) {
+    display: none !important;
+  }
+  :global(.rewind-error .shaka-controls-container) {
     display: none !important;
   }
 </style>

@@ -29,10 +29,17 @@
     seekableRange: { start: number; end: number } | null;
     mpdStartTime: number;
     isRewound: boolean;
-    onRewind: (interval: string) => void;
+    onRewind: (isoTime: string, pause?: boolean) => Promise<boolean>;
+    onTimeChange?: () => void;
   }
 
-  let { seekableRange, mpdStartTime, isRewound, onRewind }: Props = $props();
+  let {
+    seekableRange,
+    mpdStartTime,
+    isRewound,
+    onRewind,
+    onTimeChange,
+  }: Props = $props();
 
   const explorer = getExplorerContext();
   const bar = useElementSize();
@@ -269,7 +276,7 @@
 
   <div class="relative h-[40px] w-full">
     {#if explorer.selectedTime !== null || hoverPx !== null}
-      <RewindSlider {hoverPx} {isRewound} {onRewind} />
+      <RewindSlider {hoverPx} {isRewound} {onRewind} {onTimeChange} />
     {:else}
       <div
         class="flex h-full items-center justify-center gap-1 text-sm text-muted-foreground"

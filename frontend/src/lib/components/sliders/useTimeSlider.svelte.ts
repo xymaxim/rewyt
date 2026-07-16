@@ -8,6 +8,7 @@ export interface TimeSliderOptions {
   getFallback?: () => number;
   clampToSpan?: boolean;
   updateViewRange?: boolean;
+  onTimeChange?: () => void;
 }
 
 export interface TimeSliderState {
@@ -61,6 +62,7 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
       : value;
 
     explorer.setSelectedTime(value);
+    options.onTimeChange?.();
     if (options.updateViewRange !== false) {
       explorer.setViewRange(
         clampViewRange(

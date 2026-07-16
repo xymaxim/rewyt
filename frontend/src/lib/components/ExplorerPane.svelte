@@ -14,9 +14,10 @@
     playingTime: Date | null;
     seekableRange: { start: number; end: number } | null;
     videoEl: HTMLVideoElement | null;
+    onClearRewindError: () => void;
     onPlayInterval: (a: number, b: number) => void;
     onReplay: () => void;
-    onRewind: (isoTime: string) => void;
+    onRewind: (isoTime: string, pause?: boolean) => Promise<boolean>;
     onRewindToLive: () => void;
     onScreenshot: (ts: number) => void;
     onSeekTo: (time: number, pause?: boolean) => void;
@@ -33,6 +34,7 @@
     playingTime,
     seekableRange,
     videoEl,
+    onClearRewindError,
     onPlayInterval,
     onReplay,
     onRewind,
@@ -80,6 +82,7 @@
       {isPlaying}
       {playingTime}
       {isRewound}
+      {onClearRewindError}
       {onReplay}
       {onRewindToLive}
       {onRewind}
@@ -93,14 +96,15 @@
       mpdStartTime={mpdStartTime.getTime()}
       {isRewound}
       {onRewind}
+      onTimeChange={onClearRewindError}
     />
 
     <div class="mt-1 mb-2 flex gap-2">
       <div class="relative w-[60%] rounded-2xl bg-neutral-200 px-[1rem]">
-        <DaysSlider />
+        <DaysSlider onTimeChange={onClearRewindError} />
       </div>
       <div class="relative w-[40%] rounded-2xl bg-neutral-200 px-[1rem]">
-        <DaySlider />
+        <DaySlider onTimeChange={onClearRewindError} />
       </div>
     </div>
 

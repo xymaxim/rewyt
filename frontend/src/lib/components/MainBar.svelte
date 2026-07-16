@@ -38,9 +38,10 @@
     isPlaying: boolean;
     playingTime: Date | null;
     isRewound: boolean;
+    onClearRewindError: () => void;
     onTogglePlayPause: () => void;
     onStep: (seconds: number) => void;
-    onRewind: (isoTime: string) => void;
+    onRewind: (isoTime: string, pause?: boolean) => Promise<boolean>;
     onRewindToLive: () => void;
     onReplay: () => void;
     onScreenshot: (ts: number) => void;
@@ -50,6 +51,7 @@
     isPlaying,
     playingTime,
     isRewound,
+    onClearRewindError,
     onReplay,
     onRewind,
     onRewindToLive,
@@ -128,16 +130,15 @@
   }
 
   function openJumpToTimeDialog() {
-    jumpToTimeValue =
-      playingTime !== null
-        ? toIsoWithOffset(playingTime.getTime(), explorer.timezoneOffset)
-        : "";
+    const defaultTime = explorer.selectedTime ?? Date.now();
+    jumpToTimeValue = toIsoWithOffset(defaultTime, explorer.timezoneOffset);
     jumpToTimeError = null;
     jumpToTimeDialogOpen = true;
+    onClearRewindError();
     if (isPlaying) onTogglePlayPause();
   }
 
-  function confirmJumpToTime() {
+  async function confirmJumpToTime() {
     const value = jumpToTimeValue.trim();
     const parsed = new Date(value);
     if (value === "" || Number.isNaN(parsed.getTime())) {
@@ -145,8 +146,18 @@
         "Enter a valid ISO timestamp, e.g. 2026-01-02T10:20:30+00:00";
       return;
     }
-    const ts = parsed.getTime();
+    let ts = parsed.getTime();
     explorer.setSelectedTime(ts);
+    jumpToTimeDialogOpen = false;
+
+    const success = await onRewind(value, true);
+    if (!success) {
+      const ar = explorer.availableRange;
+      if (ar && (ts < ar.start || ts > ar.end)) {
+        ts = Math.max(ar.start + 10 * 60_000, Math.min(ar.end, ts));
+        explorer.setSelectedTime(ts);
+      }
+    }
     explorer.setViewRange(
       clampViewRange(
         ts,
@@ -155,8 +166,6 @@
         explorer.centeredOnMidnight,
       ),
     );
-    onRewind(value, true);
-    jumpToTimeDialogOpen = false;
   }
 
   function cancelJumpToTime() {
@@ -244,7 +253,9 @@
         </div>
       </div>
     {:else}
-      <span class="text-sm text-gray-400">Not playing</span>
+      <div class="flex w-70 items-center justify-center">
+        <span class="text-3xl text-muted-foreground">&mdash;</span>
+      </div>
     {/if}
 
     <div class="flex h-10 items-center gap-0 gap-1!">

@@ -10,7 +10,7 @@
     seekableRange: { start: number; end: number } | null;
     onSeekTo: (time: number, pause?: boolean) => void;
     onPlayInterval: (a: number, b: number) => void;
-    onRewind: (isoTime: string, pause?: boolean) => void;
+    onRewind: (isoTime: string, pause?: boolean) => Promise<boolean>;
     onStopInterval: () => void;
   }
 

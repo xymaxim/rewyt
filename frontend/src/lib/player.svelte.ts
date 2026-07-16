@@ -34,6 +34,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   let isPlayingInterval = $state(false);
   let intervalStopTime = $state<number | null>(null);
   let lastRewindTarget = $state<number | null>(null);
+  let rewindError = $state<string | null>(null);
 
   // Playback
   function tick() {
@@ -87,30 +88,30 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
           );
         }
 
-        const promise = fetch(uri.replace("live://", ""), {
-          headers: { Accept: "application/json" },
-        })
-          .then((r) => r.json())
-          .then((json) => {
-            if (!json.metadata) throw new Error("Invalid MPD response");
-            mpdStartTime = new Date(json.metadata.startActualTime);
-            isMpdLoaded = true;
-            const data = new TextEncoder().encode(
-              sanitizeManifest(rewriteManifestBaseUrl(json.mpd)),
-            );
-            cachedManifest = { uri, data };
-            return {
-              uri,
-              originalUri: uri,
-              originalRequest: request,
-              data,
-              headers: { "content-type": "application/dash+xml" },
-            };
-          });
-
-        return shaka.util.AbortableOperation.notAbortable(promise);
+        return shaka.util.AbortableOperation.notAbortable(
+          Promise.reject(new Error("manifest not pre-fetched")),
+        );
       },
     );
+  }
+
+  async function fetchManifest(uri: string): Promise<void> {
+    const response = await fetch(uri.replace("live://", ""), {
+      headers: { Accept: "application/json" },
+    });
+    if (!response.ok) {
+      const text = await response.text().catch(() => "");
+      throw new Error(text || `Server responded with ${response.status}`);
+    }
+    const json = await response.json();
+    if (!json?.metadata) throw new Error("Invalid MPD response");
+
+    mpdStartTime = new Date(json.metadata.startActualTime);
+    isMpdLoaded = true;
+    const data = new TextEncoder().encode(
+      sanitizeManifest(rewriteManifestBaseUrl(json.mpd)),
+    );
+    cachedManifest = { uri, data };
   }
 
   function sanitizeManifest(mpd: string): string {
@@ -179,6 +180,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     });
 
     shakaPlayer.configure(playerConfig);
+    await fetchManifest("live:///mpd/now");
     await shakaPlayer.load("live:///mpd/now");
 
     animFrameId = requestAnimationFrame(tick);
@@ -228,36 +230,54 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   }
 
   // Playback controls
-  async function rewind(isoTime: string, pause = false) {
+  async function rewind(isoTime: string, pause = false): Promise<boolean> {
     isRewinding = true;
     lastRewindTarget = new Date(isoTime).getTime();
+    rewindError = null;
 
     try {
       const uri = `live:///mpd/${encodeURIComponent(isoTime)}`;
+      await fetchManifest(uri);
       await loadManifest(uri);
       const videoEl = getVideoEl();
-      if (!videoEl) return;
-      pause ? videoEl.pause() : videoEl.play();
+      if (videoEl) pause ? videoEl.pause() : videoEl.play();
+      return true;
     } catch (err) {
-      console.error("Rewind failed:", err);
+      const message = err instanceof Error ? err.message : String(err);
+      console.error("Rewind failed:", message);
+      await shakaPlayer?.unload().catch(() => {});
+      mpdStartTime = null;
+      playheadTime = null;
+      seekableRange = null;
+      rewindError = message;
       lastRewindTarget = null; // allow retry
+      return false;
     } finally {
       isRewinding = false;
     }
   }
 
-  async function rewindToLive(pause = false) {
+  async function rewindToLive(pause = false): Promise<boolean> {
     isRewinding = true;
     cachedManifest = null;
+    rewindError = null;
     try {
-      await loadManifest("live:///mpd/now").catch(console.error);
+      await fetchManifest("live:///mpd/now");
+      await loadManifest("live:///mpd/now");
       lastRewindTarget = mpdStartTime?.getTime() ?? null;
       const videoEl = getVideoEl();
-      if (!videoEl) return;
-      pause ? videoEl.pause() : videoEl.play();
+      if (videoEl) pause ? videoEl.pause() : videoEl.play();
+      return true;
     } catch (err) {
-      console.error("Rewind to live failed:", err);
+      const message = err instanceof Error ? err.message : String(err);
+      console.error("Rewind to live failed:", message);
+      await shakaPlayer?.unload().catch(() => {});
+      mpdStartTime = null;
+      playheadTime = null;
+      seekableRange = null;
+      rewindError = message;
       lastRewindTarget = null;
+      return false;
     } finally {
       isRewinding = false;
     }
@@ -322,6 +342,10 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     }
   };
 
+  function clearRewindError() {
+    rewindError = null;
+  }
+
   return {
     get isRewinding() {
       return isRewinding;
@@ -347,6 +371,9 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     get lastRewindTarget() {
       return lastRewindTarget;
     },
+    get rewindError() {
+      return rewindError;
+    },
 
     init,
     destroy,
@@ -360,6 +387,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     step,
     togglePlayPause,
     captureScreenshot,
+    clearRewindError,
 
     playInterval,
     stopInterval,
