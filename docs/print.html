@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-2b6168cf.js";
+            window.path_to_searchindex_js = "searchindex-4e9cfce1.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-3107a95e.js"></script>
+        <script src="toc-2f0ef3ae.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -271,8 +271,13 @@ rewinding yet.</p>
 <p>You can combine both methods: use the sliders to get close to a moment before
 rewinding, then click the timeline to rewind to the exact moment.</p>
 <h2 id="next-steps"><a class="header" href="#next-steps">Next steps</a></h2>
-<p>Learn how to save a specific part of a stream: <a href="https://xymaxim.github.io/rewyt/docs/guides/download-excerpts.html">Highlight and
-download excerpts</a>.</p>
+<p>Learn how to:</p>
+<ul>
+<li><a href="https://xymaxim.github.io/rewyt/docs/guides/download-excerpts.html">Highlight and download excerpts</a>
+— save a specific part of a stream</li>
+<li><a href="https://xymaxim.github.io/rewyt/docs/guides/share-timestamps.html">Share and paste timestamps</a>
+— share the moment you discovered and jump to a shared timestamp</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="installation-1"><a class="header" href="#installation-1">Installation</a></h1>
 <p>Available on Linux, macOS, and Windows.</p>
@@ -497,6 +502,49 @@ video</a> to turn your excerpt into a time-lapse.</p>
   2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00 abcdefgh123
 </code></pre>
 <p>The file is saved in your current working directory.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="share-and-paste-timestamps"><a class="header" href="#share-and-paste-timestamps">Share and paste timestamps</a></h1>
+<p>This guide shows you how to copy a timestamp from the stream and jump to a shared one.</p>
+<h2 id="copy-a-timestamp"><a class="header" href="#copy-a-timestamp">Copy a timestamp</a></h2>
+<ol>
+<li>
+<p><strong>Select a time on the timeline</strong></p>
+<p>Click on the timeline to rewind to the moment you want to share.</p>
+</li>
+<li>
+<p><strong>Copy the timestamp</strong></p>
+<p>Open the <strong>Selected</strong> tab at the bottom of the interface. Click <strong>More</strong>,
+then select <strong>Copy timestamp</strong>. This copies an ISO timestamp to your
+clipboard, for example:</p>
+<pre><code> 2026-06-20T14:30:00+03:00
+</code></pre>
+<figure>
+<img src="guides/share-timestamps-files/share-copy-timestamp.png" />
+<figcaption aria-hidden="true">Copying the timestamp</figcaption>
+</figure>
+</li>
+</ol>
+<p>Share this timestamp with others so they can jump to the exact same moment.</p>
+<h2 id="jump-to-a-shared-timestamp"><a class="header" href="#jump-to-a-shared-timestamp">Jump to a shared timestamp</a></h2>
+<ol>
+<li>
+<p><strong>Open the Jump to time dialog</strong></p>
+<p>Click the <strong>Jump to time</strong> button in the main bar.</p>
+<figure>
+<img src="guides/share-timestamps-files/share-jump-button.png" />
+<figcaption aria-hidden="true">Opening the Jump to title dialog</figcaption>
+</figure>
+</li>
+<li>
+<p><strong>Paste the timestamp and rewind</strong></p>
+<p>Paste the ISO timestamp into the input field and click <strong>Rewind</strong>.
+The stream jumps to that moment and starts playing.</p>
+<figure>
+<img src="guides/share-timestamps-files/share-jump-dialog.png" />
+<figcaption aria-hidden="true">Entering the timestamp for rewinding</figcaption>
+</figure>
+</li>
+</ol>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="usage-disclaimer"><a class="header" href="#usage-disclaimer">Usage disclaimer</a></h1>
 <p>This app unfortunately violates YouTube’s <a href="https://www.youtube.com/t/terms">Terms of
