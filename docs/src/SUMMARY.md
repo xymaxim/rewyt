@@ -15,6 +15,7 @@
 - [How-to guides]()
   - [Highlight and download excerpts](guides/download-excerpts.md)
   - [Download excerpts with container images](guides/download-excerpts-container.md)
+  - [Share and paste timestamps](guides/share-timestamps.md)
 
 # About
 
