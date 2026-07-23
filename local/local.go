@@ -12,8 +12,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/xymaxim/ypb/playback"
 )
 
 const (
@@ -163,10 +161,6 @@ func NewStream(ctx context.Context, cfg Config) (*Stream, error) {
 
 func (s *Stream) Server() *http.Server {
 	return s.server
-}
-
-func (s *Stream) Playback() playback.Playbacker {
-	return nil
 }
 
 func (s *Stream) Start() error {

@@ -8,14 +8,14 @@ import (
 	"net/http"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
-	"github.com/xymaxim/ypb/stream"
+	"github.com/xymaxim/ypb"
 )
 
 const playbackPort = 8080
 
 type StreamService struct {
 	ctx         context.Context
-	stream      stream.Streamer
+	stream      ypb.Streamer
 	startCancel context.CancelFunc
 }
 

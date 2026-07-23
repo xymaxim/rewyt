@@ -6,11 +6,11 @@ import (
 	"context"
 	"log"
 
-	"github.com/xymaxim/ypb/stream"
+	"github.com/xymaxim/ypb"
 	"rewyt/local"
 )
 
-func newStream(ctx context.Context, videoID string, port int, onPrint func([]byte)) (stream.Streamer, error) {
+func newStream(ctx context.Context, videoID string, port int, onPrint func([]byte)) (ypb.Streamer, error) {
 	log.Printf("running new stream on port %d type=local v=%s", port, videoID)
 	cfg := local.Config{
 		VideoID:     videoID,
