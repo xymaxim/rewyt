@@ -99,9 +99,12 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   }
 
   async function fetchManifest(uri: string): Promise<void> {
-    const response = await fetch(uri.replace("live://", `http://localhost:${playbackPort}`), {
-      headers: { Accept: "application/json" },
-    });
+    const response = await fetch(
+      uri.replace("live://", `http://localhost:${playbackPort}`),
+      {
+        headers: { Accept: "application/json" },
+      },
+    );
     if (!response.ok) {
       const text = await response.text().catch(() => "");
       throw new Error(text || `Server responded with ${response.status}`);
