@@ -13,8 +13,8 @@ FROM mwader/static-ffmpeg:8.1.2 AS ffmpeg
 # Get deno
 FROM docker.io/denoland/deno:bin-2.6.3 AS deno
 
-# Get yt-dlp and ypb binaries
-FROM alpine:latest AS binaries
+# Get yt-dlp
+FROM alpine:latest AS ytdlp
 RUN apk add --no-cache curl unzip jq
 
 RUN curl -L https://github.com/yt-dlp/yt-dlp-nightly-builds/releases/latest/download/yt-dlp_linux -o /yt-dlp \
@@ -25,11 +25,8 @@ RUN mkdir -p /yt-dlp-plugins \
       "https://github.com/Brainicism/bgutil-ytdlp-pot-provider/releases/latest/download/bgutil-ytdlp-pot-provider.zip" \
     && unzip -q /tmp/pot-plugin.zip -d /yt-dlp-plugins/
 
-RUN URL="$(curl -fsSL https://api.github.com/repos/xymaxim/ypb/releases/latest \
-      | jq -r '.assets[] | select(.name | test("linux-amd64\\.zip$")) | .browser_download_url')" \
-    && curl -fsSL -o /tmp/ypb.zip "$URL" \
-    && unzip -q /tmp/ypb.zip -d / \
-    && chmod +x /ypb
+# Get ypb
+FROM ghcr.io/xymaxim/ypb:bin-latest AS ypb
 
 # Runtime stage
 FROM gcr.io/distroless/cc-debian13
@@ -44,9 +41,10 @@ COPY --from=ffmpeg /ffprobe /usr/local/bin/ffprobe
 
 COPY --from=deno /deno /usr/local/bin/deno
 
-COPY --from=binaries /yt-dlp /usr/local/bin/yt-dlp
-COPY --from=binaries /yt-dlp-plugins /etc/yt-dlp/plugins/bgutil-ytdlp-pot-provider
-COPY --from=binaries /ypb /usr/local/bin/ypb
+COPY --from=ytdlp /yt-dlp /usr/local/bin/yt-dlp
+COPY --from=ytdlp /yt-dlp-plugins /etc/yt-dlp/plugins/bgutil-ytdlp-pot-provider
+
+COPY --from=ypb /ypb /usr/local/bin/ypb
 
 COPY --from=builder /app/rewyt /rewyt
 COPY --from=builder /app/frontend/dist /frontend/dist
