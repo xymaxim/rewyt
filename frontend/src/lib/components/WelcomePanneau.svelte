@@ -1,160 +1,131 @@
 <script lang="ts">
-  import Bead from "$lib/components/panneau/primitives/Bead.svelte";
-  import Empty from "$lib/components/panneau/primitives/Empty.svelte";
-  import Rectangle from "$lib/components/panneau/primitives/Rectangle.svelte";
-  import GradientRectangle from "$lib/components/panneau/primitives/GradientRectangle.svelte";
-  import StaticPanneau from "$lib/components/panneau/StaticPanneau.svelte";
-  import { OKLCH_RANGE } from "$lib/components/panneau/utils";
-  import type { PrimitiveDescriptor } from "$lib/components/panneau/types";
-  import {
-    resolveRectangle,
-    resolveBead,
-    resolveEmpty,
-  } from "$lib/components/panneau/resolvers";
-
   interface Props {
-    collapsing: boolean;
-    collapsingDuration: number;
+    collapsing?: boolean;
+    collapsingDuration?: number;
     seed?: number;
   }
 
-  let { collapsing, collapsingDuration, seed = 0 }: Props = $props();
+  let { collapsing = false, collapsingDuration = 600, seed = 0 }: Props = $props();
 
-  const initialPrimitives: PrimitiveDescriptor[] = [
-    {
-      component: Bead,
-      config: {
-        sizeRange: [80, 80],
-        ringProportions: [0.08, 1.0],
-        ringColors: [
-          {
-            l: [0, 0],
-            c: [0, 0],
-            h: [0, 0],
-          },
-          {
-            l: [0.8841, 0.8841],
-            c: [0.1675, 0.1675],
-            h: [117.72, 117.72],
-          },
-        ],
-      },
-      resolve: resolveBead,
-    },
-    {
-      component: Bead,
-      config: {
-        sizeRange: [80, 80],
-        ringProportions: [1.0],
-        ringColors: [
-          {
-            l: [0.8, 0.8],
-            c: [0.1469, 0.1469],
-            h: [83.99, 83.99],
-          },
-        ],
-      },
-      resolve: resolveBead,
-    },
-    {
-      component: Bead,
-      config: {
-        sizeRange: [30, 30],
-        ringProportions: [0.15, 1.0],
-        ringColors: [
-          {
-            l: [0, 0],
-            c: [0, 0],
-            h: [0, 0],
-          },
-          {
-            l: [0.69, 0.69],
-            c: [0.2, 0.2],
-            h: [19, 19],
-          },
-        ],
-      },
-      resolve: resolveBead,
-    },
+  const WIDTH = 620;
+  const HEIGHT = 342;
 
+  type Ring = { r: number; fill: string };
+  type Shape =
+    | { kind: "bead"; rings: Ring[] }
+    | { kind: "rect"; width: number; height: number; color: string };
+  type LayoutItem = { shape: Shape; radius: number; x: number; y: number; angle: number };
+
+  const SHAPES: Shape[] = [
     {
-      component: Bead,
-      config: {
-        sizeRange: [30, 30],
-        ringProportions: [1.0],
-        ringColors: [
-          {
-            l: [0.85, 0.85],
-            c: [0.07, 0.07],
-            h: [307, 307],
-          },
-        ],
-      },
-      resolve: resolveBead,
+      kind: "bead",
+      rings: [
+        { r: 80 / 2 * 0.08, fill: "oklch(0 0 0)" },
+        { r: 80 / 2 * 1.0, fill: "oklch(0.884 0.168 117.7)" },
+      ],
     },
     {
-      component: Rectangle,
-      config: {
-        sizeRange: [70, 70],
-        ratioRange: [0.15, 0.15],
-        angleRange: [0, 180],
-        colorRange: {
-          l: [0.85, 0.85],
-          c: [0.07, 0.07],
-          h: [307, 307],
-        },
-      },
-      resolve: resolveRectangle,
+      kind: "bead",
+      rings: [{ r: 80 / 2 * 1.0, fill: "oklch(0.800 0.147 84.0)" }],
     },
     {
-      component: Empty,
-      config: {},
-      resolve: resolveEmpty,
+      kind: "bead",
+      rings: [
+        { r: 30 / 2 * 0.15, fill: "oklch(0 0 0)" },
+        { r: 30 / 2 * 1.0, fill: "oklch(0.690 0.200 19.0)" },
+      ],
     },
     {
-      component: Empty,
-      config: {},
-      resolve: resolveEmpty,
+      kind: "bead",
+      rings: [{ r: 30 / 2 * 1.0, fill: "oklch(0.850 0.070 307.0)" }],
+    },
+    {
+      kind: "rect",
+      width: 70 * 0.15,
+      height: 70,
+      color: "oklch(0.850 0.070 307.0)",
     },
   ];
 
-  function shuffle(arr: PrimitiveDescriptor[]): PrimitiveDescriptor[] {
-    const hasAdjacentEmpty = (shuffled: PrimitiveDescriptor[]) => {
-      for (let i = 0; i < shuffled.length - 1; i++) {
-        if (
-          shuffled[i].component === Empty &&
-          shuffled[i + 1].component === Empty
-        ) {
-          return true;
-        }
-      }
-      return false;
-    };
-
-    let shuffled: PrimitiveDescriptor[];
-
-    do {
-      shuffled = [...arr].sort(() => Math.random() - 0.5);
-    } while (hasAdjacentEmpty(shuffled));
-
-    return shuffled;
+  function shapeRadius(s: Shape): number {
+    return s.kind === "bead" ? (s.rings.at(-1)?.r ?? 0) : Math.hypot(s.width, s.height) / 2;
   }
 
-  const primitives = $derived.by(() => {
+  function layout(): LayoutItem[] {
+    const maxAttempts = 100;
+    const placed: { x: number; y: number; r: number }[] = [];
+
+    return SHAPES.map((shape) => {
+      const r = shapeRadius(shape);
+      let x = 0;
+      let y = 0;
+      for (let attempt = 0; attempt < maxAttempts; attempt++) {
+        const nx = r + Math.random() * (WIDTH - r * 2);
+        const ny = r + Math.random() * (HEIGHT - r * 2);
+        if (!placed.some((p) => Math.hypot(p.x - nx, p.y - ny) < p.r + r)) {
+          x = nx;
+          y = ny;
+          break;
+        }
+        x = nx;
+        y = ny;
+      }
+      placed.push({ x, y, r });
+      return { shape, radius: r, x, y, angle: Math.random() * 360 };
+    });
+  }
+
+  let items = $state<LayoutItem[]>([]);
+
+  $effect(() => {
     seed;
-    return shuffle(initialPrimitives);
+    items = layout();
   });
 </script>
 
-<StaticPanneau
-  class="overflow-visible!"
-  {primitives}
-  width={620}
-  height={342}
-  rx={250}
-  aspect={16 / 9}
-  nudge={[-10, 0]}
-  {seed}
-  collapsed={collapsing}
-  {collapsingDuration}
-/>
+<div
+  class="block overflow-visible!"
+  style:width="{WIDTH}px"
+  style:height="{HEIGHT}px"
+>
+  <svg
+    width={WIDTH}
+    height={HEIGHT}
+    viewBox="0 0 {WIDTH} {HEIGHT}"
+    class="overflow-none block"
+    style="--collapsing-duration: {collapsingDuration}ms;"
+    xmlns="http://www.w3.org/2000/svg"
+    aria-hidden="true"
+  >
+    {#each items as item, i (i)}
+      <g
+        class="slot"
+        class:collapsed={collapsing}
+        style="translate: {item.x}px {item.y}px; rotate: {item.angle}deg;"
+      >
+        {#if item.shape.kind === "bead"}
+          {#each item.shape.rings.toReversed() as ring}
+            <circle r={ring.r} fill={ring.fill} />
+          {/each}
+        {:else}
+          <rect
+            x={-item.shape.width / 2}
+            y={-item.shape.height / 2}
+            width={item.shape.width}
+            height={item.shape.height}
+            fill={item.shape.color}
+          />
+        {/if}
+      </g>
+    {/each}
+  </svg>
+</div>
+
+<style>
+  .slot {
+    transition: translate var(--collapsing-duration)
+      cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: center;
+    transform-box: fill-box;
+  }
+</style>
