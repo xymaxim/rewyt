@@ -23,6 +23,10 @@ func NewStreamService() *StreamService {
 	return &StreamService{}
 }
 
+func (s *StreamService) GetPlaybackPort() int {
+	return playbackPort
+}
+
 // ServiceStartup is called when the service is registered
 func (s *StreamService) ServiceStartup(ctx context.Context, options application.ServiceOptions) error {
 	s.ctx = ctx

@@ -1,5 +1,6 @@
 import shaka from "shaka-player/dist/shaka-player.ui";
 import "shaka-player/dist/controls.css";
+import { GetPlaybackPort } from "../../bindings/rewyt/services/streamservice";
 
 export interface StreamInfo {
   id: string;
@@ -8,6 +9,8 @@ export interface StreamInfo {
   channelId: string;
   actualStartTime: Date;
 }
+
+const playbackPort = await GetPlaybackPort();
 
 const playerConfig = {
   streaming: {
@@ -64,7 +67,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   function rewriteManifestBaseUrl(mpd: string): string {
     const match = mpd.match(/<BaseURL>(.*?)<\/BaseURL>/);
     if (!match) return mpd;
-    return mpd.replaceAll(match[1], `${window.location.origin}/`);
+    return mpd.replaceAll(match[1], `http://localhost:${playbackPort}/`);
   }
 
   function registerSchemes() {
@@ -96,7 +99,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   }
 
   async function fetchManifest(uri: string): Promise<void> {
-    const response = await fetch(uri.replace("live://", ""), {
+    const response = await fetch(uri.replace("live://", `http://localhost:${playbackPort}`), {
       headers: { Accept: "application/json" },
     });
     if (!response.ok) {
@@ -136,7 +139,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
 
   // Lifecycle
   async function init() {
-    const response = await fetch("/info");
+    const response = await fetch(`http://localhost:${playbackPort}/info`);
     const json = await response.json();
     streamInfo = {
       id: json.id,
