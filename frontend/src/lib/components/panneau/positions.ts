@@ -90,6 +90,37 @@ export function ellipseSkippedPositions2({
   return positions;
 }
 
+export function randomPositions({
+  n,
+  cx,
+  cy,
+  rx,
+  ry,
+  radii,
+}: PositionParams) {
+  const placed: { x: number; y: number; r: number }[] = [];
+  const maxAttempts = 100;
+
+  return Array.from({ length: n }, (_, i) => {
+    const r = radii?.[i] ?? 0;
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      const x = cx + (Math.random() - 0.5) * rx * 2;
+      const y = cy + (Math.random() - 0.5) * ry * 2;
+      const overlaps = placed.some(
+        (p) => Math.hypot(p.x - x, p.y - y) < p.r + r,
+      );
+      if (!overlaps) {
+        placed.push({ x, y, r });
+        return { x, y };
+      }
+    }
+    const x = cx + (Math.random() - 0.5) * rx * 2;
+    const y = cy + (Math.random() - 0.5) * ry * 2;
+    placed.push({ x, y, r });
+    return { x, y };
+  });
+}
+
 export function tanPositions({
   n,
   cx,

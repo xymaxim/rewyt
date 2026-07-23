@@ -95,22 +95,8 @@
     {
       component: Rectangle,
       config: {
-        sizeRange: [60, 70],
-        ratioRange: [0.2, 0.2],
-        angleRange: [0, 180],
-        colorRange: {
-          l: [0.85, 0.85],
-          c: [0.07, 0.07],
-          h: [307, 307],
-        },
-      },
-      resolve: resolveRectangle,
-    },
-    {
-      component: GradientRectangle,
-      config: {
-        sizeRange: [60, 80],
-        ratioRange: [0.5, 0.7],
+        sizeRange: [70, 70],
+        ratioRange: [0.15, 0.15],
         angleRange: [0, 180],
         colorRange: {
           l: [0.85, 0.85],

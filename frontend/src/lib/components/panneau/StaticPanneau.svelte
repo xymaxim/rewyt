@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import type { AnyResolved } from "./types";
   import { randBetween } from "./utils";
-  import { ellipsePositions } from "./positions";
+  import { randomPositions } from "./positions";
 
   interface Props {
     primitives: PrimitiveDescriptor[];
@@ -30,7 +30,7 @@
     nudge = [0, 0],
     collapsed = false,
     collapsingDuration = 600,
-    getPositions = ellipsePositions,
+    getPositions = randomPositions,
     class: className = "",
   }: Props = $props();
 
@@ -42,6 +42,7 @@
     ry: number;
     nudges: number[];
     angle: number;
+    radii: number[];
   };
 
   export type PositionFn = (
@@ -57,6 +58,14 @@
 
   const nudgeOffsets = $derived(primitives.map(() => randBetween(nudge)));
 
+  const radii = $derived(
+    primitives.map(({ config }) => {
+      const c = config as any;
+      if (c.sizeRange) return c.sizeRange[0] / 2;
+      return 0;
+    }),
+  );
+
   const positionParams = $derived<PositionParams>({
     n: primitives.length,
     cx,
@@ -65,6 +74,7 @@
     ry,
     nudges: nudgeOffsets,
     angle: 0,
+    radii,
   });
 
   const computedPositions = $derived(getPositions(positionParams));
