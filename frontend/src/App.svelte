@@ -16,6 +16,7 @@
   import DependencyNotice from "./lib/components/DependencyNotice.svelte";
   import StartingPane from "./lib/components/StartingPane.svelte";
   import StartingProgress from "./lib/components/StartingProgress.svelte";
+  import StartingError from "./lib/components/StartingError.svelte";
 
   export const StreamStatus = {
     IDLE: "idle",
@@ -41,6 +42,7 @@
   let ytdlpStdout = $state<string>("");
   let unlistenStdout: (() => void) | null = null;
   let showStdoutLog = $state(false);
+  let lastError = $state<unknown>(null);
 
   // Effects: player-explorer wiring
   $effect(() => {
@@ -64,6 +66,7 @@
   // Events
   async function onStreamStart(videoId: string) {
     streamStatus = StreamStatus.STARTING;
+    lastError = null;
     ytdlpStdout = "";
     showStdoutLog = false;
     unlistenStdout = Events.On("stream-stdout", (event) => {
@@ -83,13 +86,15 @@
       hasLoadedStream = true;
     } catch (err) {
       console.error(err);
-      if (streamStatus === StreamStatus.STARTING) {
-        cleanupStdout();
-        streamStatus = StreamStatus.IDLE;
-        return;
+      const message =
+        err instanceof Error ? err.message : String(err);
+      if (!message.includes("context canceled")) {
+        lastError = err;
       }
-      cleanupStdout();
+      unlistenStdout?.();
+      unlistenStdout = null;
       streamStatus = StreamStatus.IDLE;
+      return;
     }
   }
 
@@ -291,6 +296,9 @@
   </div>
 
   {#if streamStatus === StreamStatus.IDLE}
+    {#if lastError}
+      <StartingError error={lastError} stdout={ytdlpStdout} />
+    {/if}
     <DependencyNotice />
   {:else if streamStatus === StreamStatus.STARTING}
     <StartingProgress
