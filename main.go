@@ -3,8 +3,8 @@ package main
 import (
 	"embed"
 
-	"rewyt/services"
 	"github.com/wailsapp/wails/v3/pkg/application"
+	"rewyt/services"
 )
 
 //go:embed frontend/dist
