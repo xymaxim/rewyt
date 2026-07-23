@@ -15,6 +15,13 @@ export function CancelStreamStart() {
 }
 
 /**
+ * @returns {$CancellablePromise<number>}
+ */
+export function GetPlaybackPort() {
+    return $Call.ByID(161821948);
+}
+
+/**
  * Shutdown is called when the service shuts down
  * @returns {$CancellablePromise<void>}
  */
