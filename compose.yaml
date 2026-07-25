@@ -19,7 +19,10 @@ services:
     ports:
       - "8080:3000"
     volumes:
-      - ${YTDLP_CONFIG_DIR:-/dev/null}:/root/.config/yt-dlp:z
+      - ${YTDLP_CONFIG_DIR:-config}:/root/.config/yt-dlp:z
     depends_on:
       pot-provider:
         condition: service_healthy
+
+volumes:
+  config:
