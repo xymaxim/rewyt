@@ -11,9 +11,7 @@ services:
       start_period: 5s
 
   app:
-    build:
-      context: .
-      dockerfile: Containerfile
+    image: ghcr.io/xymaxim/rewyt:latest
     container_name: app
     restart: unless-stopped
     ports:
