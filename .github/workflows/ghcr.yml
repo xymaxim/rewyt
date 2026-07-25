@@ -1,4 +1,4 @@
-name: Build and Push Container Image
+name: Build and Push to ghcr.io
 
 on:
   push:
@@ -6,15 +6,11 @@ on:
       - 'v*'
 
 jobs:
-  build-and-push:
+  publish-image:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-
-    env:
-      REGISTRY: ghcr.io
-      IMAGE_NAME: ${{ github.repository }}
 
     steps:
       - name: Checkout code
@@ -25,7 +21,7 @@ jobs:
       - name: Log in to GHCR
         uses: redhat-actions/podman-login@v1
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
@@ -33,7 +29,7 @@ jobs:
         id: build
         uses: redhat-actions/buildah-build@v2
         with:
-          image: ${{ env.IMAGE_NAME }}
+          image: ${{ github.repository }}
           tags: |
             latest
             ${{ github.ref_name }}
@@ -45,4 +41,37 @@ jobs:
         with:
           image: ${{ steps.build.outputs.image }}
           tags: ${{ steps.build.outputs.tags }}
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
+
+  publish-compose:
+    needs: publish-image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push compose.yaml as OCI artifact
+        run: |
+          oras push \
+            --artifact-type application/vnd.docker.compose.project \
+            --annotation org.opencontainers.image.title="Rewyt Compose" \
+            --annotation org.opencontainers.image.description="Compose file to run Rewyt with PO token provider" \
+            --annotation org.opencontainers.image.source=https://github.com/${{ github.repository }} \
+            --annotation org.opencontainers.image.version=${{ github.ref_name }} \
+            ghcr.io/${{ github.repository }}-compose:latest \
+            compose.yaml
+          oras push \
+            --artifact-type application/vnd.docker.compose.project \
+            --annotation org.opencontainers.image.title="Rewyt Compose" \
+            --annotation org.opencontainers.image.description="Compose file to run Rewyt with PO token provider" \
+            --annotation org.opencontainers.image.source=https://github.com/${{ github.repository }} \
+            --annotation org.opencontainers.image.version=${{ github.ref_name }} \
+            ghcr.io/${{ github.repository }}-compose:${{ github.ref_name }} \
+            compose.yaml
