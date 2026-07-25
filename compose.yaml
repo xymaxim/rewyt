@@ -18,7 +18,6 @@ services:
     restart: unless-stopped
     ports:
       - "8080:3000"
-      - "9000:9000"
     volumes:
       - ${YTDLP_CONFIG_DIR:-/dev/null}:/root/.config/yt-dlp:z
     depends_on:
