@@ -6,7 +6,7 @@ Rewyt comes in two distributions, each with its own installation process:
 
 1. [**Desktop app**](binaries.md): Install platform-specific pre-built binaries
    along with additional dependencies
-2. [**Web app**](container.md): Run in a container with all dependencies
+2. [**Container**](container.md): Run in a container with all dependencies
    bundled, and access via your browser
 
 ## Choosing installation method
