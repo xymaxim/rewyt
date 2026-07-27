@@ -10,14 +10,17 @@ services:
       retries: 5
       start_period: 5s
 
-  app:
-    image: ghcr.io/xymaxim/rewyt:latest
-    container_name: app
+  rewyt:
+    build:
+      context: .
+      dockerfile: Containerfile
+    container_name: rewyt
     restart: unless-stopped
     ports:
       - "8080:3000"
+      - "9000:9000"
     volumes:
-      - ${YTDLP_CONFIG_DIR:-config}:/root/.config/yt-dlp:z
+      - ${YPB_YTDLP_CONFIG_LOCATION:-config}:/root/.config/yt-dlp:z
     depends_on:
       pot-provider:
         condition: service_healthy

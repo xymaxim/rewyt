@@ -17,7 +17,7 @@ LABEL org.opencontainers.image.licenses="AGPL-3.0-or-later"
 
 COPY --from=builder /app/rewyt /usr/local/bin/rewyt
 
-COPY --chmod=755 entrypoint.sh /entrypoint.sh
+COPY --chmod=755 containers/entrypoint.sh /entrypoint.sh
 
 WORKDIR /
 
