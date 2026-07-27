@@ -8,7 +8,7 @@
 
 - [Installation](guides/install/install.md)
   - [Desktop app](guides/install/desktop.md)
-  - [Container](guides/install/container.md)
+  - [Web app](guides/install/web.md)
 
 - [Overview](overview.md)
 
