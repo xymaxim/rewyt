@@ -34,7 +34,7 @@ jobs:
             latest
             ${{ github.ref_name }}
           containerfiles: |
-            ./Containerfile
+            ./containers/Containerfile
 
       - name: Push to GHCR
         uses: redhat-actions/push-to-registry@v2
@@ -54,11 +54,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Install oras
+        uses: oras-project/setup-oras@v1
+
       - name: Log in to GHCR
         run: echo "${{ secrets.GITHUB_TOKEN }}" | oras login ghcr.io -u ${{ github.actor }} --password-stdin
 
+      - name: Fetch ypb's .env
+        run: |
+          mkdir ypb-compose
+          oras pull ghcr.io/xymaxim/ypb-compose:latest -o ypb-compose
+          cp ypb-compose/.env .env
+
       - name: Push compose.yaml as OCI artifact
         run: |
+          cd containers
           oras push \
             --artifact-type application/vnd.docker.compose.project \
             --annotation org.opencontainers.image.title="Rewyt Compose" \
@@ -66,7 +76,7 @@ jobs:
             --annotation org.opencontainers.image.source=https://github.com/${{ github.repository }} \
             --annotation org.opencontainers.image.version=${{ github.ref_name }} \
             ghcr.io/${{ github.repository }}-compose:latest \
-            compose.yaml
+            compose.yaml .env
           oras push \
             --artifact-type application/vnd.docker.compose.project \
             --annotation org.opencontainers.image.title="Rewyt Compose" \
@@ -74,4 +84,4 @@ jobs:
             --annotation org.opencontainers.image.source=https://github.com/${{ github.repository }} \
             --annotation org.opencontainers.image.version=${{ github.ref_name }} \
             ghcr.io/${{ github.repository }}-compose:${{ github.ref_name }} \
-            compose.yaml
+            compose.yaml .env
