@@ -2,7 +2,11 @@
 
 # Rewyt
 
-_Rewind and play YouTube live streams_
+[![Release](https://img.shields.io/github/v/release/xymaxim/rewyt)](https://github.com/xymaxim/rewyt/releases/latest)
+
+[Source](https://github.com/xymaxim/rewyt) &nbsp; [Website](https://xymaxim.github.io/rewyt) &nbsp; [Documentation](https://xymaxim.github.io/rewyt/docs) &nbsp; [Changelog](https://xymaxim.github.io/rewyt/docs/changelog.html)
+
+*Rewind and play YouTube live streams*
 
 Rewyt is a desktop app for rewatching past moments of live streams beyond
 YouTube's limits.
