@@ -52,6 +52,10 @@ might run into rate limits or get blocked if YouTube notices.
 If you enjoy the videos you watch, please consider supporting the creators by
 subscribing to their channels and engaging with their content directly.
 
+## Sponsoring
+
+You can support this project by [sponsoring](SPONSORING.md) it.
+
 ## Credits
 
 The font used in the application is [Geist](https://vercel.com/font). The

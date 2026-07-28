@@ -21,4 +21,6 @@
 
 - [Disclaimer](disclaimer.md)
 
+- [Sponsoring](sponsoring.md)
+
 - [Changelog](changelog.md)
