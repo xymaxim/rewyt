@@ -90,14 +90,7 @@ export function ellipseSkippedPositions2({
   return positions;
 }
 
-export function randomPositions({
-  n,
-  cx,
-  cy,
-  rx,
-  ry,
-  radii,
-}: PositionParams) {
+export function randomPositions({ n, cx, cy, rx, ry, radii }: PositionParams) {
   const placed: { x: number; y: number; r: number }[] = [];
   const maxAttempts = 100;
 

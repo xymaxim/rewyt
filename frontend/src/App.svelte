@@ -86,8 +86,7 @@
       hasLoadedStream = true;
     } catch (err) {
       console.error(err);
-      const message =
-        err instanceof Error ? err.message : String(err);
+      const message = err instanceof Error ? err.message : String(err);
       if (!message.includes("context canceled")) {
         lastError = err;
       }
