@@ -20,15 +20,13 @@ Windows.
 
 ## Overview
 
-The app is built on a Go backend with a Svelte frontend. On startup, the
-backend starts [ypb](https://github.com/xymaxim/ypb), which fetches video
-info via yt-dlp. When you rewind to a moment, the frontend requests an
-MPEG-DASH manifest from ypb, which generates one with proxied URLs. During
-playback, [Shaka Player](https://github.com/shaka-project/shaka-player)
-streams segments through those URLs, and ypb fetches them from YouTube,
-gracefully handling connection errors along the way. See
-[Overview](https://xymaxim.github.io/rewyt/docs/overview.html) for more
-details.
+On startup, the Go backend starts [ypb](https://github.com/xymaxim/ypb), which
+fetches video info via [yt-dlp](github.com/yt-dlp/yt-dlp). When you rewind to a
+moment, the Svelte frontend requests an MPEG-DASH manifest from ypb, which
+generates one with proxied URLs. During playback, [Shaka
+Player](https://github.com/shaka-project/shaka-player) streams video through
+ypb, which proxies media segments from YouTube and handles connection errors. See
+[Overview](https://xymaxim.github.io/rewyt/docs/overview.html) for more details.
 
 ## Installation
 

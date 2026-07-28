@@ -4,63 +4,36 @@ Rewyt is built with Go, Svelte, [Shaka
 Player](https://github.com/shaka-project/shaka-player), and packaged with
 [Wails](https://wails.io).
 
-<figure>
-<img
-src="./overview-files/overview.svg"
-alt="Schematic overview of the Rewyt app" />
-<figcaption aria-hidden="true"><i>Schematic overview of the Rewyt app</i></figcaption>
-</figure>
+```mermaid
+sequenceDiagram
+    autonumber
+    participant A as Frontend<br/>(Svelte + Shaka Player)
+    participant B as Backend<br/>(Go)
+    participant C as ypb
+    participant Y as YouTube
 
-<h2>Backend</h2>
+    note over B,C: Startup
+    B->>C: Start server
+    C->>Y: Fetch info (via yt-dlp)
+    Y-->>C: Video info
 
-The backend is built in Go and relies on two main
-components. [ypb](https://github.com/xymaxim/ypb) locates specific moments in a
-stream and creates the corresponding MPEG-DASH manifests that the player
-needs. A proxy layer sits between the player and YouTube's servers, delivering
-video segments and handling connection errors
-gracefully. [yt-dlp](https://github.com/yt-dlp/yt-dlp) handles the supporting
-work: fetching video metadata and solving the JavaScript challenges YouTube
-requires for access.
+    note over A,C: Rewind to moment
+    A->>C: Request MPD
+    C->>C: Generate MPD
+    C-->>A: MPD (proxied base URLs)
 
-<h2>Frontend</h2>
+    note over A,C: Playback
+    loop
+        A->>C: Request segment (proxied URL)
+        C->>Y: Request segment
+        Y-->>C: Stream segment
+        C-->>A: Stream segment
+    end
+```    
 
-The frontend uses [Shaka
-Player](https://github.com/shaka-project/shaka-player) to play the MPEG-DASH
-manifests and stream video from YouTube through the stream proxy.
-
-<!-- ```mermaid -->
-<!-- --- -->
-<!-- config: -->
-<!--   flowchart: -->
-<!--     defaultRenderer: elk -->
-<!--     fontSize: 28px -->
-<!--   theme: base -->
-<!--   layout: dagre -->
-<!--   look: neo -->
-<!--   themeVariables: -->
-<!--     dropShadow: false -->
-<!-- --- -->
-<!-- flowchart LR -->
-<!--  subgraph Rewyt["`**Rewyt app**`"] -->
-<!--     direction TB -->
-<!--         A["Frontend<br>(Svelte + Shaka Player)"] -->
-<!--         B["Backend<br>(Go, Wails)"] -->
-<!--   end -->
-<!--  subgraph CoreTools["Stream proxy"] -->
-<!--     direction TB -->
-<!--         C["`**ypb**<br>Start proxy server<br>Generate MPDs`"] -->
-<!--         D["`**yt-dlp**<br>Fetch metadata<br>Solve JS challenges`"] -->
-<!--   end -->
-<!--     B -- Rewind<br>moments -\-> C -->
-<!--     C -\-> D -->
-<!--     D -\-> YT{{"`**YouTube**`"}} -->
-<!--     C -- Locate<br>segments -\-> YT -->
-<!--     A <== Stream<br>video ==> C -->
-<!--     C ==> YT -->
-
-<!--      A:::app -->
-<!--      B:::app -->
-<!--      YT:::yt -->
-<!--     classDef app stroke:#222,stroke-dasharray: 3 3,stroke-width:3px,fill:none -->
-<!--     classDef yt stroke:#ff0033,stroke-dasharray: 3 3,stroke-width:3px,fill:none -->
-<!-- ``` -->
+On startup, the Go backend starts [ypb](https://github.com/xymaxim/ypb), which
+fetches video info via [yt-dlp](github.com/yt-dlp/yt-dlp). When you rewind to a
+moment, the Svelte frontend requests an MPEG-DASH manifest from ypb, which
+generates one with proxied URLs. During playback, [Shaka
+Player](https://github.com/shaka-project/shaka-player) streams video through
+ypb, which proxies media segments from YouTube and handles connection errors.
