@@ -7,8 +7,8 @@ Learn how to install Rewyt and start rewatching YouTube live streams.
 Rewyt comes as a **desktop app** (pre-built binary) or a **web app**
 (container).
 
-- **Desktop app** — choose this if you already have `yt-dlp` installed
-- **Web app** — choose this if you don't, or prefer a self-contained setup
+- **Desktop app**: choose this if you already have `yt-dlp` installed
+- **Web app**: choose this if you don't, or prefer a self-contained setup
 
 ### Desktop app
 
@@ -21,20 +21,32 @@ working directory.
 
 ### Web app
 
-You'll need [Podman](https://podman.io/getting-started/installation) or
-[Docker](https://docs.docker.com/get-docker/).
-    
-Pull and run the container:
+Running Rewyt in containers gives you an isolated environment with `yt-dlp`,
+`ffmpeg`, and `ypb` pre-installed, along with the PO token provider.
 
-```shell
-podman run --rm -p 3000:3000 ghcr.io/xymaxim/rewyt
-```
+**Prerequisites:** [Podman](https://podman.io/getting-started/installation) or
+[Docker](https://docs.docker.com/get-docker/), with Compose.
+
+**macOS/Windows only, Podman:** Initialize the Podman machine (one-time setup):
+
+    podman machine init && podman machine start
+
+Pull the compose file and extract it to a local directory:
+
+    podman artifact pull ghcr.io/xymaxim/rewyt-compose
+    podman artifact extract ghcr.io/xymaxim/rewyt-compose ~/rewyt-app
+    cd ~/rewyt-app
+
+Start the app:
+
+    podman compose up -d
 
 Open the app in your browser:
 
-    http://localhost:3000
+    http://localhost:8080
 
-> See [Web app](guides/install/web.md) for more details.
+> See [Web app](guides/install/web.md) for configuration options and more
+> details.
 
 ## Verify installation
 
@@ -44,9 +56,22 @@ describing what's needed. Otherwise, you're ready to go.
 
 ## Initial setup
 
-If you need to pass options to `yt-dlp` (for example, cookies to bypass sign-in
-checks), add them to your [yt-dlp config
-file](https://github.com/yt-dlp/yt-dlp#configuration) before continuing.
+Rewyt relies on yt-dlp's network-related options and cookies. Where you set them
+depends on how you installed Rewyt:
+
+- **Desktop app**: uses your local [yt-dlp configuration
+  file](https://github.com/yt-dlp/yt-dlp#configuration) directly
+- **Web app**: uses a yt-dlp configuration file mounted into the container, set
+  by editing the `.env` file, see
+  [Configuration](guides/install/web.md#configuration) for details
+
+If YouTube responds with a "Sign in to confirm you're not a bot" error while
+loading a stream, you'll need to provide cookies from a signed-in browser
+session. See yt-dlp's wiki on how to
+[export](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies)
+and
+[pass](https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp)
+cookies to yt-dlp.
 
 ## Rewatch a specific moment
 
@@ -114,7 +139,5 @@ rewinding, then click the timeline to rewind to the exact moment.
 
 Learn how to:
 
-- [Highlight and download excerpts](https://xymaxim.github.io/rewyt/docs/guides/download-excerpts.html)
-  — save a specific part of a stream
-- [Share and paste timestamps](https://xymaxim.github.io/rewyt/docs/guides/share-timestamps.html)
-  — share the moment you discovered and jump to a shared timestamp
+- [Highlight and download excerpts](https://xymaxim.github.io/rewyt/docs/guides/download-excerpts.html): save a specific part of a stream
+- [Share and paste timestamps](https://xymaxim.github.io/rewyt/docs/guides/share-timestamps.html): share the moment you discovered and jump to a shared timestamp
