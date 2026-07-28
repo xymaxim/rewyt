@@ -35,7 +35,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4e9cfce1.js";
+            window.path_to_searchindex_js = "searchindex-75ec2f17.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-2f0ef3ae.js"></script>
@@ -180,8 +180,8 @@
 <p>Rewyt comes as a <strong>desktop app</strong> (pre-built binary) or a <strong>web app</strong>
 (container).</p>
 <ul>
-<li><strong>Desktop app</strong> — choose this if you already have <code>yt-dlp</code> installed</li>
-<li><strong>Web app</strong> — choose this if you don’t, or prefer a self-contained setup</li>
+<li><strong>Desktop app</strong>: choose this if you already have <code>yt-dlp</code> installed</li>
+<li><strong>Web app</strong>: choose this if you don’t, or prefer a self-contained setup</li>
 </ul>
 <h3 id="desktop-app"><a class="header" href="#desktop-app">Desktop app</a></h3>
 <p>Download the binary for your platform from the <a href="https://github.com/xymaxim/rewyt/releases/latest">latest
@@ -192,25 +192,49 @@ working directory.</p>
 app</a>.</p>
 </blockquote>
 <h3 id="web-app"><a class="header" href="#web-app">Web app</a></h3>
-<p>You’ll need <a href="https://podman.io/getting-started/installation">Podman</a> or
-<a href="https://docs.docker.com/get-docker/">Docker</a>.</p>
-<p>Pull and run the container:</p>
-<pre><code class="language-shell">podman run --rm -p 3000:3000 ghcr.io/xymaxim/rewyt
+<p>Running Rewyt in containers gives you an isolated environment with <code>yt-dlp</code>,
+<code>ffmpeg</code>, and <code>ypb</code> pre-installed, along with the PO token provider.</p>
+<p><strong>Prerequisites:</strong> <a href="https://podman.io/getting-started/installation">Podman</a> or
+<a href="https://docs.docker.com/get-docker/">Docker</a>, with Compose.</p>
+<p><strong>macOS/Windows only, Podman:</strong> Initialize the Podman machine (one-time setup):</p>
+<pre><code>podman machine init &amp;&amp; podman machine start
+</code></pre>
+<p>Pull the compose file and extract it to a local directory:</p>
+<pre><code>podman artifact pull ghcr.io/xymaxim/rewyt-compose
+podman artifact extract ghcr.io/xymaxim/rewyt-compose ~/rewyt-app
+cd ~/rewyt-app
+</code></pre>
+<p>Start the app:</p>
+<pre><code>podman compose up -d
 </code></pre>
 <p>Open the app in your browser:</p>
-<pre><code>http://localhost:3000
+<pre><code>http://localhost:8080
 </code></pre>
 <blockquote>
-<p>See <a href="guides/install/web.html">Web app</a> for more details.</p>
+<p>See <a href="guides/install/web.html">Web app</a> for configuration options and more
+details.</p>
 </blockquote>
 <h2 id="verify-installation"><a class="header" href="#verify-installation">Verify installation</a></h2>
 <p>Open the app to see a welcome screen, where you can verify that your
 installation is complete. If something’s missing, you’ll see a warning
 describing what’s needed. Otherwise, you’re ready to go.</p>
 <h2 id="initial-setup"><a class="header" href="#initial-setup">Initial setup</a></h2>
-<p>If you need to pass options to <code>yt-dlp</code> (for example, cookies to bypass sign-in
-checks), add them to your <a href="https://github.com/yt-dlp/yt-dlp#configuration">yt-dlp config
-file</a> before continuing.</p>
+<p>Rewyt relies on yt-dlp’s network-related options and cookies. Where you set them
+depends on how you installed Rewyt:</p>
+<ul>
+<li><strong>Desktop app</strong>: uses your local <a href="https://github.com/yt-dlp/yt-dlp#configuration">yt-dlp configuration
+file</a> directly</li>
+<li><strong>Web app</strong>: uses a yt-dlp configuration file mounted into the container, set
+by editing the <code>.env</code> file, see
+<a href="guides/install/web.html#configuration">Configuration</a> for details</li>
+</ul>
+<p>If YouTube responds with a “Sign in to confirm you’re not a bot” error while
+loading a stream, you’ll need to provide cookies from a signed-in browser
+session. See yt-dlp’s wiki on how to
+<a href="https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies">export</a>
+and
+<a href="https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp">pass</a>
+cookies to yt-dlp.</p>
 <h2 id="rewatch-a-specific-moment"><a class="header" href="#rewatch-a-specific-moment">Rewatch a specific moment</a></h2>
 <h3 id="open-a-live-stream"><a class="header" href="#open-a-live-stream">Open a live stream</a></h3>
 <p>To get started, you’ll need a live stream to rewind. If you’re not sure what to
@@ -259,10 +283,8 @@ rewinding, then click the timeline to rewind to the exact moment.</p>
 <h2 id="next-steps"><a class="header" href="#next-steps">Next steps</a></h2>
 <p>Learn how to:</p>
 <ul>
-<li><a href="https://xymaxim.github.io/rewyt/docs/guides/download-excerpts.html">Highlight and download excerpts</a>
-— save a specific part of a stream</li>
-<li><a href="https://xymaxim.github.io/rewyt/docs/guides/share-timestamps.html">Share and paste timestamps</a>
-— share the moment you discovered and jump to a shared timestamp</li>
+<li><a href="https://xymaxim.github.io/rewyt/docs/guides/download-excerpts.html">Highlight and download excerpts</a>: save a specific part of a stream</li>
+<li><a href="https://xymaxim.github.io/rewyt/docs/guides/share-timestamps.html">Share and paste timestamps</a>: share the moment you discovered and jump to a shared timestamp</li>
 </ul>
 
                     </main>
