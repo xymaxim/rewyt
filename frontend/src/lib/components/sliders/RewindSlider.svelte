@@ -31,7 +31,7 @@
   const thumbSlidingWidth = thumbActiveWidth - 4;
   const labelOffset = 6;
   const thumbColorDefault = "var(--rewyt-selected)";
-  const thumbColorActive = "#DAA520";
+  const thumbColorActive = "var(--rewyt-selecting)";
 
   const rangeStart = $derived(explorer.viewRange?.start ?? 0);
   const rangeEnd = $derived(explorer.viewRange?.end ?? 0);
@@ -216,7 +216,7 @@
                                {isLabelFlipped
               ? `right: 100%; margin-right: 1px;`
               : `left: 100%; margin-left: 1px;`}
-                               background: linear-gradient(to right, {thumbColorActive} 0%, var(--rewyt-selected) 50%);
+                               background: linear-gradient(to right, var(--rewyt-selecting) 0%, var(--rewyt-selected) 50%);
                                "
             onclick={() =>
               onRewind(

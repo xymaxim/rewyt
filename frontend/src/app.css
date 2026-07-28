@@ -89,6 +89,8 @@
   --rewyt-selected-darker: #8cb41d;
   --rewyt-selected-darkest: #6d8c17;
 
+  --rewyt-selecting: oklch(0.8 0.147 84);
+
   --rewyt-interval: var(--rewyt-interval-300);
   --rewyt-interval-light: var(--rewyt-interval-100);
 }
