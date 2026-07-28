@@ -20,33 +20,30 @@ Windows.
 
 ## Overview
 
-The app is built on a Go backend with a Svelte frontend. It uses our
-[ypb](https://github.com/xymaxim/ypb) to locate moments in a live stream,
-generate dynamic MPEG-DASH manifests, and act as a stream proxy that delivers
-media segments while gracefully handling connection errors. [Shaka
-Player](https://github.com/shaka-project/shaka-player) plays the video with
-adaptive streaming from YouTube through the stream proxy. See more details
-[here](https://xymaxim.github.io/rewyt/docs/overview.html).
+The app is built on a Go backend with a Svelte frontend. On startup, the
+backend starts [ypb](https://github.com/xymaxim/ypb), which fetches video
+info via yt-dlp. When you rewind to a moment, the frontend requests an
+MPEG-DASH manifest from ypb, which generates one with proxied URLs. During
+playback, [Shaka Player](https://github.com/shaka-project/shaka-player)
+streams segments through those URLs, and ypb fetches them from YouTube,
+gracefully handling connection errors along the way. See
+[Overview](https://xymaxim.github.io/rewyt/docs/overview.html) for more
+details.
 
 ## Installation
 
-Rewyt comes as a (1) **desktop app** via pre-built binaries or (2) **web
-app** via container, accessible through your browser. See the [Installation
-guide](https://xymaxim.github.io/rewyt/docs/guides/install/install.html) for setup
-instructions.
+Rewyt runs either as a **desktop app** via pre-built binaries or as a **web
+app** you run locally with Compose and access through your browser. See the
+[Installation](https://xymaxim.github.io/rewyt/docs/guides/install/install.html)
+guide for setup instructions.
 
 ## Etymology
 
-1. *(v.)* to rewind and rewatch YouTube live streams
-2. *(n.)* from Anglo-Saxon "rewyt",
+1. *(n.)* from Anglo-Saxon "rewyt",
    [meaning](https://archive.org/details/analectaanglosax00tho/page/240/mode/2up?q=rewyt)
-   *navigation*, *voyage*, reflecting the act of exploring and revisiting
-   moments.
-
-## Credits
-
-The font used in the application is [Geist](https://vercel.com/font). The
-icons are from [Lucide Icons](https://lucide.dev/).
+   *navigation*, *voyage*
+2. *(v.)* to rewind and rewatch YouTube live streams, navigating back through
+   past moments
 
 ## Disclaimer
 
@@ -56,6 +53,11 @@ might run into rate limits or get blocked if YouTube notices.
 
 If you enjoy the videos you watch, please consider supporting the creators by
 subscribing to their channels and engaging with their content directly.
+
+## Credits
+
+The font used in the application is [Geist](https://vercel.com/font). The
+icons are from [Lucide Icons](https://lucide.dev/).
 
 ## License
 
