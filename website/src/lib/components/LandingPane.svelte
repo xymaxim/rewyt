@@ -197,7 +197,7 @@
     </button>
   </div>
 
-  <div class="flex w-full max-w-[720px] mt-2 px-4">
+  <div class="mt-2 flex w-full max-w-[720px] px-4">
     <Slider.Root
       type="single"
       bind:value={rewindValue}
@@ -232,7 +232,7 @@
 
       <Slider.Thumb
         index={0}
-        class="items-centerrelative top-2 z-20 block h-9 w-9 translate-y-full cursor-grab touch-none rounded-full border-16 border-[var(--color-rewind-light)] bg-black/80 outline-none select-none active:cursor-grabbing"
+        class="items-centerrelative top-2 z-20 block h-10 w-10 translate-y-full cursor-grab touch-none rounded-full border-17 border-[var(--color-rewind-light)] bg-black/80 outline-none select-none active:cursor-grabbing"
       ></Slider.Thumb>
     </Slider.Root>
   </div>
