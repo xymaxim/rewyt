@@ -1,12 +1,12 @@
 # Download excerpts with container images
 
-This guide shows you how to download a highlighted live stream excerpt when Rewyt and [ypb](https://xymaxim.github.io/ypb/) are run from container images.
+This guide shows you how to download a highlighted live stream excerpt when
+Rewyt and [ypb](https://xymaxim.github.io/ypb/) are run via Compose.
 
 ## Prerequisites
 
 - [Podman](https://podman.io/getting-started/installation) or [Docker](https://docs.docker.com/get-docker/)
-- Rewyt running from a [container image](https://xymaxim.github.io/rewyt/docs/guides/install/web.html)
-- ypb available as a [container image](https://xymaxim.github.io/ypb/guides/install/container.html)
+- Rewyt running via [Compose](https://xymaxim.github.io/rewyt/docs/guides/install/web.html)
 
 ## Highlight the excerpt
 
@@ -16,16 +16,18 @@ This guide shows you how to download a highlighted live stream excerpt when Rewy
 Highlight the excerpt and copy its timestamp, for example:
 
 ```text
-2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00
+2026-06-20T10:00:00+00:00/2026-06-20T10:30:00+00:00
 ```
 
 ## Download the excerpt
 
-Run `ypb` from its container image, mounting the current directory so the downloaded file is saved locally:
+Run ypb inside the already-running Rewyt container:
 
-```shell
-podman run --rm -v .:/content ghcr.io/xymaxim/ypb download \
+```sh
+# --workdir must stay /media, it's where the container's volume is mounted
+podman compose exec --workdir /media rewyt ypb download \
   2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00 abcdefgh123
 ```
 
-The file is saved in your current working directory.
+The file is saved to `./media` by default, or the path set via
+[`YPB_MEDIA_DIR`](https://xymaxim.github.io/ypb/guides/install/container.html#ypb_media_dir).
