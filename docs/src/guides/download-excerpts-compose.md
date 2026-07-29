@@ -1,4 +1,4 @@
-# Download excerpts with container images
+# Download excerpts with Compose
 
 This guide shows you how to download a highlighted live stream excerpt when
 Rewyt and [ypb](https://xymaxim.github.io/ypb/) are run via Compose.
@@ -6,7 +6,7 @@ Rewyt and [ypb](https://xymaxim.github.io/ypb/) are run via Compose.
 ## Prerequisites
 
 - [Podman](https://podman.io/getting-started/installation) or [Docker](https://docs.docker.com/get-docker/)
-- Rewyt running via [Compose](https://xymaxim.github.io/rewyt/docs/guides/install/web.html)
+- Rewyt installed as a [web app](install/web.md), running via Compose
 
 ## Highlight the excerpt
 
