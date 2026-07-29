@@ -43,11 +43,14 @@ jobs:
         with:
           mdbook-version: '0.5.2'
 
-      - name: Add mdBook variables
+      - name: Add mdbook-variables
         run: cargo install mdbook-variables
 
-      - name: Add mdBook cmdrun 
+      - name: Add mdbook-cmdrun
         run: cargo install --git https://github.com/roberth/mdbook-cmdrun --branch mdbook-0.5
+
+      - name: Add mdbook-mermaid-mmdr
+        run: cargo install --git https://github.com/adamcavendish/mdbook-mermaid-mmdr
 
       - name: Build docs
         run: cd docs && mdbook build
