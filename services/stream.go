@@ -11,7 +11,7 @@ import (
 	"github.com/xymaxim/ypb"
 )
 
-const playbackPort = 9000
+const playbackPort = 9001
 
 type StreamService struct {
 	ctx         context.Context
