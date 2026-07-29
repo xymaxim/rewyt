@@ -6,4 +6,4 @@ RELEASE_VERSION := $(shell git describe --tags --abbrev=0 --match 'v*' | sed 's/
 
 .PHONY: docs
 docs:
-	MDBOOK_PREPROCESSOR__VARIABLES__VARIABLES__RELEASE_VERSION="$(RELEASE_VERSION)" mdbook build docs
+	MDBOOK_PREPROCESSOR__VARIABLES__VARIABLES__RELEASE="$(RELEASE_VERSION)" mdbook build docs

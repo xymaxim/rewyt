@@ -5,7 +5,7 @@ title = "Rewyt documentation"
 no-section-label = true
 
 [preprocessor.variables.variables]
-release-version = "dev"
+release = "dev"
 
 [preprocessor.mermaid-mmdr]
 command = "mdbook-mermaid-mmdr"
