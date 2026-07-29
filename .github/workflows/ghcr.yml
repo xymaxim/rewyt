@@ -64,7 +64,7 @@ jobs:
         run: |
           mkdir ypb-compose
           oras pull ghcr.io/xymaxim/ypb-compose:latest -o ypb-compose
-          cp ypb-compose/.env .env
+          cp ypb-compose/.env containers/.env
 
       - name: Push compose.yaml as OCI artifact
         run: |
