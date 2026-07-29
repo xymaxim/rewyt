@@ -15,7 +15,9 @@ The app runs as two containers managed by [Compose](https://compose-spec.io/):
 
 ## Prerequisites
 
-[Podman](https://podman.io/getting-started/installation) with [Compose](https://podman-desktop.io/docs/compose).
+- [Podman](https://podman.io/getting-started/installation) with [Compose](https://podman-desktop.io/docs/compose)
+
+- YouTube cookies [exported](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies) from your browser
 
 ### macOS and Windows
 
@@ -31,19 +33,38 @@ The machine starts automatically on subsequent reboots.
 
 ## Set up
 
-Pull the compose file and extract it to a local directory:
+1. Pull the compose file and extract it to a local directory:
 
-```shell
-podman artifact pull ghcr.io/xymaxim/rewyt-compose
-podman artifact extract ghcr.io/xymaxim/rewyt-compose ~/rewyt-app
-cd ~/rewyt-app
-```
+   ```shell
+   podman artifact pull ghcr.io/xymaxim/rewyt-compose
+   podman artifact extract ghcr.io/xymaxim/rewyt-compose ~/rewyt-app
+   cd ~/rewyt-app
+   ```
 
-This gives you `compose.yaml` and a `.env` file with defaults, containing ypb's
-configuration variables.
+   This gives you `compose.yaml` and `.env.template` files with defaults,
+   containing configuration variables, including ypb's — see
+   [Configuration](#configuration) below for what's available.
 
-If YouTube responds with a "Sign in to confirm you're not a bot" error, setting
-up cookies usually resolves it. See [Configuration](#configuration) below.
+2. Copy `.env.template` to `.env` and edit that copy:
+
+   ```shell
+   cp .env.template .env
+   ```
+
+   `.env` is yours to customize and won't be overwritten by future updates.
+
+### Set up cookies (recommended)
+
+YouTube may respond with a "Sign in to confirm you're not a bot" error
+without cookies, so setting them up is recommended. To avoid this:
+
+1. Export cookies from your browser into a `cookies.txt` file.
+2. In `.env`, set `YPB_YTDLP_CONFIG_DIR` to the directory where you want
+   to store yt-dlp related config files.
+3. Place `cookies.txt` inside that directory.
+4. Reference it from your yt-dlp config file:
+
+        --cookies /path/to/cookies.txt
 
 ## Usage
 
@@ -65,18 +86,23 @@ podman compose down
 
 ## Configuration
 
-The `.env` file holds ypb's configuration variables. See
-[ypb's Configuration section](https://xymaxim.github.io/ypb/guides/install/container.html#configuration)
-for what's available and how to set them.
-
-For example, to use cookies, export them from your browser into a
-`cookies.txt` file, place it inside your `YPB_YTDLP_CONFIG_DIR`, then
-reference it from your yt-dlp config file:
-
-    --cookies /path/to/cookies.txt
+The `.env.template` file (copied to `.env` during [setup](#set-up)) holds
+configuration variables, including ypb's. See [ypb's
+Configuration](https://xymaxim.github.io/ypb/guides/install/container.html#configuration)
+section for what's available and how to set them.
 
 ## Update the app
 
+To update the container images:
+
 ```shell
 podman compose pull
+```
+
+To pick up changes to `compose.yaml` or `.env.template`, re-run the extract
+step. This leaves your `.env` untouched:
+
+```shell
+podman artifact pull ghcr.io/xymaxim/rewyt-compose
+podman artifact extract ghcr.io/xymaxim/rewyt-compose .
 ```
