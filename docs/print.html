@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-75ec2f17.js";
+            window.path_to_searchindex_js = "searchindex-8bf3cb27.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-2f0ef3ae.js"></script>
+        <script src="toc-663bfc5f.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -357,7 +357,7 @@ release</a> page.</p>
 <tr><th>Linux</th><th>Windows</th><th>macOS</th></tr>
 </thead>
 <tbody>
-<tr><td><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.4.26/Rewyt-2026.4.26-linux-x86_64.zip">x86_64</a></td><td><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.4.26/Rewyt-2026.4.26-windows-x86_64.zip">x86_64</a></td><td><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.4.26/Rewyt-2026.4.26-macos-universal.zip">universal</a></td></tr>
+<tr><td><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.7.29/Rewyt-2026.7.29-linux_x64.zip">x64</a></td><td><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.7.29/Rewyt-2026.7.29-windows_x64.zip">x64</a></td><td><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.7.29/Rewyt-2026.7.29-macos_universal.zip">universal</a></td></tr>
 </tbody>
 </table>
 </div>
@@ -423,69 +423,33 @@ reference it from your yt-dlp config file:</p>
 <p>Rewyt is built with Go, Svelte, <a href="https://github.com/shaka-project/shaka-player">Shaka
 Player</a>, and packaged with
 <a href="https://wails.io">Wails</a>.</p>
-<figure>
-<img src="overview-files/overview.svg" alt="Schematic overview of the Rewyt app" />
-<figcaption aria-hidden="true"><i>Schematic overview of the Rewyt app</i></figcaption>
-</figure>
-<h2>Backend</h2>
+<div class="mermaid-mmdr-svg">
+<svg xmlns="http://www.w3.org/2000/svg" width="878.04" height="841.19995" viewbox="-50 -10 878.04 841.19995"><rect x="-50" y="-10" width="878.04" height="841.19995" fill="#FFFFFF" /><defs><marker id="arrow-0" viewbox="0 0 10 10" refx="5" refy="5" markerunits="userSpaceOnUse" markerwidth="8" markerheight="8" orient="auto"><path d="M 0 0 L 10 5 L 0 10 z" fill="#64748B" stroke="#64748B" stroke-width="1" stroke-dasharray="1,0" /></marker><marker id="arrow-start-0" viewbox="0 0 10 10" refx="4.5" refy="5" markerunits="userSpaceOnUse" markerwidth="8" markerheight="8" orient="auto"><path d="M 0 5 L 10 10 L 10 0 z" fill="#64748B" stroke="#64748B" stroke-width="1" stroke-dasharray="1,0" /></marker><marker id="arrow-seq-0" viewbox="-1 0 12 10" refx="7.9" refy="5" markerunits="userSpaceOnUse" markerwidth="12" markerheight="12" orient="auto-start-reverse"><path d="M -1 0 L 10 5 L 0 10 z" fill="#64748B" stroke="#64748B" stroke-width="1" stroke-dasharray="1,0" /></marker><marker id="arrow-start-seq-0" viewbox="-1 0 12 10" refx="2.1" refy="5" markerunits="userSpaceOnUse" markerwidth="12" markerheight="12" orient="auto"><path d="M 11 0 L 0 5 L 11 10 z" fill="#64748B" stroke="#64748B" stroke-width="1" stroke-dasharray="1,0" /></marker></defs><rect x="64.00" y="374.00" width="653.74" height="364.20" fill="none" stroke="#94A3B8" stroke-width="2.0" stroke-dasharray="2 2" /><polygon points="64.00,374.00 116.64,374.00 116.64,387.00 106.11,394.00 64.00,394.00" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.1" /><text x="90.32" y="387.50" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="90.32" dy="0.00">loop</tspan></text><line x1="75.00" y1="72.00" x2="75.00" y2="748.20" stroke="#64748B" stroke-width="0.5" /><line x1="275.00" y1="72.00" x2="275.00" y2="748.20" stroke="#64748B" stroke-width="0.5" /><line x1="475.00" y1="72.00" x2="475.00" y2="748.20" stroke="#64748B" stroke-width="0.5" /><line x1="703.04" y1="72.00" x2="703.04" y2="748.20" stroke="#64748B" stroke-width="0.5" /><path d="M 250.00 82.00 L 488.80 82.00 L 500.00 93.20 L 500.00 121.40 L 250.00 121.40 Z" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.1" /><polyline points="488.80,82.00 488.80,93.20 500.00,93.20" fill="none" stroke="#FDBA74" stroke-width="1.0" /><text x="375.00" y="105.20" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="375.00" dy="0.00">Startup</tspan></text><path d="M 50.00 269.40 L 488.80 269.40 L 500.00 280.60 L 500.00 308.80 L 50.00 308.80 Z" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.1" /><polyline points="488.80,269.40 488.80,280.60 500.00,280.60" fill="none" stroke="#FDBA74" stroke-width="1.0" /><text x="275.00" y="292.60" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="275.00" dy="0.00">Rewind to moment</tspan></text><path d="M 50.00 456.80 L 488.80 456.80 L 500.00 468.00 L 500.00 496.20 L 50.00 496.20 Z" fill="#FFF7ED" stroke="#FDBA74" stroke-width="1.1" /><polyline points="488.80,456.80 488.80,468.00 500.00,468.00" fill="none" stroke="#FDBA74" stroke-width="1.0" /><text x="275.00" y="480.00" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="275.00" dy="0.00">Playback</tspan></text><path id="edge-0" class="edgePath" data-edge-id="edge-0" d="M 275.000,167.400 L 475.000,167.400" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-seq-0)" stroke-linecap="round" stroke-linejoin="round" /><rect class="edgeLabel sequenceEdgeLabel" data-edge-id="edge-0" data-label-kind="center" x="317.24" y="136.60" width="115.52" height="28.00" rx="2" ry="2" fill="#FFFFFF" fill-opacity="0.00" stroke="#94A3B8" stroke-opacity="0.00" stroke-width="0.8" /><g class="edgeLabel" data-edge-id="edge-0" data-label-kind="center"><text x="375.00" y="154.10" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="375.00" dy="0.00">Start server</tspan></text></g><path id="edge-1" class="edgePath" data-edge-id="edge-1" d="M 475.000,213.400 L 703.040,213.400" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-seq-0)" stroke-linecap="round" stroke-linejoin="round" /><rect class="edgeLabel sequenceEdgeLabel" data-edge-id="edge-1" data-label-kind="center" x="481.98" y="216.20" width="214.08" height="28.00" rx="2" ry="2" fill="#FFFFFF" fill-opacity="0.00" stroke="#94A3B8" stroke-opacity="0.00" stroke-width="0.8" /><g class="edgeLabel" data-edge-id="edge-1" data-label-kind="center"><text x="589.02" y="233.70" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="589.02" dy="0.00">Fetch info (via yt-dlp)</tspan></text></g><path id="edge-2" class="edgePath" data-edge-id="edge-2" d="M 703.040,259.400 L 475.000,259.400" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-seq-0)" stroke-dasharray="3 3" stroke-linecap="round" stroke-linejoin="round" /><rect class="edgeLabel sequenceEdgeLabel" data-edge-id="edge-2" data-label-kind="center" x="540.22" y="262.20" width="97.60" height="28.00" rx="2" ry="2" fill="#FFFFFF" fill-opacity="0.00" stroke="#94A3B8" stroke-opacity="0.00" stroke-width="0.8" /><g class="edgeLabel" data-edge-id="edge-2" data-label-kind="center"><text x="589.02" y="279.70" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="589.02" dy="0.00">Video info</tspan></text></g><path id="edge-3" class="edgePath" data-edge-id="edge-3" d="M 75.000,354.800 L 475.000,354.800" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-seq-0)" stroke-linecap="round" stroke-linejoin="round" /><rect class="edgeLabel sequenceEdgeLabel" data-edge-id="edge-3" data-label-kind="center" x="220.36" y="324.00" width="109.28" height="28.00" rx="2" ry="2" fill="#FFFFFF" fill-opacity="0.00" stroke="#94A3B8" stroke-opacity="0.00" stroke-width="0.8" /><g class="edgeLabel" data-edge-id="edge-3" data-label-kind="center"><text x="275.00" y="341.50" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="275.00" dy="0.00">Request MPD</tspan></text></g><path id="edge-4" class="edgePath" data-edge-id="edge-4" d="M 475.000,400.800 L 510.000,400.800 L 510.000,435.800 L 475.000,435.800" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-seq-0)" stroke-linecap="round" stroke-linejoin="round" /><rect class="edgeLabel sequenceEdgeLabel" data-edge-id="edge-4" data-label-kind="center" x="499.11" y="439.83" width="116.98" height="28.00" rx="2" ry="2" fill="#FFFFFF" fill-opacity="0.00" stroke="#94A3B8" stroke-opacity="0.00" stroke-width="0.8" /><g class="edgeLabel" data-edge-id="edge-4" data-label-kind="center"><text x="557.60" y="457.33" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="557.60" dy="0.00">Generate MPD</tspan></text></g><path id="edge-5" class="edgePath" data-edge-id="edge-5" d="M 475.000,446.800 L 75.000,446.800" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-seq-0)" stroke-dasharray="3 3" stroke-linecap="round" stroke-linejoin="round" /><rect class="edgeLabel sequenceEdgeLabel" data-edge-id="edge-5" data-label-kind="center" x="167.96" y="416.00" width="214.08" height="28.00" rx="2" ry="2" fill="#FFFFFF" fill-opacity="0.00" stroke="#94A3B8" stroke-opacity="0.00" stroke-width="0.8" /><g class="edgeLabel" data-edge-id="edge-5" data-label-kind="center"><text x="275.00" y="433.50" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="275.00" dy="0.00">MPD (proxied base URLs)</tspan></text></g><path id="edge-6" class="edgePath" data-edge-id="edge-6" d="M 75.000,588.200 L 475.000,588.200" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-seq-0)" stroke-linecap="round" stroke-linejoin="round" /><rect class="edgeLabel sequenceEdgeLabel" data-edge-id="edge-6" data-label-kind="center" x="141.08" y="557.40" width="267.84" height="28.00" rx="2" ry="2" fill="#FFFFFF" fill-opacity="0.00" stroke="#94A3B8" stroke-opacity="0.00" stroke-width="0.8" /><g class="edgeLabel" data-edge-id="edge-6" data-label-kind="center"><text x="275.00" y="574.90" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="275.00" dy="0.00">Request segment (proxied URL)</tspan></text></g><path id="edge-7" class="edgePath" data-edge-id="edge-7" d="M 475.000,634.200 L 703.040,634.200" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-seq-0)" stroke-linecap="round" stroke-linejoin="round" /><rect class="edgeLabel sequenceEdgeLabel" data-edge-id="edge-7" data-label-kind="center" x="517.82" y="603.40" width="142.40" height="28.00" rx="2" ry="2" fill="#FFFFFF" fill-opacity="0.00" stroke="#94A3B8" stroke-opacity="0.00" stroke-width="0.8" /><g class="edgeLabel" data-edge-id="edge-7" data-label-kind="center"><text x="589.02" y="620.90" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="589.02" dy="0.00">Request segment</tspan></text></g><path id="edge-8" class="edgePath" data-edge-id="edge-8" d="M 703.040,680.200 L 475.000,680.200" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-seq-0)" stroke-dasharray="3 3" stroke-linecap="round" stroke-linejoin="round" /><rect class="edgeLabel sequenceEdgeLabel" data-edge-id="edge-8" data-label-kind="center" x="522.30" y="649.40" width="133.44" height="28.00" rx="2" ry="2" fill="#FFFFFF" fill-opacity="0.00" stroke="#94A3B8" stroke-opacity="0.00" stroke-width="0.8" /><g class="edgeLabel" data-edge-id="edge-8" data-label-kind="center"><text x="589.02" y="666.90" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="589.02" dy="0.00">Stream segment</tspan></text></g><path id="edge-9" class="edgePath" data-edge-id="edge-9" d="M 475.000,726.200 L 75.000,726.200" fill="none" stroke="#64748B" stroke-width="1.5" marker-end="url(#arrow-seq-0)" stroke-dasharray="3 3" stroke-linecap="round" stroke-linejoin="round" /><rect class="edgeLabel sequenceEdgeLabel" data-edge-id="edge-9" data-label-kind="center" x="208.28" y="695.40" width="133.44" height="28.00" rx="2" ry="2" fill="#FFFFFF" fill-opacity="0.00" stroke="#94A3B8" stroke-opacity="0.00" stroke-width="0.8" /><g class="edgeLabel" data-edge-id="edge-9" data-label-kind="center"><text x="275.00" y="712.90" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="275.00" dy="0.00">Stream segment</tspan></text></g><circle cx="291.00" cy="155.50" r="6.30" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1" /><text x="291.00" y="160.40" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A">1</text><circle cx="491.00" cy="201.50" r="6.30" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1" /><text x="491.00" y="206.40" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A">2</text><circle cx="687.04" cy="247.50" r="6.30" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1" /><text x="687.04" y="252.40" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A">3</text><circle cx="91.00" cy="342.90" r="6.30" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1" /><text x="91.00" y="347.80" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A">4</text><circle cx="491.00" cy="388.90" r="6.30" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1" /><text x="491.00" y="393.80" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A">5</text><circle cx="459.00" cy="434.90" r="6.30" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1" /><text x="459.00" y="439.80" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A">6</text><circle cx="91.00" cy="576.30" r="6.30" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1" /><text x="91.00" y="581.20" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A">7</text><circle cx="491.00" cy="622.30" r="6.30" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1" /><text x="491.00" y="627.20" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A">8</text><circle cx="687.04" cy="668.30" r="6.30" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1" /><text x="687.04" y="673.20" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A">9</text><circle cx="459.00" cy="714.30" r="6.30" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1" /><text x="459.00" y="719.20" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A">10</text><rect x="0.00" y="0.00" width="150.00" height="72.00" rx="3" ry="3" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.0" /><text x="75.00" y="29.00" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="75.00" dy="0.00">Frontend</tspan><tspan x="75.00" dy="21.00">(Svelte + Shaka Player)</tspan></text><rect x="200.00" y="0.00" width="150.00" height="72.00" rx="3" ry="3" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.0" /><text x="275.00" y="29.00" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="275.00" dy="0.00">Backend</tspan><tspan x="275.00" dy="21.00">(Go)</tspan></text><rect x="400.00" y="0.00" width="150.00" height="72.00" rx="3" ry="3" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.0" /><text x="475.00" y="39.50" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="475.00" dy="0.00">ypb</tspan></text><rect x="628.04" y="0.00" width="150.00" height="72.00" rx="3" ry="3" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.0" /><text x="703.04" y="39.50" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="703.04" dy="0.00">YouTube</tspan></text><rect x="0.00" y="748.20" width="150.00" height="72.00" rx="3" ry="3" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.0" /><text x="75.00" y="777.20" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="75.00" dy="0.00">Frontend</tspan><tspan x="75.00" dy="21.00">(Svelte + Shaka Player)</tspan></text><rect x="200.00" y="748.20" width="150.00" height="72.00" rx="3" ry="3" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.0" /><text x="275.00" y="777.20" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="275.00" dy="0.00">Backend</tspan><tspan x="275.00" dy="21.00">(Go)</tspan></text><rect x="400.00" y="748.20" width="150.00" height="72.00" rx="3" ry="3" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.0" /><text x="475.00" y="787.70" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="475.00" dy="0.00">ypb</tspan></text><rect x="628.04" y="748.20" width="150.00" height="72.00" rx="3" ry="3" fill="#F8FAFC" stroke="#94A3B8" stroke-width="1.0" /><text x="703.04" y="787.70" text-anchor="middle" font-family="Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif" font-size="14" fill="#0F172A"><tspan x="703.04" dy="0.00">YouTube</tspan></text></svg>
+</div>
 
-<p>The backend is built in Go and relies on two main
-components. <a href="https://github.com/xymaxim/ypb">ypb</a> locates specific moments in a
-stream and creates the corresponding MPEG-DASH manifests that the player
-needs. A proxy layer sits between the player and YouTube’s servers, delivering
-video segments and handling connection errors
-gracefully. <a href="https://github.com/yt-dlp/yt-dlp">yt-dlp</a> handles the supporting
-work: fetching video metadata and solving the JavaScript challenges YouTube
-requires for access.</p>
-<h2>Frontend</h2>
-
-<p>The frontend uses <a href="https://github.com/shaka-project/shaka-player">Shaka
-Player</a> to play the MPEG-DASH
-manifests and stream video from YouTube through the stream proxy.</p>
-<!-- ```mermaid -->
-<!-- --- -->
-<!-- config: -->
-<!--   flowchart: -->
-<!--     defaultRenderer: elk -->
-<!--     fontSize: 28px -->
-<!--   theme: base -->
-<!--   layout: dagre -->
-<!--   look: neo -->
-<!--   themeVariables: -->
-<!--     dropShadow: false -->
-<!-- --- -->
-<!-- flowchart LR -->
-<!--  subgraph Rewyt["`**Rewyt app**`"] -->
-<!--     direction TB -->
-<!--         A["Frontend<br>(Svelte + Shaka Player)"] -->
-<!--         B["Backend<br>(Go, Wails)"] -->
-<!--   end -->
-<!--  subgraph CoreTools["Stream proxy"] -->
-<!--     direction TB -->
-<!--         C["`**ypb**<br>Start proxy server<br>Generate MPDs`"] -->
-<!--         D["`**yt-dlp**<br>Fetch metadata<br>Solve JS challenges`"] -->
-<!--   end -->
-<!--     B -- Rewind<br>moments -\-> C -->
-<!--     C -\-> D -->
-<!--     D -\-> YT{{"`**YouTube**`"}} -->
-<!--     C -- Locate<br>segments -\-> YT -->
-<!--     A <== Stream<br>video ==> C -->
-<!--     C ==> YT -->
-<!--      A:::app -->
-<!--      B:::app -->
-<!--      YT:::yt -->
-<!--     classDef app stroke:#222,stroke-dasharray: 3 3,stroke-width:3px,fill:none -->
-<!--     classDef yt stroke:#ff0033,stroke-dasharray: 3 3,stroke-width:3px,fill:none -->
-<!-- ``` -->
+<p>On startup, the Go backend starts <a href="https://github.com/xymaxim/ypb">ypb</a>, which
+fetches video info via <a href="github.com/yt-dlp/yt-dlp">yt-dlp</a>. When you rewind to a
+moment, the Svelte frontend requests an MPEG-DASH manifest from ypb, which
+generates one with proxied URLs. During playback, <a href="https://github.com/shaka-project/shaka-player">Shaka
+Player</a> streams video through
+ypb, which proxies media segments from YouTube and handles connection errors.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="highlight-and-download-excerpts"><a class="header" href="#highlight-and-download-excerpts">Highlight and download excerpts</a></h1>
 <p>This guide shows you how to highlight a live stream excerpt and download it as a video file.</p>
 <h2 id="prerequisites-2"><a class="header" href="#prerequisites-2">Prerequisites</a></h2>
 <p>Rewyt doesn’t download excerpts directly, you need <a href="https://github.com/xymaxim/ypb">ypb</a> for that.</p>
 <ul>
-<li>Rewyt installed locally or in a container</li>
+<li>Rewyt installed as a <a href="guides/guides/install/desktop.html">desktop app</a> or <a href="guides/guides/install/web.html">web
+app</a></li>
 <li><a href="https://xymaxim.github.io/ypb/guides/install/install.html">ypb</a> installed</li>
 </ul>
+<blockquote class="blockquote-tag blockquote-tag-note">
+<p class="blockquote-tag-title"><svg viewbox="0 0 16 16" width="18" height="18"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p>
+<p>If you’re running Rewyt as a web app, <code>ypb</code> is already bundled inside its
+container, no separate install needed. Steps 1 and 2 below still apply,
+but for the download step, see <a href="#download-excerpts-with-compose">Download excerpts with
+Compose</a> instead.</p>
+</blockquote>
 <h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
 <ol>
 <li>
@@ -519,13 +483,13 @@ exactly which part of the stream to download, for example:</p>
 <p>See <a href="https://xymaxim.github.io/ypb/tutorials/timelapse.html">Create a time-lapse
 video</a> to turn your excerpt into a time-lapse.</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="download-excerpts-with-container-images"><a class="header" href="#download-excerpts-with-container-images">Download excerpts with container images</a></h1>
-<p>This guide shows you how to download a highlighted live stream excerpt when Rewyt and <a href="https://xymaxim.github.io/ypb/">ypb</a> are run from container images.</p>
+<h1 id="download-excerpts-with-compose"><a class="header" href="#download-excerpts-with-compose">Download excerpts with Compose</a></h1>
+<p>This guide shows you how to download a highlighted live stream excerpt when
+Rewyt and <a href="https://xymaxim.github.io/ypb/">ypb</a> are run via Compose.</p>
 <h2 id="prerequisites-3"><a class="header" href="#prerequisites-3">Prerequisites</a></h2>
 <ul>
 <li><a href="https://podman.io/getting-started/installation">Podman</a> or <a href="https://docs.docker.com/get-docker/">Docker</a></li>
-<li>Rewyt running from a <a href="https://xymaxim.github.io/rewyt/docs/guides/install/web.html">container image</a></li>
-<li>ypb available as a <a href="https://xymaxim.github.io/ypb/guides/install/container.html">container image</a></li>
+<li>Rewyt installed as a <a href="#web-app-1">web app</a>, running via Compose</li>
 </ul>
 <h2 id="highlight-the-excerpt"><a class="header" href="#highlight-the-excerpt">Highlight the excerpt</a></h2>
 <blockquote class="blockquote-tag blockquote-tag-note">
@@ -533,14 +497,16 @@ video</a> to turn your excerpt into a time-lapse.</p>
 <p>For highlighting excerpts in Rewyt, see <a href="#highlight-and-download-excerpts">Highlight and download excerpts</a>.</p>
 </blockquote>
 <p>Highlight the excerpt and copy its timestamp, for example:</p>
-<pre><code class="language-text">2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00
+<pre><code class="language-text">2026-06-20T10:00:00+00:00/2026-06-20T10:30:00+00:00
 </code></pre>
 <h2 id="download-the-excerpt"><a class="header" href="#download-the-excerpt">Download the excerpt</a></h2>
-<p>Run <code>ypb</code> from its container image, mounting the current directory so the downloaded file is saved locally:</p>
-<pre><code class="language-shell">podman run --rm -v .:/content ghcr.io/xymaxim/ypb download \
+<p>Run ypb inside the already-running Rewyt container:</p>
+<pre><code class="language-sh"># --workdir must stay /media, it's where the container's volume is mounted
+podman compose exec --workdir /media rewyt ypb download \
   2026-06-20T10:00:00+03:00/2026-06-20T20:00:00+03:00 abcdefgh123
 </code></pre>
-<p>The file is saved in your current working directory.</p>
+<p>The file is saved to <code>./media</code> by default, or the path set via
+<a href="https://xymaxim.github.io/ypb/guides/install/container.html#ypb_media_dir"><code>YPB_MEDIA_DIR</code></a>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="share-and-paste-timestamps"><a class="header" href="#share-and-paste-timestamps">Share and paste timestamps</a></h1>
 <p>This guide shows you how to copy a timestamp from the stream and jump to a shared one.</p>
@@ -591,6 +557,33 @@ Service</a>, so use it at your own risk. You
 might run into rate limits or get blocked if YouTube notices.</p>
 <p>If you enjoy the videos you watch, please consider supporting the creators by
 subscribing to their channels and engaging with their content directly.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="sponsoring"><a class="header" href="#sponsoring">Sponsoring</a></h1>
+<p>Thank you for considering sponsoring <a href="https://github.com/xymaxim/rewyt">Rewyt</a> and
+<a href="https://github.com/xymaxim/ypb">ypb</a>.</p>
+<p>Both projects are maintained in personal time. Your support helps with:</p>
+<ul>
+<li>Fixing issues and adding new features</li>
+<li>Improving user documentation</li>
+<li>Maintaining Windows version</li>
+<li>Covering costs for testing infrastructure</li>
+</ul>
+<h2 id="how-to-sponsor"><a class="header" href="#how-to-sponsor">How to sponsor?</a></h2>
+<h3 id="cryptocurrency"><a class="header" href="#cryptocurrency">Cryptocurrency</a></h3>
+<p>You can support the project using any of these cryptocurrencies:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Currency</th><th>Address</th></tr>
+</thead>
+<tbody>
+<tr><td>Bitcoin (BTC)</td><td><code>bc1qhmm7d30q4cw93cfk09h6rk6hka9let0wtaa3uh</code></td></tr>
+<tr><td>Ethereum (ETH)</td><td><code>0x98570df8162C2A8736Cc54E4c67F8D83BA383C2a</code></td></tr>
+<tr><td>Solana (SOL)</td><td><code>Fzj2zvkWzMSF1MXZCh3PvED7PLcVN6CG6FWTzxjJ89AM</code></td></tr>
+<tr><td>Monero (XMR)</td><td><code>4AQg1DhWHzVTyBoXtGBddTE1u38DHW4RzUDFwsxvsF4Mj2TSdwSjLkUWoU5s3njByhLPXr53tkUHdRz1FzqxGJVB4z5rbP3</code></td></tr>
+</tbody>
+</table>
+</div>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="changelog"><a class="header" href="#changelog">Changelog</a></h1>
 <p>The format of this changelog is based on <a href="https://keepachangelog.com/en/1.1.0/">Keep a
