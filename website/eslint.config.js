@@ -41,4 +41,11 @@ export default defineConfig(
     // 'svelte/button-has-type': 'error'
     rules: {},
   },
+  {
+    files: ["src/routes/picks/+page.svelte"],
+    rules: {
+      // Links are loaded from a JSON data file; external URLs cannot use $app/paths resolve().
+      "svelte/no-navigation-without-resolve": "off",
+    },
+  },
 );

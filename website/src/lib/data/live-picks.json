@@ -1,0 +1,18 @@
+[
+  {
+    "title": "MaunaKea West view & Meteor shower LIVE from CFHT, hawaii",
+    "description": "Description.",
+    "link": "https://www.youtube.com/watch?v=MPokOMJvZ-g",
+    "channelLink": "https://www.youtube.com/@astroasahi",
+    "channelTitle": "Asahi Astro LIVE　朝日新聞宇宙部",
+    "status": "live"
+  },
+  {
+    "title": "MaunaKea East view & Meteor shower LIVE from Subaru telescope NAOJ, Hawaii",
+    "link": "https://www.youtube.com/watch?v=6g4Fh8K-MhY",
+    "description": "Description.",
+    "channelLink": "https://www.youtube.com/@astroasahi",
+    "channelTitle": "Asahi Astro LIVE　朝日新聞宇宙部",
+    "status": "live"
+  }
+]
