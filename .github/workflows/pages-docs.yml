@@ -1,15 +1,16 @@
-name: Deploy to GitHub Pages
+name: Deploy Docs to GitHub Pages
 
 on:
   push:
     branches: [main]
     paths:
-      - 'website/**'
       - 'docs/**'
+    tags:
+      - 'v*'
   workflow_dispatch:
 
 concurrency:
-  group: pages
+  group: pages-docs
   cancel-in-progress: true
 
 jobs:
@@ -17,27 +18,11 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-
     steps:
       - uses: actions/checkout@v7
-
-      # Install frontend deps
-      - uses: actions/setup-node@v4
         with:
-          node-version: 'lts/*'
-      - run: cd frontend && npm install
+          fetch-depth: 0 # needed for git describe to see tags
 
-      # Build website
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-      - run: |
-          cd website
-          bun install --frozen-lockfile
-          bunx svelte-kit sync
-          bun run build
-
-      # Build docs
       - name: Setup mdBook
         uses: peaceiris/actions-mdbook@v2
         with:
@@ -53,19 +38,15 @@ jobs:
         run: cargo install --git https://github.com/adamcavendish/mdbook-mermaid-mmdr
 
       - name: Build docs
-        run: cd docs && mdbook build
-
-      # Prepare deployment directories
-      - name: Prepare pages
         run: |
-          mkdir -p gh-pages
-          mkdir -p gh-pages/docs
-          cp -r website/build/* gh-pages/
-          cp -r docs/book/* gh-pages/docs/
+          cd docs
+          RELEASE_VERSION="$(git describe --tags --abbrev=0 --match 'v*' | sed 's/^v//')"
+          MDBOOK_PREPROCESSOR__VARIABLES__VARIABLES__RELEASE_VERSION="$RELEASE_VERSION" mdbook build
 
-      # Deploy to GitHub Pages
-      - name: Deploy to GitHub Pages
+      - name: Deploy docs
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./gh-pages
+          publish_dir: ./docs/book
+          destination_dir: docs
+          keep_files: true

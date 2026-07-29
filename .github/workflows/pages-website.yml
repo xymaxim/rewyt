@@ -1,0 +1,43 @@
+name: Deploy Website to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'website/**'
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+concurrency:
+  group: pages-website
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - run: cd frontend && npm install
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: |
+          cd website
+          bun install --frozen-lockfile
+          bunx svelte-kit sync
+          bun run build
+
+      - name: Deploy website
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./website/build
+          keep_files: true
