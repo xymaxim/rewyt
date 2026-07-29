@@ -1,18 +1,18 @@
 [
   {
     "title": "MaunaKea West view & Meteor shower LIVE from CFHT, hawaii",
-    "description": "Description.",
+    "description": "Live night-sky view from the summit of Mauna Kea, Hawaii. Stars, meteor showers, and sunsets over the observatories.",
     "link": "https://www.youtube.com/watch?v=MPokOMJvZ-g",
     "channelLink": "https://www.youtube.com/@astroasahi",
     "channelTitle": "Asahi Astro LIVE　朝日新聞宇宙部",
     "status": "live"
   },
   {
-    "title": "MaunaKea East view & Meteor shower LIVE from Subaru telescope NAOJ, Hawaii",
-    "link": "https://www.youtube.com/watch?v=6g4Fh8K-MhY",
-    "description": "Description.",
-    "channelLink": "https://www.youtube.com/@astroasahi",
-    "channelTitle": "Asahi Astro LIVE　朝日新聞宇宙部",
+    "title": "Live & Just Hatched! Royal Albatross Cam - NZ Dept. of Conservation | Cornell Lab",
+    "link": "https://www.youtube.com/live/Mm_zVDDUeNA",
+    "description": "A nesting pair of albatross incubate their egg and raise their chick through fledging at Taiaroa Head, New Zealand.",
+    "channelLink": "https://www.youtube.com/@CornellBirdCams",
+    "channelTitle": "Cornell Lab Bird Cams",
     "status": "live"
   }
 ]
