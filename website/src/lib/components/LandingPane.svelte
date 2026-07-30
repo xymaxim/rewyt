@@ -154,8 +154,8 @@
   <div
     bind:this={containerEl}
     class="relative w-full max-w-[720px] rounded-2xl {rewinding
-      ? 'bg-[var(--color-rewind-lightest)]/50'
-      : 'bg-[var(--color-rewind-lightest)]'} transition-colors"
+      ? 'bg-[var(--color-rewind-lighter)]/40'
+      : 'bg-[var(--color-rewind-lighter)]/80'} transition-colors"
   >
     <AnimatedPanneau
       class="relative {rewinding ? 'rewinding' : ''} {rewinding || playing
