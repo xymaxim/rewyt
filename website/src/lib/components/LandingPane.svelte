@@ -104,8 +104,6 @@
       },
       resolve: resolveRectangle,
     },
-    // { component: Empty, config: {}, resolve: resolveEmpty },
-    // { component: Empty, config: {}, resolve: resolveEmpty },
   ];
 
   function shuffle(arr: PrimitiveDescriptor[]): PrimitiveDescriptor[] {
