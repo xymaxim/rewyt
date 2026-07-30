@@ -1,18 +1,56 @@
 [
   {
-    "title": "MaunaKea West view & Meteor shower LIVE from CFHT, hawaii",
-    "description": "Live night-sky view from the summit of Mauna Kea, Hawaii. Stars, meteor showers, and sunsets over the observatories.",
-    "link": "https://www.youtube.com/watch?v=MPokOMJvZ-g",
-    "channelLink": "https://www.youtube.com/@astroasahi",
-    "channelTitle": "Asahi Astro LIVE　朝日新聞宇宙部",
-    "status": "live"
-  },
-  {
-    "title": "Live & Just Hatched! Royal Albatross Cam - NZ Dept. of Conservation | Cornell Lab",
+    "title": "Live & Just Hatched! Royal Albatross Cam - NZ Dept. of Conservation",
     "link": "https://www.youtube.com/live/Mm_zVDDUeNA",
     "description": "A nesting pair of albatross incubate their egg and raise their chick through fledging at Taiaroa Head, New Zealand.",
     "channelLink": "https://www.youtube.com/@CornellBirdCams",
     "channelTitle": "Cornell Lab Bird Cams",
-    "status": "live"
+    "status": "live",
+    "subject": "Animals"
+  },
+  {
+    "title": "Assisi Live Webcam Piazza del Comune",
+    "link": "https://www.youtube.com/watch?v=CkNeltsc5ps",
+    "description": "Assisi's medieval main square in Umbria, with the Torre del Popolo bell tower chiming every hour.",
+    "channelLink": "https://www.youtube.com/@UmbriaWebcam",
+    "channelTitle": "Umbria Webcam",
+    "status": "live",
+    "subject": "City"
+  },
+  {
+    "title": "Mirror Lake Livestream",
+    "link": "https://www.youtube.com/watch?v=jB4Iwn2GJS4",
+    "description": "Mirror Lake's ice freezes and melts through the seasons, alongside the arrival of loons.",
+    "channelLink": "https://www.youtube.com/@ausablecenter",
+    "channelTitle": "Ausable Freshwater Center",
+    "status": "live",
+    "subject": "Nature"
+  },
+  {
+    "title": "Vervet Live - Utsikt Sør",
+    "link": "https://www.youtube.com/watch?v=3y7_fkAzzps",
+    "description": "Quiet marina in Tromsø, Norway, with boats resting on mirror-calm water under near-endless Arctic summer daylight.",
+    "channelLink": "https://www.youtube.com/@VervetTroms",
+    "channelTitle": "Vervet Tromsø",
+    "status": "live",
+    "subject": "Nature"
+  },
+  {
+    "title": "Mauna Kea West view & Meteor shower LIVE from CFHT, Hawaii",
+    "description": "Live night-sky view from the summit of Mauna Kea, Hawaii. Stars, meteor showers, and sunsets over the observatories.",
+    "link": "https://www.youtube.com/watch?v=MPokOMJvZ-g",
+    "channelLink": "https://www.youtube.com/@astroasahi",
+    "channelTitle": "Asahi Astro LIVE　朝日新聞宇宙部",
+    "status": "live",
+    "subject": "Night sky"
+  },
+  {
+    "title": "Nuuk Airport South Live Cam",
+    "link": "https://www.youtube.com/watch?v=MApnQlsX5AQ",
+    "description": "Aircraft land and depart at Nuuk Airport, Greenland's main international gateway.",
+    "channelLink": "https://www.youtube.com/@GreenlandAirports",
+    "channelTitle": "Greenland Airports",
+    "status": "live",
+    "subject": "Transit"
   }
 ]
