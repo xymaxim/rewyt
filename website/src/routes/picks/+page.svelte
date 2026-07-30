@@ -32,9 +32,10 @@
   <h1 class="mb-4 text-3xl font-medium">Live Picks</h1>
 
   <p class="leading-relaxed">
-      YouTube hosts many great live streams from all around the world. You can
-      find feeding birds, erupting volcanoes, streaking meteor showers, and more.
-      Here is a hand-picked selection of long-running streams we found interesting.
+    YouTube hosts many great live streams from all around the world. You can
+    find feeding birds, erupting volcanoes, streaking meteor showers, and more.
+    Here is a hand-picked selection of long-running streams we found
+    interesting.
   </p>
   <p class="mt-2 text-sm text-[var(--color-muted-foreground)]">
     If a video isn't available, the stream has probably ended. You might find
