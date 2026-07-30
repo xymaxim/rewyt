@@ -29,20 +29,20 @@
       href="https://xymaxim.github.io/rewyt/docs/guides/install/desktop.html"
       class="flex cursor-pointer items-center gap-1 rounded-2xl bg-neutral-200 px-4 py-2.5 text-sm font-semibold transition hover:scale-105 active:scale-95"
     >
-      Download <ArrowRight />
+      Get Rewyt <ArrowRight />
     </a>
     <a
       href="https://xymaxim.github.io/rewyt/docs/quickstart.html"
       class="cursor-pointer rounded-2xl px-4 py-3 text-sm font-semibold transition hover:scale-105 active:scale-95"
-      >Get Started</a
+      >Quickstart</a
     >
   </div>
   <div class="flex flex-col items-center gap-2">
     <p class="text-sm">Available for Linux, macOS, and Windows</p>
     <p class="text-muted-foreground text-xs">
-      Read <a
+      Read the <a
         href="https://xymaxim.github.io/rewyt/docs/disclaimer.html"
-        class="text-foreground cursor-pointer font-medium">this</a
+        class="text-foreground cursor-pointer font-medium">disclaimer</a
       > before using
     </p>
   </div>
