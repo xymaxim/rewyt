@@ -51,51 +51,55 @@
     {/each}
   </nav>
 
-  {#each grouped as group}
-    <h2 id={group.slug} class="mt-8 mb-3 text-2xl font-medium">
-      {group.subject}
-    </h2>
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-      {#each group.items as pick (pick.link)}
-        {@const videoId = videoIdFromLink(pick.link)}
-        <div class="flex flex-col rounded-xl bg-neutral-200/50 px-4 py-3">
-          <span class="flex items-center gap-2">
-            <a
-              href={pick.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-lg leading-tight font-medium"
-            >
-              {pick.title}
-            </a>
-          </span>
-          {#if pick.channelTitle}
-            <a
-              href={pick.channelLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-xs"
-            >
-              {pick.channelTitle}
-            </a>
-          {/if}
-          <p class="mt-1 leading-none text-[var(--color-muted-foreground)]">
-            {pick.description}
-          </p>
-          {#if videoId}
-            <div
-              class="relative mt-3 aspect-video w-full overflow-hidden rounded-lg"
-            >
-              <iframe
-                class="absolute inset-0 h-full w-full"
-                src="https://www.youtube.com/embed/{videoId}"
-                allowfullscreen
-                loading="lazy"
-              ></iframe>
+  <div class="mt-4 flex flex-col gap-8">
+    {#each grouped as group}
+      <div>
+        <h2 id={group.slug} class="mb-3 text-2xl font-medium">
+          {group.subject}
+        </h2>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          {#each group.items as pick (pick.link)}
+            {@const videoId = videoIdFromLink(pick.link)}
+            <div class="flex flex-col rounded-xl bg-neutral-200/50 px-4 py-3">
+              <span class="flex items-center gap-2">
+                <a
+                  href={pick.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-lg leading-tight font-medium"
+                >
+                  {pick.title}
+                </a>
+              </span>
+              {#if pick.channelTitle}
+                <a
+                  href={pick.channelLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="text-xs"
+                >
+                  {pick.channelTitle}
+                </a>
+              {/if}
+              <p class="mt-1 leading-none text-[var(--color-muted-foreground)]">
+                {pick.description}
+              </p>
+              {#if videoId}
+                <div
+                  class="relative mt-3 aspect-video w-full overflow-hidden rounded-lg"
+                >
+                  <iframe
+                    class="absolute inset-0 h-full w-full"
+                    src="https://www.youtube.com/embed/{videoId}"
+                    allowfullscreen
+                    loading="lazy"
+                  ></iframe>
+                </div>
+              {/if}
             </div>
-          {/if}
+          {/each}
         </div>
-      {/each}
-    </div>
-  {/each}
+      </div>
+    {/each}
+  </div>
 </section>
