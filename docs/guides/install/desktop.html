@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-a86e1720.js";
+            window.path_to_searchindex_js = "../../searchindex-889e014c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-0f547605.js"></script>
@@ -176,7 +176,25 @@
                     <main>
                         <h1 id="desktop-app"><a class="header" href="#desktop-app">Desktop app</a></h1>
 <h2 id="prerequisites"><a class="header" href="#prerequisites">Prerequisites</a></h2>
-<p>Ensure the <a href="install.html#requirements">requirements</a> are installed.</p>
+<p>Rewyt relies on yt-dlp:</p>
+<ul>
+<li><a href="https://github.com/yt-dlp/yt-dlp/wiki/Installation">yt-dlp</a>: For video info
+extraction and downloading. Nightly builds are recommended. If you use
+binaries, update with: <code>yt-dlp --update-to nightly</code>.</li>
+</ul>
+<h3 id="additional-dependencies"><a class="header" href="#additional-dependencies">Additional dependencies</a></h3>
+<p>The following dependencies are optional, but strongly recommended in practice:</p>
+<ul>
+<li>
+<p><a href="https://github.com/yt-dlp/yt-dlp/issues/15012">External JavaScript runtime</a>:
+Required for full YouTube support</p>
+</li>
+<li>
+<p>Proof-of-Origin (PO) token <a href="https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide">provider
+plugin</a>: Required to
+avoid HTTP 403 errors</p>
+</li>
+</ul>
 <h2 id="install-from-binaries"><a class="header" href="#install-from-binaries">Install from binaries</a></h2>
 <p>Pre-built binaries for different platforms are available on the GitHub <a href="https://github.com/xymaxim/rewyt/releases/latest">latest
 release</a> page.</p>
