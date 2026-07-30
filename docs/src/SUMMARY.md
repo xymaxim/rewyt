@@ -1,6 +1,6 @@
 # Summary
 
-- [Welcome](welcome.md)
+[Welcome](welcome.md)
 
 # Getting started 
 

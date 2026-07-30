@@ -9,7 +9,7 @@ Available on Linux, macOS, and Windows. Built on top of
 
 ![Main screenshot](./welcome-files/screenshot.png)
 
-## Get started
+<h2>Get started</h2>
 
 - [**Quickstart**](quickstart.md) — Get up and running with Rewyt
 - [**Installation options**](guides/install/install.md) — Choose your installation method
