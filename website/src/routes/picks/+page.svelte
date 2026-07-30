@@ -29,20 +29,20 @@
 </script>
 
 <section class="mx-auto mt-6 max-w-4xl px-4">
-  <h1 class="mb-4 text-3xl font-medium">Live Picks</h1>
+  <h1 class="text-3xl font-medium">Live Picks</h1>
 
-  <p class="leading-relaxed">
-    YouTube hosts many great live streams from all around the world. You can
-    find feeding birds, erupting volcanoes, streaking meteor showers, and more.
-    Here is a hand-picked selection of long-running streams we found
-    interesting.
-  </p>
-  <p class="mt-2 text-sm text-[var(--color-muted-foreground)]">
-    If a video isn't available, the stream has probably ended. You might find
-    other related live streams on its channel.
-  </p>
-
-  <nav class="mt-6 flex flex-wrap gap-x-4 gap-y-1">
+  <div class="w-full max-w-2xl">
+    <p class="text-lg">
+      YouTube hosts many great live streams from all around the world. You can
+      find feeding birds, erupting volcanoes, meteor showers, and more. Here is
+      a hand-picked selection of long-running streams we found interesting.
+    </p>
+    <p class="mt-2 text-sm text-[var(--color-muted-foreground)]">
+      If a video isn't available, the stream has probably ended. You might find
+      other ones on its channel.
+    </p>
+  </div>
+  <nav class="mt-8 flex flex-wrap gap-x-4 gap-y-1">
     {#each subjects as subject}
       <a
         href="#{subjectSlug(subject)}"
