@@ -223,7 +223,7 @@
       ></div>
 
       <span
-        class="relative h-2 w-full grow cursor-pointer overflow-hidden rounded-full bg-neutral-200/30"
+        class="relative h-2 w-full grow cursor-pointer overflow-hidden rounded-full bg-neutral-200/40"
       >
         <Slider.Range class="absolute inset-0 h-full w-full" />
       </span>
