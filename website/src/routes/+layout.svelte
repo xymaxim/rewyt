@@ -9,7 +9,7 @@
 
 <svelte:head><link rel="icon" href={favicon} /></svelte:head>
 
-<main class="relative mx-auto min-h-dvh max-w-7xl overflow-hidden">
+<main class="relative mx-auto min-h-dvh max-w-6xl overflow-hidden">
   <header
     class="relative z-10 mt-4 flex w-full max-w-screen-xl justify-between px-4"
   >
