@@ -1,8 +1,17 @@
 [
   {
+    "title": "Live Cornell Lab FeederWatch Cam at Sapsucker Woods",
+    "link": "https://www.youtube.com/watch?v=x10vL6_47Dw",
+    "description": "Birds from Sapsucker Woods visit feeders at the Cornell Lab of Ornithology in Ithaca, New York.",
+    "channelLink": "https://www.youtube.com/@CornellBirdCams",
+    "channelTitle": "Cornell Lab Bird Cams",
+    "status": "live",
+    "subject": "Animals"
+  },
+  {
     "title": "Live & Just Hatched! Royal Albatross Cam - NZ Dept. of Conservation",
     "link": "https://www.youtube.com/live/Mm_zVDDUeNA",
-    "description": "A nesting pair of albatross incubate their egg and raise their chick through fledging at Taiaroa Head, New Zealand.",
+    "description": "A nesting pair of Northern Royal Albatrosses during the breeding season at Taiaroa Head, New Zealand.",
     "channelLink": "https://www.youtube.com/@CornellBirdCams",
     "channelTitle": "Cornell Lab Bird Cams",
     "status": "live",
@@ -29,7 +38,7 @@
   {
     "title": "Vervet Live - Utsikt Sør",
     "link": "https://www.youtube.com/watch?v=3y7_fkAzzps",
-    "description": "Quiet marina in Tromsø, Norway, with boats resting on mirror-calm water under near-endless Arctic summer daylight.",
+    "description": "Quiet marina in Tromsø, Norway, with boats resting under near-endless Arctic summer daylight.",
     "channelLink": "https://www.youtube.com/@VervetTroms",
     "channelTitle": "Vervet Tromsø",
     "status": "live",
@@ -37,12 +46,21 @@
   },
   {
     "title": "Mauna Kea West view & Meteor shower LIVE from CFHT, Hawaii",
-    "description": "Live night-sky view from the summit of Mauna Kea, Hawaii. Stars, meteor showers, and sunsets over the observatories.",
+    "description": "Stars, meteor showers, and sunsets over the summit observatories of Mauna Kea, Hawaii.",
     "link": "https://www.youtube.com/watch?v=MPokOMJvZ-g",
     "channelLink": "https://www.youtube.com/@astroasahi",
     "channelTitle": "Asahi Astro LIVE　朝日新聞宇宙部",
     "status": "live",
     "subject": "Night sky"
+  },
+  {
+    "title": "Chester Railway Station CSX & Amtrak - LIVE",
+    "link": "https://www.youtube.com/live/wuPEBUNnATE",
+    "description": "Freight trains roll past the historic Chester Railway Station in Chester, Massachusetts, USA.",
+    "channelLink": "https://www.youtube.com/@BostonAndMaineLive",
+    "channelTitle": "Boston and Maine Live",
+    "status": "live",
+    "subject": "Transit"
   },
   {
     "title": "Nuuk Airport South Live Cam",
