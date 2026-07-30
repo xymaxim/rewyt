@@ -1,6 +1,6 @@
 <script lang="ts">
   import { resolve } from "$app/paths";
-  import { Sparkles } from "lucide-svelte";
+  import { Grape } from "lucide-svelte";
   import "../app.css";
   import favicon from "$lib/assets/favicon.svg";
 
@@ -16,7 +16,7 @@
     <a href={resolve("/")} class="flex items-center font-bold">Rewyt</a>
     <nav class="flex items-center gap-6 text-sm font-medium">
       <a href={resolve("/picks")} class="flex items-center gap-2"
-        ><Sparkles size={16} class="text-orange-400" /> Live picks</a
+        ><Grape size={16} class="text-[var(--color-play-600)]" /> Live picks</a
       >
       <a href="https://xymaxim.github.io/rewyt/docs/">Docs</a>
       <a href="https://github.com/xymaxim/rewyt/">Source</a>
