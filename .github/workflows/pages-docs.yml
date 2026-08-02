@@ -5,6 +5,9 @@ on:
     branches: [main]
     paths:
       - 'docs/**'
+      - 'zensical.toml'
+      - 'pyproject.toml'
+      - 'uv.lock'
     tags:
       - 'v*'
   workflow_dispatch:
@@ -23,30 +26,19 @@ jobs:
         with:
           fetch-depth: 0 # needed for git describe to see tags
 
-      - name: Setup mdBook
-        uses: peaceiris/actions-mdbook@v2
-        with:
-          mdbook-version: '0.5.2'
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
 
-      - name: Add mdbook-variables
-        run: cargo install mdbook-variables
-
-      - name: Add mdbook-cmdrun
-        run: cargo install --git https://github.com/roberth/mdbook-cmdrun --branch mdbook-0.5
-
-      - name: Add mdbook-mermaid-mmdr
-        run: cargo install --git https://github.com/adamcavendish/mdbook-mermaid-mmdr
+      - name: Install dependencies
+        run: uv sync
 
       - name: Build docs
-        run: |
-          cd docs
-          RELEASE_VERSION="$(git describe --tags --abbrev=0 --match 'v*' | sed 's/^v//')"
-          MDBOOK_PREPROCESSOR__VARIABLES__VARIABLES__RELEASE="$RELEASE_VERSION" mdbook build
+        run: uv run zensical build
 
       - name: Deploy docs
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/book
+          publish_dir: ./docs/site
           destination_dir: docs
           keep_files: true

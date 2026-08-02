@@ -4,7 +4,7 @@ Available on Linux, macOS, and Windows.
 
 Rewyt comes in two distributions, each with its own installation process:
 
-1. [**Desktop app**](binaries.md): Install platform-specific pre-built binaries
+1. [**Desktop app**](desktop.md): Install platform-specific pre-built binaries
    along with additional dependencies
 2. [**Web app**](web.md): Run in a container with all dependencies
    bundled, and access via your browser

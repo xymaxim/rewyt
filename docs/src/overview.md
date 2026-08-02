@@ -32,7 +32,7 @@ sequenceDiagram
 ```    
 
 On startup, the Go backend starts [ypb](https://github.com/xymaxim/ypb), which
-fetches video info via [yt-dlp](github.com/yt-dlp/yt-dlp). When you rewind to a
+fetches video info via [yt-dlp](https://github.com/yt-dlp/yt-dlp). When you rewind to a
 moment, the Svelte frontend requests an MPEG-DASH manifest from ypb, which
 generates one with proxied URLs. During playback, [Shaka
 Player](https://github.com/shaka-project/shaka-player) streams video through

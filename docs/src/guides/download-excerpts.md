@@ -6,15 +6,16 @@ This guide shows you how to highlight a live stream excerpt and download it as a
 
 Rewyt doesn't download excerpts directly, you need [ypb](https://github.com/xymaxim/ypb) for that.
 
-- Rewyt installed as a [desktop app](guides/install/desktop.md) or [web
-  app](guides/install/web.md)
-- [ypb](https://xymaxim.github.io/ypb/guides/install/install.html) installed
+- Rewyt installed as a [desktop app](install/desktop.md) or [web
+  app](install/web.md)
+- [ypb](https://xymaxim.github.io/ypb/guides/install/install/) installed
 
-> [!NOTE]
-> If you're running Rewyt as a web app, `ypb` is already bundled inside its
-> container, no separate install needed. Steps 1 and 2 below still apply,
-> but for the download step, see [Download excerpts with
-> Compose](download-excerpts-compose.md) instead.
+!!! note
+
+    If you're running Rewyt as a web app, `ypb` is already bundled inside its
+    container, no separate install needed. Steps 1 and 2 below still apply,
+    but for the download step, see [Download excerpts with
+    Compose](download-excerpts-compose.md) instead.
 
 ## Steps
 
@@ -53,4 +54,4 @@ By the end, you will have a downloaded file in your working directory when done.
 ## See also
 
 See [Create a time-lapse
-video](https://xymaxim.github.io/ypb/tutorials/timelapse.html) to turn your excerpt into a time-lapse.
+video](https://xymaxim.github.io/ypb/tutorials/timelapse/) to turn your excerpt into a time-lapse.

@@ -1,1 +1,1 @@
-{{#include ../../SPONSORING.md}}
+--8<-- "SPONSORING.md"

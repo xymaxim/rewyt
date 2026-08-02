@@ -10,8 +10,9 @@ Rewyt and [ypb](https://xymaxim.github.io/ypb/) are run via Compose.
 
 ## Highlight the excerpt
 
-> [!NOTE]
-> For highlighting excerpts in Rewyt, see [Highlight and download excerpts](./download-excerpts.md).
+!!! note
+
+    For highlighting excerpts in Rewyt, see [Highlight and download excerpts](./download-excerpts.md).
 
 Highlight the excerpt and copy its timestamp, for example:
 
@@ -30,4 +31,4 @@ podman compose exec --workdir /media rewyt ypb download \
 ```
 
 The file is saved to `./media` by default, or the path set via
-[`YPB_MEDIA_DIR`](https://xymaxim.github.io/ypb/guides/install/container.html#ypb_media_dir).
+[`YPB_MEDIA_DIR`](https://xymaxim.github.io/ypb/guides/install/container/#ypb_media_dir).

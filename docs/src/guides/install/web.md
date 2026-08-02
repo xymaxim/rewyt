@@ -2,11 +2,12 @@
 
 Running Rewyt with containers is the recommended way to get started.
 
-> [!NOTE]
-> This guide uses Podman, but Docker works too. Commands are mostly the
-> same with `docker` in place of `podman`, though some steps (like
-> `podman machine` and `podman artifact`) don't have a direct Docker
-> equivalent.
+!!! note
+
+    This guide uses Podman, but Docker works too. Commands are mostly the
+    same with `docker` in place of `podman`, though some steps (like
+    `podman machine` and `podman artifact`) don't have a direct Docker
+    equivalent.
 
 The app runs as two containers managed by [Compose](https://compose-spec.io/):
 
@@ -88,7 +89,7 @@ podman compose down
 
 The `.env.template` file (copied to `.env` during [setup](#set-up)) holds
 configuration variables, including ypb's. See [ypb's
-Configuration](https://xymaxim.github.io/ypb/guides/install/container.html#configuration)
+Configuration](https://xymaxim.github.io/ypb/guides/install/container/#configuration)
 section for what's available and how to set them.
 
 ## Update the app

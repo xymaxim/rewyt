@@ -1,0 +1,14 @@
+[project]
+name = "rewyt-docs"
+version = "0.1.0"
+description = "Documentation build tooling for rewyt"
+requires-python = ">=3.9"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "zensical",
+]
+
+[tool.uv]
+package = false

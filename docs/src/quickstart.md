@@ -139,5 +139,5 @@ rewinding, then click the timeline to rewind to the exact moment.
 
 Learn how to:
 
-- [Highlight and download excerpts](https://xymaxim.github.io/rewyt/docs/guides/download-excerpts.html): save a specific part of a stream
-- [Share and paste timestamps](https://xymaxim.github.io/rewyt/docs/guides/share-timestamps.html): share the moment you discovered and jump to a shared timestamp
+- [Highlight and download excerpts](guides/download-excerpts.md): save a specific part of a stream
+- [Share and paste timestamps](guides/share-timestamps.md): share the moment you discovered and jump to a shared timestamp
