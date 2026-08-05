@@ -4,7 +4,7 @@ Rewyt is a desktop app for rewatching past moments of YouTube live streams, beyo
 YouTube's limits. You can navigate and play streams interactively in the app or in your browser.
 
 Available on Linux, macOS, and Windows. Built on top of
-[ypb](https://github.com/xymaxim/ypb) and
+[ypb](https://xymaxim.github.io/ypb) and
 [yt-dlp](https://github.com/yt-dlp/yt-dlp/).
 
 ![Main screenshot](./welcome-files/screenshot.png)
