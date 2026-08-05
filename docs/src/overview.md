@@ -29,7 +29,7 @@ sequenceDiagram
         Y-->>C: Stream segment
         C-->>A: Stream segment
     end
-```    
+```
 
 On startup, the Go backend starts [ypb](https://github.com/xymaxim/ypb), which
 fetches video info via [yt-dlp](https://github.com/yt-dlp/yt-dlp). When you rewind to a
