@@ -1,20 +1,20 @@
-# Support
+# Sponsoring
 
-Thank you for considering support of [Rewyt](https://github.com/xymaxim/rewyt)
+Thank you for considering supporting [Rewyt](https://github.com/xymaxim/rewyt)
 and [ypb](https://github.com/xymaxim/ypb).
 
-## Sponsoring
-
-Both projects are maintained in personal time. Your support helps with:
+Both project are free, open-source, and maintained in personal time. If you find
+these projects useful and want to support their development, you can sponsor
+them. Your support helps with:
 
 - Fixing issues and adding new features
 - Improving user documentation
-- Maintaining Windows version
-- Covering costs for testing infrastructure
+- Maintaining the Windows version
+- Covering testing infrastructure costs
 
-### How to sponsor?
+## How to sponsor
 
-#### Cryptocurrency
+### Cryptocurrency
 
 You can support the project using any of these cryptocurrencies:
 
