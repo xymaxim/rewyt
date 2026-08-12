@@ -53,8 +53,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
       if (videoEl.seekable.length > 0) {
         const newStart =
           mpdStartTime.getTime() + videoEl.seekable.start(0) * 1000;
-        const newEnd =
-          mpdStartTime.getTime() + videoEl.seekable.end(0) * 1000;
+        const newEnd = mpdStartTime.getTime() + videoEl.seekable.end(0) * 1000;
 
         const hasStartShifted =
           !seekableRange || Math.abs(seekableRange.start - newStart) > 1000;
@@ -107,20 +106,20 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     dashPlayer = MediaPlayer().create();
 
     dashPlayer.updateSettings({
-        // debug: {
-        //     logLevel: Debug.LOG_LEVEL_DEBUG,
-        // },
-        streaming: {
-            delay: {
-                useSuggestedPresentationDelay: false,
-                liveDelay: 604800,
-            },
-            liveCatchup: {
-                enabled: false
-            }
-        }
+      // debug: {
+      //     logLevel: Debug.LOG_LEVEL_DEBUG,
+      // },
+      streaming: {
+        delay: {
+          useSuggestedPresentationDelay: false,
+          liveDelay: 604800,
+        },
+        liveCatchup: {
+          enabled: false,
+        },
+      },
     });
-    
+
     dashPlayer.on(MediaPlayer.events.ERROR, (e) =>
       console.error("dash.js error:", e.error),
     );

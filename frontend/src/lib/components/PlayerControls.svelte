@@ -70,7 +70,8 @@
 
     const buffer =
       dashPlayer.getDashMetrics()?.getCurrentBufferLevel("video", true) ?? 0;
-    bufferedPercent = duration > 0 ? Math.min(((position + buffer) / duration) * 100, 100) : 0;
+    bufferedPercent =
+      duration > 0 ? Math.min(((position + buffer) / duration) * 100, 100) : 0;
   }
 
   function onSeekCommit(value: number) {
@@ -138,7 +139,7 @@
   </button>
 
   <div
-    class="pointer-events-auto absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent pt-8 px-6"
+    class="pointer-events-auto absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent px-6 pt-8"
   >
     <Slider.Root
       type="single"
@@ -165,21 +166,19 @@
       ></Slider.Thumb>
     </Slider.Root>
 
-    <div
-      class="flex items-center justify-between gap-2 pt-2 pb-2"
-    >
+    <div class="flex items-center justify-between gap-2 pt-2 pb-2">
       <span class="text-sm font-medium text-white tabular-nums">{elapsed}</span>
       <button
-          type="button"
-          title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-          class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
-          onclick={toggleFullscreen}
+        type="button"
+        title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+        class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
+        onclick={toggleFullscreen}
       >
-          {#if isFullscreen}
-              <Minimize size={22} strokeWidth={2} />
-          {:else}
-              <Maximize size={22} strokeWidth={2} />
-          {/if}
+        {#if isFullscreen}
+          <Minimize size={22} strokeWidth={2} />
+        {:else}
+          <Maximize size={22} strokeWidth={2} />
+        {/if}
       </button>
     </div>
   </div>

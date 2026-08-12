@@ -212,9 +212,8 @@
   @apply flex items-center gap-2;
 }
 
-
 button:focus {
-  @apply outline-hidden ring-0;
+  @apply ring-0 outline-hidden;
 }
 
 button:not(:disabled) {

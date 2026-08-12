@@ -292,10 +292,7 @@
           !!player.rewindError}
         bind:this={stageEl}
       >
-        <video
-          bind:this={videoEl}
-          class="block h-full w-auto max-w-full"
-          muted
+        <video bind:this={videoEl} class="block h-full w-auto max-w-full" muted
         ></video>
         <PlayerControls
           {videoEl}
