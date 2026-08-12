@@ -1,5 +1,4 @@
-import shaka from "shaka-player/dist/shaka-player.ui";
-import "shaka-player/dist/controls.css";
+import { MediaPlayer, Debug, type MediaPlayerClass } from "dashjs";
 import { GetPlaybackPort } from "../../bindings/rewyt/services/streamservice";
 
 export interface StreamInfo {
@@ -12,19 +11,24 @@ export interface StreamInfo {
 
 const playbackPort = await GetPlaybackPort();
 
-const playerConfig = {
-  streaming: {
-    bufferingGoal: 30,
-    rebufferingGoal: 10,
-    bufferBehind: 30,
-  },
-  preferredVideo: [{ codec: "vp9" }, { codec: "avc1" }],
-};
+// Our media segments are self-initializing, so skip separate init fetch.
+function skipInitSegments(e: { data?: any }) {
+  const manifest = e.data;
+  if (!manifest) return;
+  (manifest.Period ?? []).forEach((period: any) => {
+    (period.AdaptationSet ?? []).forEach((as: any) => {
+      (as.Representation ?? []).forEach((rep: any) => {
+        if (rep.SegmentTemplate) {
+          rep.SegmentTemplate.initialization =
+            "data:application/octet-stream;base64,";
+        }
+      });
+    });
+  });
+}
 
 export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
-  let shakaPlayer: shaka.Player | null = null;
-  let shakaUi: shaka.ui.Overlay | null = null;
-  let cachedManifest: { uri: string; data: Uint8Array } | null = null;
+  let dashPlayer: MediaPlayerClass | null = null;
   let animFrameId: number;
 
   // State
@@ -42,13 +46,15 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   // Playback
   function tick() {
     const videoEl = getVideoEl();
-    if (shakaPlayer && mpdStartTime && videoEl) {
+    if (dashPlayer && mpdStartTime && videoEl) {
       const currentMs = mpdStartTime.getTime() + videoEl.currentTime * 1000;
       playheadTime = new Date(currentMs);
-      if (shakaPlayer.seekRange) {
-        const sr = shakaPlayer.seekRange();
-        const newStart = mpdStartTime.getTime() + sr.start * 1000;
-        const newEnd = mpdStartTime.getTime() + sr.end * 1000;
+
+      if (videoEl.seekable.length > 0) {
+        const newStart =
+          mpdStartTime.getTime() + videoEl.seekable.start(0) * 1000;
+        const newEnd =
+          mpdStartTime.getTime() + videoEl.seekable.end(0) * 1000;
 
         const hasStartShifted =
           !seekableRange || Math.abs(seekableRange.start - newStart) > 1000;
@@ -64,47 +70,14 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   }
 
   // Manifest helpers
-  function rewriteManifestBaseUrl(mpd: string): string {
-    const match = mpd.match(/<BaseURL>(.*?)<\/BaseURL>/);
-    if (!match) return mpd;
-    return mpd.replaceAll(match[1], `http://localhost:${playbackPort}/`);
+  function buildMpdUrl(interval: string): string {
+    return `http://localhost:${playbackPort}/mpd/${encodeURIComponent(interval)}`;
   }
 
-  function registerSchemes() {
-    shaka.net.NetworkingEngine.registerScheme(
-      "wails",
-      shaka.net.HttpXHRPlugin.parse,
-    );
-
-    shaka.net.NetworkingEngine.registerScheme(
-      "live",
-      (uri: string, request: shaka.extern.Request) => {
-        if (cachedManifest?.uri === uri) {
-          return shaka.util.AbortableOperation.notAbortable(
-            Promise.resolve({
-              uri,
-              originalUri: uri,
-              originalRequest: request,
-              data: cachedManifest.data,
-              headers: { "content-type": "application/dash+xml" },
-            }),
-          );
-        }
-
-        return shaka.util.AbortableOperation.notAbortable(
-          Promise.reject(new Error("manifest not pre-fetched")),
-        );
-      },
-    );
-  }
-
-  async function fetchManifest(uri: string): Promise<void> {
-    const response = await fetch(
-      uri.replace("live://", `http://localhost:${playbackPort}`),
-      {
-        headers: { Accept: "application/json" },
-      },
-    );
+  async function fetchManifestMetadata(url: string): Promise<void> {
+    const response = await fetch(url, {
+      headers: { Accept: "application/json" },
+    });
     if (!response.ok) {
       const text = await response.text().catch(() => "");
       throw new Error(text || `Server responded with ${response.status}`);
@@ -114,30 +87,6 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
 
     mpdStartTime = new Date(json.metadata.startActualTime);
     isMpdLoaded = true;
-    const data = new TextEncoder().encode(
-      sanitizeManifest(rewriteManifestBaseUrl(json.mpd)),
-    );
-    cachedManifest = { uri, data };
-  }
-
-  function sanitizeManifest(mpd: string): string {
-    return stripUnwantedAdaptationSets(rewriteManifestBaseUrl(mpd));
-  }
-
-  function stripUnwantedAdaptationSets(mpd: string): string {
-    const doc = new DOMParser().parseFromString(mpd, "application/xml");
-    const sets = Array.from(doc.getElementsByTagName("AdaptationSet"));
-
-    for (const set of sets) {
-      const mimeType = set.getAttribute("mimeType") ?? "";
-      const codecs = set.getAttribute("codecs") ?? "";
-
-      if (codecs.startsWith("av01")) {
-        set.parentNode?.removeChild(set);
-      }
-    }
-
-    return new XMLSerializer().serializeToString(doc);
   }
 
   // Lifecycle
@@ -152,42 +101,34 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
       actualStartTime: new Date(json.actualStartTime),
     };
 
-    shaka.polyfill.installAll();
-    if (!shaka.Player.isBrowserSupported()) {
-      console.error("Browser not supported");
-      return;
-    }
-
-    registerSchemes();
-
-    shakaPlayer = new shaka.Player();
-    shakaPlayer.addEventListener("error", ({ detail }: any) =>
-      console.error("Shaka error:", detail),
-    );
-
     const videoEl = getVideoEl();
     if (!videoEl) return;
 
-    await shakaPlayer.attach(videoEl);
+    dashPlayer = MediaPlayer().create();
 
-    shakaUi = new shaka.ui.Overlay(
-      shakaPlayer,
-      videoEl.parentElement!,
-      videoEl,
-    );
-    shakaUi.configure({
-      controlPanelElements: [
-        "play_pause",
-        "spacer",
-        "mute",
-        "fullscreen",
-        "quality",
-      ],
+    dashPlayer.updateSettings({
+        // debug: {
+        //     logLevel: Debug.LOG_LEVEL_DEBUG,
+        // },
+        streaming: {
+            delay: {
+                useSuggestedPresentationDelay: false,
+                liveDelay: 604800,
+            },
+            liveCatchup: {
+                enabled: false
+            }
+        }
     });
+    
+    dashPlayer.on(MediaPlayer.events.ERROR, (e) =>
+      console.error("dash.js error:", e.error),
+    );
+    dashPlayer.on(MediaPlayer.events.MANIFEST_LOADED, skipInitSegments);
 
-    shakaPlayer.configure(playerConfig);
-    await fetchManifest("live:///mpd/now");
-    await shakaPlayer.load("live:///mpd/now");
+    const url = buildMpdUrl("now");
+    await fetchManifestMetadata(url);
+    dashPlayer.initialize(videoEl, url, true);
 
     animFrameId = requestAnimationFrame(tick);
     videoEl.addEventListener("timeupdate", onTimeUpdate);
@@ -196,43 +137,13 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   async function destroy() {
     cancelAnimationFrame(animFrameId);
     getVideoEl()?.removeEventListener("timeupdate", onTimeUpdate);
-    await shakaPlayer?.unload().catch(() => {});
-    shakaUi?.destroy();
-    await shakaPlayer?.destroy().catch(() => {});
-    shakaPlayer = null;
+    dashPlayer?.destroy();
+    dashPlayer = null;
   }
 
-  async function loadManifest(uri: string) {
-    if (!shakaPlayer) return;
-
-    const tracks = shakaPlayer.getVariantTracks();
-    const activeTrack = tracks.find((t) => t.active);
-    const wasManualChoice = !shakaPlayer.getConfiguration().abr.enabled;
-
-    await shakaPlayer.load(uri);
-
-    if (wasManualChoice && activeTrack) {
-      shakaPlayer.configure({ abr: { enabled: false } });
-
-      const newTracks = shakaPlayer.getVariantTracks();
-
-      const matchingTrack =
-        newTracks.find(
-          (t) => t.originalVideoId === activeTrack.originalVideoId,
-        ) ??
-        newTracks.find((t) => t.height === activeTrack.height) ??
-        newTracks
-          .filter((t) => t.height != null)
-          .sort(
-            (a, b) =>
-              Math.abs((a.height ?? 0) - (activeTrack.height ?? 0)) -
-              Math.abs((b.height ?? 0) - (activeTrack.height ?? 0)),
-          )[0];
-
-      if (matchingTrack) {
-        shakaPlayer.selectVariantTrack(matchingTrack, /* clearBuffer= */ true);
-      }
-    }
+  function loadManifest(uri: string) {
+    if (!dashPlayer) return;
+    dashPlayer.attachSource(uri);
   }
 
   // Playback controls
@@ -245,15 +156,15 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     videoEl?.pause();
 
     try {
-      const uri = `live:///mpd/${encodeURIComponent(isoTime)}`;
-      await fetchManifest(uri);
-      await loadManifest(uri);
+      const url = buildMpdUrl(isoTime);
+      await fetchManifestMetadata(url);
+      loadManifest(url);
       if (videoEl) pause ? videoEl.pause() : videoEl.play();
       return true;
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       console.error("Rewind failed:", message);
-      await shakaPlayer?.unload().catch(() => {});
+      videoEl?.pause();
       mpdStartTime = null;
       playheadTime = null;
       seekableRange = null;
@@ -267,12 +178,12 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
 
   async function rewindToLive(pause = false): Promise<boolean> {
     isRewinding = true;
-    cachedManifest = null;
     rewindError = null;
     getVideoEl()?.pause();
     try {
-      await fetchManifest("live:///mpd/now");
-      await loadManifest("live:///mpd/now");
+      const url = buildMpdUrl("now");
+      await fetchManifestMetadata(url);
+      loadManifest(url);
       lastRewindTarget = mpdStartTime?.getTime() ?? null;
       const videoEl = getVideoEl();
       if (videoEl) pause ? videoEl.pause() : videoEl.play();
@@ -280,7 +191,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       console.error("Rewind to live failed:", message);
-      await shakaPlayer?.unload().catch(() => {});
+      getVideoEl()?.pause();
       mpdStartTime = null;
       playheadTime = null;
       seekableRange = null;
@@ -300,9 +211,10 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   }
 
   async function replay() {
-    if (!shakaPlayer || !cachedManifest) return;
-    await shakaPlayer.load(cachedManifest.uri, 0).catch(console.error);
-    getVideoEl()?.play();
+    const videoEl = getVideoEl();
+    if (!videoEl) return;
+    videoEl.currentTime = 0;
+    videoEl.play();
   }
 
   function step(seconds: number) {

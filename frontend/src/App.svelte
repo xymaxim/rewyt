@@ -289,6 +289,7 @@
         class="block h-full w-auto max-w-full"
         class:hidden={streamStatus !== StreamStatus.READY ||
           !!player.rewindError}
+        controls
         muted
       ></video>
     </div>
