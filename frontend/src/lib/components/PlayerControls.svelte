@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Pause, Play, Maximize, Minimize } from "lucide-svelte";
+  import { Pause, Play, Maximize, Minimize, Volume2, VolumeOff } from "lucide-svelte";
   import { Slider } from "bits-ui";
   import type { MediaPlayerClass } from "dashjs";
   import { clampSeekTarget, getSeekMargin } from "$lib/player.svelte";
@@ -23,6 +23,9 @@
   let seekValue = $state(0);
   let dragging = $state(false);
   let seekMargin = $state(5);
+
+  // Volume state
+  let isMuted = $state(true);
 
   // Fullscreen state
   let isFullscreen = $state(false);
@@ -68,7 +71,7 @@
     seekMargin = getSeekMargin(dashPlayer);
 
     const buffer =
-      dashPlayer.getDashMetrics()?.getCurrentBufferLevel("video", true) ?? 0;
+      dashPlayer.getDashMetrics()?.getCurrentBufferLevel("video") ?? 0;
     bufferedPercent =
       duration > 0 ? Math.min(((position + buffer) / duration) * 100, 100) : 0;
   }
@@ -82,6 +85,17 @@
       return;
     }
     videoEl.currentTime = clampSeekTarget(dvr.start + value, dashPlayer, dvr);
+  }
+
+  // Volume handlers
+  function onVolumeChange() {
+    if (videoEl) isMuted = videoEl.muted;
+  }
+
+  function toggleMute() {
+    if (!videoEl) return;
+    videoEl.muted = !videoEl.muted;
+    isMuted = videoEl.muted;
   }
 
   // Fullscreen handlers
@@ -104,13 +118,16 @@
     if (!el) return;
     isPlaying = !el.paused;
     currentTime = el.currentTime;
+    isMuted = el.muted;
     el.addEventListener("play", onPlay);
     el.addEventListener("pause", onPause);
     el.addEventListener("timeupdate", onTimeUpdate);
+    el.addEventListener("volumechange", onVolumeChange);
     return () => {
       el.removeEventListener("play", onPlay);
       el.removeEventListener("pause", onPause);
       el.removeEventListener("timeupdate", onTimeUpdate);
+      el.removeEventListener("volumechange", onVolumeChange);
     };
   });
 
@@ -167,18 +184,32 @@
 
     <div class="flex items-center justify-between gap-2 pt-2 pb-2">
       <span class="text-sm font-medium text-white tabular-nums">{elapsed}</span>
-      <button
-        type="button"
-        title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-        class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
-        onclick={toggleFullscreen}
-      >
-        {#if isFullscreen}
-          <Minimize size={22} strokeWidth={2} />
-        {:else}
-          <Maximize size={22} strokeWidth={2} />
-        {/if}
-      </button>
+      <div class="flex items-center gap-2">
+        <button
+          type="button"
+          title={isMuted ? "Unmute" : "Mute"}
+          class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
+          onclick={toggleMute}
+        >
+          {#if isMuted}
+            <VolumeOff size={22} strokeWidth={2} />
+          {:else}
+            <Volume2 size={22} strokeWidth={2} />
+          {/if}
+        </button>
+        <button
+          type="button"
+          title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+          class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
+          onclick={toggleFullscreen}
+        >
+          {#if isFullscreen}
+            <Minimize size={22} strokeWidth={2} />
+          {:else}
+            <Maximize size={22} strokeWidth={2} />
+          {/if}
+        </button>
+      </div>
     </div>
   </div>
 </div>
