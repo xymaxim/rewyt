@@ -2,6 +2,7 @@
   import { Pause, Play, Maximize, Minimize } from "lucide-svelte";
   import { Slider } from "bits-ui";
   import type { MediaPlayerClass } from "dashjs";
+  import { clampSeekTarget, getSeekMargin } from "$lib/player.svelte";
 
   interface Props {
     videoEl: HTMLVideoElement | null;
@@ -64,9 +65,7 @@
     if (Number.isFinite(d) && d > 0) duration = d;
     else if (videoEl.seekable.length > 0) duration = videoEl.seekable.end(0);
 
-    const repr = dashPlayer.getCurrentRepresentationForType("video");
-    const segmentDuration = repr?.fragmentDuration ?? repr?.segmentDuration;
-    seekMargin = segmentDuration && segmentDuration > 0 ? segmentDuration : 5;
+    seekMargin = getSeekMargin(dashPlayer);
 
     const buffer =
       dashPlayer.getDashMetrics()?.getCurrentBufferLevel("video", true) ?? 0;
@@ -82,7 +81,7 @@
       dashPlayer.seek(value);
       return;
     }
-    videoEl.currentTime = Math.min(dvr.start + value, dvr.end - seekMargin);
+    videoEl.currentTime = clampSeekTarget(dvr.start + value, dashPlayer, dvr);
   }
 
   // Fullscreen handlers

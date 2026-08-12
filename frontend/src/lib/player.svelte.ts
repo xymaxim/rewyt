@@ -1,4 +1,9 @@
-import { MediaPlayer, Debug, type MediaPlayerClass } from "dashjs";
+import {
+  MediaPlayer,
+  Debug,
+  type DvrWindow,
+  type MediaPlayerClass,
+} from "dashjs";
 import { GetPlaybackPort } from "../../bindings/rewyt/services/streamservice";
 
 export interface StreamInfo {
@@ -25,6 +30,24 @@ function skipInitSegments(e: { data?: any }) {
       });
     });
   });
+}
+
+export const DEFAULT_SEEK_MARGIN = 5;
+
+export function getSeekMargin(dashPlayer: MediaPlayerClass | null): number {
+  if (!dashPlayer) return DEFAULT_SEEK_MARGIN;
+  const repr = dashPlayer.getCurrentRepresentationForType("video");
+  const segmentDuration = repr?.fragmentDuration ?? repr?.segmentDuration;
+  return segmentDuration && segmentDuration > 0 ? segmentDuration : DEFAULT_SEEK_MARGIN;
+}
+
+export function clampSeekTarget(
+  target: number,
+  dashPlayer: MediaPlayerClass | null,
+  dvrWindow: DvrWindow | null,
+): number {
+  if (!dashPlayer || !dvrWindow) return Math.max(0, target);
+  return Math.min(Math.max(0, target), dvrWindow.end - getSeekMargin(dashPlayer));
 }
 
 export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
@@ -219,7 +242,11 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   function step(seconds: number) {
     const videoEl = getVideoEl();
     if (!videoEl) return;
-    videoEl.currentTime = Math.max(0, videoEl.currentTime + seconds);
+    videoEl.currentTime = clampSeekTarget(
+      videoEl.currentTime + seconds,
+      dashPlayer,
+      dashPlayer?.getDvrWindow() ?? null,
+    );
   }
 
   function togglePlayPause() {
