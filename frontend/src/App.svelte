@@ -17,6 +17,7 @@
   import StartingPane from "./lib/components/StartingPane.svelte";
   import StartingProgress from "./lib/components/StartingProgress.svelte";
   import StartingError from "./lib/components/StartingError.svelte";
+  import PlayerControls from "./lib/components/PlayerControls.svelte";
 
   export const StreamStatus = {
     IDLE: "idle",
@@ -34,6 +35,7 @@
   let explorer = $derived(explorerCell.current);
 
   let videoEl: HTMLVideoElement | null = null;
+  let stageEl: HTMLElement | null = null;
 
   // State
   let player = $state(createPlayer(() => videoEl));
@@ -284,14 +286,23 @@
           </p>
         </div>
       {/if}
-      <video
-        bind:this={videoEl}
-        class="block h-full w-auto max-w-full"
+      <div
+        class="video-stage group relative flex w-full justify-center"
         class:hidden={streamStatus !== StreamStatus.READY ||
           !!player.rewindError}
-        controls
-        muted
-      ></video>
+        bind:this={stageEl}
+      >
+        <video
+          bind:this={videoEl}
+          class="block h-full w-auto max-w-full"
+          muted
+        ></video>
+        <PlayerControls
+          {videoEl}
+          {stageEl}
+          onTogglePlayPause={() => player.togglePlayPause()}
+        />
+      </div>
     </div>
   </div>
 
@@ -348,5 +359,14 @@
   }
   :global(.rewind-error .shaka-controls-container) {
     display: none !important;
+  }
+  :global(.video-stage:fullscreen) {
+    width: 100vw;
+    height: 100vh;
+  }
+  :global(.video-stage:fullscreen video) {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
   }
 </style>
