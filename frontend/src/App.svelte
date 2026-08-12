@@ -300,6 +300,7 @@
         <PlayerControls
           {videoEl}
           {stageEl}
+          dashPlayer={player.dashPlayer}
           onTogglePlayPause={() => player.togglePlayPause()}
         />
       </div>

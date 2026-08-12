@@ -295,6 +295,9 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     get rewindError() {
       return rewindError;
     },
+    get dashPlayer() {
+      return dashPlayer;
+    },
 
     init,
     destroy,
