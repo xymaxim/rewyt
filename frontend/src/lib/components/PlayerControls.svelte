@@ -322,13 +322,13 @@
   <button
     type="button"
     title={isPlaying ? "Pause" : "Play"}
-    class="pointer-events-auto flex size-16 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/35"
+    class="pointer-events-auto flex size-20 items-center justify-center rounded-full bg-black/50  hover:bg-black/40 active:bg-black/30 text-white transition-colors"
     onclick={onTogglePlayPause}
   >
     {#if isPlaying}
-      <Pause size={36} strokeWidth={2} class="fill-current" />
+      <Pause size={38} class="fill-current" />
     {:else}
-      <Play size={36} strokeWidth={2} class="fill-current" />
+      <Play size={38} class="fill-current" />
     {/if}
   </button>
 
