@@ -186,7 +186,7 @@
 </script>
 
 <div class="grid w-full gap-1" style="grid-template-columns: auto 1fr;">
-  <div class="flex gap-2">
+  <div class="flex items-center gap-2">
     {#if explorer.isRewinding}
       <div
         class="flex w-50 w-70 items-center justify-center gap-0.5 text-muted-foreground"
@@ -261,8 +261,7 @@
     <div class="flex h-10 items-center gap-0 gap-1!">
       <Button
         title="Jump to time"
-        size="lg"
-        class="text-normal size-10! rounded-full bg-[var(--rewyt-selected-light)]"
+        class="text-normal main-bar__button bg-[var(--rewyt-selected-light)]"
         onclick={openJumpToTimeDialog}
       >
         <Pen size={20} />
@@ -276,7 +275,7 @@
         <Expandable.Trigger class="gap-0! transition-none">
           <div
             title="Mark interval"
-            class="flex size-9 w-10 items-center justify-center rounded-full bg-[var(--rewyt-interval-200)]/50! text-sm font-bold tracking-tighter transition-all {context.open
+            class="main-bar__trigger-button bg-[var(--rewyt-interval-200)]/50! text-sm font-bold tracking-tighter transition-all {context.open
               ? ' -rotate-30 opacity-50'
               : ''}"
           >
@@ -335,8 +334,7 @@
             <Button
               title="Change zoom"
               variant="ghost"
-              size="icon"
-              class="relative h-9! w-10 justify-center rounded-full bg-neutral-200! text-xs font-black"
+              class="main-bar__trigger-button relative bg-neutral-200! text-xs font-black"
             >
               <span
                 class="z-20 flex tracking-wider {isOpen
@@ -362,8 +360,7 @@
             {...props}
             title="Settings"
             variant="ghost"
-            size="lg"
-            class="rounded-full bg-neutral-200"
+            class="main-bar__button bg-neutral-200"
           >
             <Settings />
           </Button>
@@ -482,3 +479,15 @@
     class="relative flex h-9 w-full flex-row justify-end gap-1 rounded-2xl bg-neutral-200/0 px-2"
   ></div>
 </div>
+
+<style>
+  @reference "tailwindcss";
+  @reference "../../app.css";
+
+  :global(.main-bar__button) {
+    @apply inline-flex h-10 w-10 items-center justify-center rounded-full;
+  }
+  :global(.main-bar__trigger-button) {
+    @apply inline-flex h-9 w-10 items-center justify-center rounded-full;
+  }
+</style>
