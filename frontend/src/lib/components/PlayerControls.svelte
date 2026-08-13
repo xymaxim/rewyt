@@ -163,24 +163,6 @@
     return `${Math.round(bandwidth / 1000)} kbps`;
   }
 
-  function formatChannels(track: MediaInfo): string | null {
-    const config = track.audioChannelConfiguration;
-    if (!config || config.length === 0) return null;
-    const value = config[0].value;
-    switch (value) {
-      case "1":
-        return "mono";
-      case "2":
-        return "stereo";
-      case "6":
-        return "5.1";
-      case "8":
-        return "7.1";
-      default:
-        return value ? `${value}ch` : null;
-    }
-  }
-
   function trackKey(track: MediaInfo): string {
     return [
       track.id,
@@ -193,20 +175,10 @@
   }
 
   function formatTrackLabel(track: MediaInfo, type: TrackType): string {
-    let label =
-      track.labels?.find((l) => l.text)?.text ??
-      track.lang ??
-      type.charAt(0).toUpperCase() + type.slice(1);
-
-    const details: string[] = [];
-    const roles = (track.roles ?? []).map((r) => r.value).filter(Boolean);
-    if (roles.length > 0) details.push(roles.join(", "));
-    const channels = formatChannels(track);
-    if (channels) details.push(channels);
-    if (track.codec) details.push(track.codec);
-    if (details.length > 0) label += ` (${details.join(", ")})`;
-
-    return label;
+    const codec = track.codec?.match(/;codecs="([^"]+)"/)?.[1];
+    return codec
+      ? `${track.mimeType ?? ""} (${codec})`
+      : (track.codec ?? 'unknown');
   }
 
   function refreshMenus(player: MediaPlayerClass) {
@@ -322,7 +294,7 @@
   <button
     type="button"
     title={isPlaying ? "Pause" : "Play"}
-    class="pointer-events-auto flex size-20 items-center justify-center rounded-full bg-black/50  hover:bg-black/40 active:bg-black/30 text-white transition-colors"
+    class="pointer-events-auto flex size-20 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/40 active:bg-black/30"
     onclick={onTogglePlayPause}
   >
     {#if isPlaying}
