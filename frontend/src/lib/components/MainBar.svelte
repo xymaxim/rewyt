@@ -9,6 +9,7 @@
   import { Switch } from "$lib/components/ui/switch/index.js";
   import { ZOOM_LEVELS, type ZoomLevelKey } from "$lib/types";
   import * as Expandable from "$lib/components/expandable";
+  import * as Popover from "$lib/components/ui/popover/index.js";
   import TimelineZoomControl from "./TimelineZoomControl.svelte";
   import {
     ArrowUpRight,
@@ -78,6 +79,8 @@
   let jumpToTimeDialogOpen = $state(false);
   let jumpToTimeValue = $state<string>("");
   let jumpToTimeError = $state<string | null>(null);
+
+  let zoomOpen = $state(false);
 
   function jumpToPlayhead() {
     if (playingTime === null) return;
@@ -318,39 +321,72 @@
         </Expandable.Content>
       </Expandable.Root>
 
-      <div class="flex items-center transition-all ease-in-out">
-        <Expandable.Root
-          open={true}
-          trigger="click"
-          closeOnClickOutside={true}
-          class="items-center"
-        >
-          {@const isOpen = getContext("expandable").open}
-          <Expandable.Trigger
-            class="justify-end! transition-transform ease-in-out {isOpen
-              ? '-rotate-30'
-              : ''}"
-          >
-            <Button
-              title="Change zoom"
-              variant="ghost"
-              class="main-bar__trigger-button relative bg-neutral-200! text-xs font-black"
+      <div class="flex items-center">
+        <div class="md:hidden">
+          <Popover.Root bind:open={zoomOpen}>
+            <Popover.Trigger>
+              {#snippet child({ props })}
+                <Button
+                  {...props}
+                  title="Change zoom"
+                  variant="ghost"
+                  class="main-bar__button relative bg-neutral-200! text-xs font-black"
+                >
+                  <span
+                    class="z-20 flex tracking-wider {zoomOpen
+                      ? 'opacity-0'
+                      : ''}"
+                  >
+                    {zoomKey}
+                  </span>
+                </Button>
+              {/snippet}
+            </Popover.Trigger>
+            <Popover.Content
+              side="bottom"
+              align="center"
+              class="w-auto! rounded-2xl! p-1.5"
             >
-              <span
-                class="z-20 flex tracking-wider {isOpen
-                  ? 'opacity-0'
-                  : ''} transition-opacity"
+              <div class="flex h-9 items-center px-2">
+                <TimelineZoomControl onChange={() => (zoomOpen = false)} />
+              </div>
+            </Popover.Content>
+          </Popover.Root>
+        </div>
+        <div class="hidden items-center md:flex transition-all ease-in-out">
+          <Expandable.Root
+            open={true}
+            trigger="click"
+            closeOnClickOutside={true}
+            class="items-center"
+          >
+            {@const isOpen = getContext("expandable").open}
+            <Expandable.Trigger
+              class="justify-end! transition-transform ease-in-out {isOpen
+                ? '-rotate-30'
+                : ''}"
+            >
+              <Button
+                title="Change zoom"
+                variant="ghost"
+                class="main-bar__trigger-button relative bg-neutral-200! text-xs font-black"
               >
-                {zoomKey}
-              </span>
-            </Button>
-          </Expandable.Trigger>
-          <Expandable.Content>
-            <div class="flex h-9 items-center bg-neutral-200/0 px-2">
-              <TimelineZoomControl />
-            </div>
-          </Expandable.Content>
-        </Expandable.Root>
+                <span
+                  class="z-20 flex tracking-wider {isOpen
+                    ? 'opacity-0'
+                    : ''} transition-opacity"
+                >
+                  {zoomKey}
+                </span>
+              </Button>
+            </Expandable.Trigger>
+            <Expandable.Content>
+              <div class="flex h-9 items-center bg-neutral-200/0 px-2">
+                <TimelineZoomControl />
+              </div>
+            </Expandable.Content>
+          </Expandable.Root>
+        </div>
       </div>
     </div>
     <DropdownMenu.Root>
