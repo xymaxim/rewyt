@@ -212,7 +212,8 @@
   @apply flex items-center gap-2;
 }
 
-button:focus {
+button:focus,
+button:focus-visible {
   @apply ring-0 outline-hidden;
 }
 
