@@ -1,7 +1,22 @@
 <script lang="ts">
-  import { Pause, Play, Maximize, Minimize, Volume2, VolumeOff } from "lucide-svelte";
+  import {
+    Pause,
+    Play,
+    Maximize,
+    Minimize,
+    Volume2,
+    VolumeOff,
+    Proportions,
+    ListVideo,
+  } from "lucide-svelte";
   import { Slider } from "bits-ui";
-  import type { MediaPlayerClass } from "dashjs";
+  import {
+    MediaPlayer,
+    type MediaInfo,
+    type MediaPlayerClass,
+    type Representation,
+  } from "dashjs";
+  import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
   import { clampSeekTarget, getSeekMargin } from "$lib/player.svelte";
 
   interface Props {
@@ -29,6 +44,25 @@
 
   // Fullscreen state
   let isFullscreen = $state(false);
+
+  // Track/quality menu state
+  type TrackType = "audio" | "video";
+
+  interface MenuOption {
+    id: string;
+    label: string;
+  }
+
+  interface MenuSection {
+    type: TrackType;
+    selected: string;
+    options: MenuOption[];
+  }
+
+  let qualitySections = $state<MenuSection[]>([]);
+  let trackSections = $state<MenuSection[]>([]);
+  let qualityOpen = $state(false);
+  let trackOpen = $state(false);
 
   // Derived values
   const elapsed = $derived(formatElapsed(currentTime));
@@ -112,6 +146,133 @@
     }
   }
 
+  // Track/quality menu helpers
+  function formatQualityLabel(rep: Representation, type: TrackType): string {
+    if (type === "video") {
+      const height = rep.height;
+      if (!Number.isFinite(height) || height <= 0) return "";
+      const frameRate = rep.frameRate;
+      const fpsSuffix =
+        Number.isFinite(frameRate) && Math.round(frameRate) !== 30
+          ? String(Math.round(frameRate))
+          : "";
+      return `${Math.round(height)}p${fpsSuffix}`;
+    }
+    const bandwidth = rep.bandwidth;
+    if (!Number.isFinite(bandwidth) || bandwidth <= 0) return "";
+    return `${Math.round(bandwidth / 1000)} kbps`;
+  }
+
+  function formatChannels(track: MediaInfo): string | null {
+    const config = track.audioChannelConfiguration;
+    if (!config || config.length === 0) return null;
+    const value = config[0].value;
+    switch (value) {
+      case "1":
+        return "mono";
+      case "2":
+        return "stereo";
+      case "6":
+        return "5.1";
+      case "8":
+        return "7.1";
+      default:
+        return value ? `${value}ch` : null;
+    }
+  }
+
+  function trackKey(track: MediaInfo): string {
+    return [
+      track.id,
+      track.lang,
+      (track.viewpoint ?? []).map((d) => d.value).join(","),
+      (track.roles ?? []).map((d) => d.value).join(","),
+      (track.accessibility ?? []).map((d) => d.value).join(","),
+      (track.audioChannelConfiguration ?? []).map((d) => d.value).join(","),
+    ].join("|");
+  }
+
+  function formatTrackLabel(track: MediaInfo, type: TrackType): string {
+    let label =
+      track.labels?.find((l) => l.text)?.text ??
+      track.lang ??
+      type.charAt(0).toUpperCase() + type.slice(1);
+
+    const details: string[] = [];
+    const roles = (track.roles ?? []).map((r) => r.value).filter(Boolean);
+    if (roles.length > 0) details.push(roles.join(", "));
+    const channels = formatChannels(track);
+    if (channels) details.push(channels);
+    if (track.codec) details.push(track.codec);
+    if (details.length > 0) label += ` (${details.join(", ")})`;
+
+    return label;
+  }
+
+  function refreshMenus(player: MediaPlayerClass) {
+    try {
+      const settings = player.getSettings();
+
+      qualitySections = (["video", "audio"] as TrackType[]).map((type) => {
+        const reps = player.getRepresentationsByType(type);
+        const auto =
+          settings?.streaming?.abr?.autoSwitchBitrate?.[type] !== false;
+        const currentRep = player.getCurrentRepresentationForType(type);
+        return {
+          type,
+          selected: auto ? "auto" : (currentRep?.id ?? "auto"),
+          options: reps.map((rep) => ({
+            id: rep.id,
+            label: formatQualityLabel(rep, type),
+          })),
+        };
+      });
+
+      trackSections = (["audio", "video"] as TrackType[]).map((type) => {
+        const tracks = player.getTracksFor(type);
+        const current = player.getCurrentTrackFor(type);
+        return {
+          type,
+          selected: current ? trackKey(current) : "",
+          options: tracks.map((track) => ({
+            id: trackKey(track),
+            label: formatTrackLabel(track, type),
+          })),
+        };
+      });
+    } catch (err) {
+      console.debug("[PlayerControls] refreshMenus skipped:", err);
+    }
+  }
+
+  function onQualityChange(type: TrackType, value: string) {
+    const player = dashPlayer;
+    if (!player) return;
+
+    if (value === "auto") {
+      player.updateSettings({
+        streaming: { abr: { autoSwitchBitrate: { [type]: true } } },
+      });
+    } else {
+      player.updateSettings({
+        streaming: { abr: { autoSwitchBitrate: { [type]: false } } },
+      });
+      const reps = player.getRepresentationsByType(type);
+      const idx = reps.findIndex((rep) => rep.id === value);
+      if (idx >= 0) player.setRepresentationForTypeByIndex(type, idx, false);
+    }
+    refreshMenus(player);
+  }
+
+  function onTrackChange(type: TrackType, value: string) {
+    const player = dashPlayer;
+    if (!player) return;
+
+    const track = player.getTracksFor(type).find((t) => trackKey(t) === value);
+    if (track) player.setCurrentTrack(track);
+    refreshMenus(player);
+  }
+
   // Effects
   $effect(() => {
     const el = videoEl;
@@ -136,10 +297,27 @@
     return () =>
       document.removeEventListener("fullscreenchange", onFullscreenChange);
   });
+
+  $effect(() => {
+    const player = dashPlayer;
+    if (!player) return;
+
+    const refresh = () => refreshMenus(player);
+    refresh();
+    const events = [
+      MediaPlayer.events.STREAM_ACTIVATED,
+      MediaPlayer.events.STREAM_INITIALIZED,
+      MediaPlayer.events.MANIFEST_LOADED,
+      MediaPlayer.events.TRACK_CHANGE_RENDERED,
+    ];
+    events.forEach((evt) => player.on(evt, refresh));
+    return () => events.forEach((evt) => player.off(evt, refresh));
+  });
 </script>
 
 <div
   class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+  class:opacity-100={qualityOpen || trackOpen}
 >
   <button
     type="button"
@@ -197,6 +375,113 @@
             <Volume2 size={22} strokeWidth={2} />
           {/if}
         </button>
+        <DropdownMenu.Root
+          open={qualityOpen}
+          onOpenChange={(open) => {
+            qualityOpen = open;
+            if (open && dashPlayer) refreshMenus(dashPlayer);
+          }}
+        >
+          <DropdownMenu.Trigger>
+            {#snippet child({ props })}
+              <button
+                type="button"
+                title="Quality"
+                {...props}
+                class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
+              >
+                <Proportions size={22} strokeWidth={2} />
+              </button>
+            {/snippet}
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content
+            align="end"
+            side="top"
+            class="z-[1000] max-h-[400px]"
+            portalProps={{ disabled: isFullscreen }}
+          >
+            {#each qualitySections as section, i (i)}
+              {#if section.options.length > 0}
+                {#if i > 0}<DropdownMenu.Separator />{/if}
+                <DropdownMenu.Group>
+                  <DropdownMenu.Label
+                    class="text-xs font-medium text-muted-foreground"
+                    >{section.type.charAt(0).toUpperCase() +
+                      section.type.slice(1)}</DropdownMenu.Label
+                  >
+                  <DropdownMenu.RadioGroup
+                    value={section.selected}
+                    onValueChange={(v) => onQualityChange(section.type, v)}
+                  >
+                    <DropdownMenu.RadioItem value="auto" class="cursor-pointer">
+                      Auto
+                    </DropdownMenu.RadioItem>
+                    {#each section.options as opt (opt.id)}
+                      <DropdownMenu.RadioItem
+                        value={opt.id}
+                        class="cursor-pointer"
+                      >
+                        {opt.label}
+                      </DropdownMenu.RadioItem>
+                    {/each}
+                  </DropdownMenu.RadioGroup>
+                </DropdownMenu.Group>
+              {/if}
+            {/each}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+        <DropdownMenu.Root
+          open={trackOpen}
+          onOpenChange={(open) => {
+            trackOpen = open;
+            if (open && dashPlayer) refreshMenus(dashPlayer);
+          }}
+        >
+          <DropdownMenu.Trigger>
+            {#snippet child({ props })}
+              <button
+                type="button"
+                title="Tracks"
+                {...props}
+                class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
+              >
+                <ListVideo size={22} strokeWidth={2} />
+              </button>
+            {/snippet}
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content
+            align="end"
+            side="top"
+            class="z-[1000] max-h-[300px]"
+            portalProps={{ disabled: isFullscreen }}
+          >
+            {#each trackSections as section, i (i)}
+              {#if section.options.length > 0}
+                {#if i > 0}<DropdownMenu.Separator />{/if}
+                <DropdownMenu.Group>
+                  <DropdownMenu.Label
+                    class="text-xs font-medium text-muted-foreground"
+                    >{section.type.charAt(0).toUpperCase() +
+                      section.type.slice(1)}</DropdownMenu.Label
+                  >
+                  <DropdownMenu.RadioGroup
+                    value={section.selected}
+                    onValueChange={(v) => onTrackChange(section.type, v)}
+                  >
+                    {#each section.options as opt (opt.id)}
+                      <DropdownMenu.RadioItem
+                        value={opt.id}
+                        class="cursor-pointer"
+                      >
+                        {opt.label}
+                      </DropdownMenu.RadioItem>
+                    {/each}
+                  </DropdownMenu.RadioGroup>
+                </DropdownMenu.Group>
+              {/if}
+            {/each}
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
         <button
           type="button"
           title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
