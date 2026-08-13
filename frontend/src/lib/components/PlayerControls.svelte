@@ -294,7 +294,7 @@
   <button
     type="button"
     title={isPlaying ? "Pause" : "Play"}
-    class="pointer-events-auto flex size-20 items-center justify-center rounded-full bg-black/50 text-white transition-colors hover:bg-black/40 active:bg-black/30"
+    class="pointer-events-auto flex size-20 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black/50 active:bg-black/40"
     onclick={onTogglePlayPause}
   >
     {#if isPlaying}
