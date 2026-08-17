@@ -16,6 +16,21 @@ export interface StreamInfo {
 
 const playbackPort = await GetPlaybackPort();
 
+const dashSettings = {
+  streaming: {
+    delay: {
+      useSuggestedPresentationDelay: false,
+      liveDelay: 604800, // 7 days
+    },
+    liveCatchup: {
+      enabled: false,
+    },
+    utcSynchronization: {
+      enabled: false,
+    },
+  },
+};
+
 // Our media segments are self-initializing, so skip separate init fetch.
 function skipInitSegments(e: { data?: any }) {
   const manifest = e.data;
@@ -127,22 +142,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     if (!videoEl) return;
 
     dashPlayer = MediaPlayer().create();
-
-    dashPlayer.updateSettings({
-      // debug: {
-      //     logLevel: Debug.LOG_LEVEL_DEBUG,
-      // },
-      streaming: {
-        delay: {
-          useSuggestedPresentationDelay: false,
-          liveDelay: 604800,
-        },
-        liveCatchup: {
-          enabled: false,
-        },
-      },
-    });
-
+    dashPlayer.updateSettings(dashSettings);
     dashPlayer.on(MediaPlayer.events.ERROR, (e) =>
       console.error("dash.js error:", e.error),
     );
@@ -163,8 +163,12 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
     dashPlayer = null;
   }
 
-  function loadManifest(uri: string) {
-    if (!dashPlayer) return;
+  function loadManifest(uri: string): Promise<boolean> {
+    const videoEl = getVideoEl();
+    if (!dashPlayer || !videoEl) return;
+    dashPlayer.reset();
+    dashPlayer.updateSettings(dashSettings);
+    dashPlayer.attachView(videoEl);
     dashPlayer.attachSource(uri);
   }
 
