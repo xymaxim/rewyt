@@ -232,25 +232,25 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   function seekTo(time: number, pause = false) {
     const videoEl = getVideoEl();
     if (!videoEl || !mpdStartTime) return;
-    videoEl.currentTime = (time - mpdStartTime.getTime()) / 1000;
+    dashPlayer.seek((time - mpdStartTime.getTime()) / 1000);
     if (pause) videoEl.pause();
   }
 
   async function replay() {
     const videoEl = getVideoEl();
     if (!videoEl) return;
-    videoEl.currentTime = 0;
+    dashPlayer.seek(0);
     videoEl.play();
   }
 
   function step(seconds: number) {
     const videoEl = getVideoEl();
     if (!videoEl) return;
-    videoEl.currentTime = clampSeekTarget(
+    dashPlayer.seek(clampSeekTarget(
       videoEl.currentTime + seconds,
       dashPlayer,
       dashPlayer?.getDvrWindow() ?? null,
-    );
+    ));
   }
 
   function togglePlayPause() {
