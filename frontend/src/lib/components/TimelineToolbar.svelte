@@ -69,7 +69,7 @@
             class="size-5! rounded-full bg-[var(--rewyt-interval-100)]"
           ></div>
           <div
-            class="h-5 w-5! rounded-l-full bg-gradient-to-r from-[var(--rewyt-interval-100)]"
+            class="size-5! rounded-l-full bg-gradient-to-r from-[var(--rewyt-interval-100)]"
           ></div>
         </div>
       </Tabs.Trigger>
@@ -105,7 +105,7 @@
   @reference "../../app.css";
 
   :global([data-tabs-trigger]) {
-    @apply flex h-10 w-12! cursor-pointer justify-center rounded-full opacity-60 shadow-none grayscale-100 outline-none! hover:grayscale-0 data-[state=active]:pointer-events-none data-[state=active]:z-20 data-[state=active]:-rotate-0 data-[state=active]:bg-neutral-600! data-[state=active]:opacity-100 data-[state=active]:grayscale-0;
+    @apply flex h-10 w-12! cursor-pointer justify-center rounded-full shadow-none grayscale-100 outline-none! hover:grayscale-0 data-[state=active]:pointer-events-none data-[state=active]:z-20 data-[state=active]:-rotate-0 data-[state=active]:bg-neutral-700! data-[state=active]:opacity-100 data-[state=active]:grayscale-0;
   }
   :global([data-slot="tabs-content"]) {
     @apply ml-[-80px] inline-flex h-10 items-center py-1;
