@@ -35,7 +35,7 @@
         class:font-medium={zoomKey !== key}
         class:font-extrabold={zoomKey === key}
         class:text-white={zoomKey === key}
-        class:bg-neutral-600={zoomKey === key}
+        class:bg-neutral-700={zoomKey === key}
         class:cursor-default!={zoomKey === key}
         class:-rotate-30={zoomKey === key}
         style="margin-left: 0px"
