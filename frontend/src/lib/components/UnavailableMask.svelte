@@ -18,13 +18,13 @@
   const size = useElementSize();
 
   const arcColor = "#d0d0d0";
-  const arcRadiusRatio = 0.8;
-  const gapRatio = 0;
-  const strokeWidth = 10;
+  const arcRadiusRatio = 0.7;
+  const gapRatio = 1.4;
+  const strokeWidth = 14;
 
   const arcRadius = $derived(Math.round(size.height * arcRadiusRatio));
-  const tileWidth = $derived(Math.round(arcRadius * (1 + gapRatio)));
-  const tileHeight = $derived(Math.round(size.height));
+  const tileWidth = $derived(Math.round(arcRadius * gapRatio));
+  const tileHeight = $derived(Math.round(size.height * 1.2));
 
   const leftPattern = $derived.by(() => {
     if (tileWidth <= 0 || tileHeight <= 0) return "none";
