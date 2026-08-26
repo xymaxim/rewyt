@@ -6,6 +6,7 @@
     rightWidth?: string;
     title?: string;
     class?: string;
+    waveWidth?: number;
   }
 
   const {
@@ -13,37 +14,25 @@
     rightWidth,
     title,
     class: className = "",
+    waveWidth: waveWidthProp,
   }: Props = $props();
 
   const size = useElementSize();
 
-  const arcColor = "#d0d0d0";
-  const arcRadiusRatio = 0.7;
-  const gapRatio = 1.4;
-  const strokeWidth = 14;
+  const darkColor = "#b0b0b0";
+  const lightColor = "#d0d0d0";
 
-  const arcRadius = $derived(Math.round(size.height * arcRadiusRatio));
-  const tileWidth = $derived(Math.round(arcRadius * gapRatio));
-  const tileHeight = $derived(Math.round(size.height * 1.2));
+  const waveWidth = $derived(Math.round(waveWidthProp ?? size.height * 6));
 
-  const leftPattern = $derived.by(() => {
-    if (tileWidth <= 0 || tileHeight <= 0) return "none";
-    const svg =
-      `<svg xmlns='http://www.w3.org/2000/svg' width='${tileWidth}' height='${tileHeight}' viewBox='0 0 ${tileWidth} ${tileHeight}'>` +
-      `<path d='M${tileWidth} 0 A${arcRadius} ${arcRadius} 0 0 0 ${tileWidth} ${tileHeight}' ` +
-      `fill='none' stroke='${arcColor}' stroke-width='${strokeWidth}' stroke-linecap='round'/>` +
-      `</svg>`;
-    return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
-  });
-
-  const rightPattern = $derived.by(() => {
-    if (tileWidth <= 0 || tileHeight <= 0) return "none";
-    const svg =
-      `<svg xmlns='http://www.w3.org/2000/svg' width='${tileWidth}' height='${tileHeight}' viewBox='0 0 ${tileWidth} ${tileHeight}'>` +
-      `<path d='M0 0 A${arcRadius} ${arcRadius} 0 0 1 0 ${tileHeight}' ` +
-      `fill='none' stroke='${arcColor}' stroke-width='${strokeWidth}' stroke-linecap='round'/>` +
-      `</svg>`;
-    return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+  const gradient = $derived.by(() => {
+    const w = waveWidth;
+    if (w <= 0) return "none";
+    return (
+      `repeating-linear-gradient(to right, ` +
+      `${darkColor} 0, ${darkColor} ${w * 0.2}px, ` +
+      `${lightColor} ${w * 0.4}px, ${lightColor} ${w * 0.6}px, ` +
+      `${darkColor} ${w * 0.8}px, ${darkColor} ${w}px)`
+    );
   });
 </script>
 
@@ -56,7 +45,7 @@
     <div
       {title}
       class="unavailable-mask unavailable-mask--left absolute top-0 bottom-0 left-0 cursor-not-allowed"
-      style="width: {leftWidth}; background-image: {leftPattern}; background-size: {tileWidth}px {tileHeight}px;"
+      style="width: {leftWidth}; background-image: {gradient};"
     ></div>
   {/if}
 
@@ -64,7 +53,7 @@
     <div
       {title}
       class="unavailable-mask unavailable-mask--right absolute top-0 bottom-0 right-0 cursor-not-allowed"
-      style="width: {rightWidth}; background-image: {rightPattern}; background-size: {tileWidth}px {tileHeight}px;"
+      style="width: {rightWidth}; background-image: {gradient};"
     ></div>
   {/if}
 </div>
@@ -74,16 +63,13 @@
 
   .unavailable-mask {
     background-color: #c0c0c0;
-    background-repeat: repeat-x;
   }
 
   .unavailable-mask--left {
     @apply rounded-r-2xl;
-    background-position: right center;
   }
 
   .unavailable-mask--right {
     @apply rounded-l-2xl;
-    background-position: left center;
   }
 </style>
