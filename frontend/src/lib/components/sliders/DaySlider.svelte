@@ -5,7 +5,7 @@
   import { findDay } from "$lib/utils/timelineUtils";
   import { useTimeSlider } from "$lib/components/sliders/useTimeSlider.svelte";
   import MinimapOverlay from "$lib/components/MinimapOverlay.svelte";
-  import UnallowedMask from "$lib/components/sliders/UnallowedMask.svelte";
+  import UnavailableMask from "$lib/components/UnavailableMask.svelte";
 
   interface Props {
     tickStepHours?: number;
@@ -70,6 +70,21 @@
     daySpan > 0 ? ((dayEnd - allowedEnd) / daySpan) * 100 : 0,
   );
 
+  const thumbOffset = 18;
+
+  const leftMaskWidth = $derived.by(() => {
+    if (slider.barWidth === 0) return `${leftUnallowedPercent}%`;
+    const pixels = (leftUnallowedPercent / 100) * slider.barWidth + thumbOffset;
+    return `${(pixels / (slider.barWidth + 2 * thumbOffset)) * 100}%`;
+  });
+
+  const rightMaskWidth = $derived.by(() => {
+    if (slider.barWidth === 0) return `${rightUnallowedPercent}%`;
+    const pixels =
+      (rightUnallowedPercent / 100) * slider.barWidth + thumbOffset;
+    return `${(pixels / (slider.barWidth + 2 * thumbOffset)) * 100}%`;
+  });
+
   const slider = useTimeSlider({
     getMin: () => dayStart,
     getMax: () => dayEnd,
@@ -133,14 +148,20 @@
     />
   </div>
 
-  <UnallowedMask
-    leftPercent={leftUnallowedPercent}
-    rightPercent={rightUnallowedPercent}
-  />
+  <div
+    class="pointer-events-none absolute inset-y-0 z-30 overflow-hidden rounded-2xl"
+    style="left: -{thumbOffset}px; right: -{thumbOffset}px;"
+  >
+    <UnavailableMask
+      leftWidth={leftUnallowedPercent > 0 ? leftMaskWidth : undefined}
+      rightWidth={rightUnallowedPercent > 0 ? rightMaskWidth : undefined}
+      title="Outside rewind range"
+    />
+  </div>
 
   <div
     class="pointer-events-none absolute inset-y-0 z-50"
-    style="left: -18px; right: -18px;"
+    style="left: -{thumbOffset}px; right: -{thumbOffset}px;"
   >
     <Slider.Root
       type="single"
@@ -154,7 +175,7 @@
       class="pointer-events-auto relative flex h-full w-full touch-none items-center"
     >
       <Slider.Track
-        class="relative h-full w-full overflow-hidden rounded-full bg-transparent"
+        class="relative h-full w-full overflow-hidden rounded-2xl bg-transparent"
       >
         <Slider.Range class="absolute h-full bg-transparent" />
       </Slider.Track>
@@ -162,7 +183,7 @@
       <Slider.Thumb
         index={0}
         class="relative flex size-9 cursor-ew-resize items-center justify-center rounded-full
-               bg-[var(--rewyt-selected)] shadow-xs transition-opacity outline-none
+               bg-[var(--rewyt-selected)] shadow-sm transition-opacity outline-none
                {slider.thumbHidden
           ? 'pointer-events-none opacity-0'
           : 'opacity-100'}"

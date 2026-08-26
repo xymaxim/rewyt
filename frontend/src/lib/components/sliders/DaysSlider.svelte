@@ -4,7 +4,7 @@
   import { MS_PER_MINUTE, MS_PER_HOUR } from "$lib/utils/dateUtils";
   import { useTimeSlider } from "$lib/components/sliders/useTimeSlider.svelte";
   import MinimapOverlay from "$lib/components/MinimapOverlay.svelte";
-  import UnallowedMask from "$lib/components/sliders/UnallowedMask.svelte";
+  import UnavailableMask from "$lib/components/UnavailableMask.svelte";
   import type { DayEntry } from "$lib/types";
 
   const explorer = getExplorerContext();
@@ -30,6 +30,21 @@
   const rightUnallowedPercent = $derived(
     minimapSpan > 0 ? ((minimapEnd - allowedEnd) / minimapSpan) * 100 : 0,
   );
+
+  const thumbOffset = 18;
+
+  const leftMaskWidth = $derived.by(() => {
+    if (slider.barWidth === 0) return `${leftUnallowedPercent}%`;
+    const pixels = (leftUnallowedPercent / 100) * slider.barWidth + thumbOffset;
+    return `${(pixels / (slider.barWidth + 2 * thumbOffset)) * 100}%`;
+  });
+
+  const rightMaskWidth = $derived.by(() => {
+    if (slider.barWidth === 0) return `${rightUnallowedPercent}%`;
+    const pixels =
+      (rightUnallowedPercent / 100) * slider.barWidth + thumbOffset;
+    return `${(pixels / (slider.barWidth + 2 * thumbOffset)) * 100}%`;
+  });
 
   const slider = useTimeSlider({
     getMin: () => minimapStart,
@@ -112,14 +127,20 @@
     <MinimapOverlay {minimapStart} {minimapEnd} barWidth={slider.barWidth} />
   </div>
 
-  <UnallowedMask
-    leftPercent={leftUnallowedPercent}
-    rightPercent={rightUnallowedPercent}
-  />
+  <div
+    class="pointer-events-none absolute inset-y-0 z-30 overflow-hidden rounded-2xl"
+    style="left: -{thumbOffset}px; right: -{thumbOffset}px;"
+  >
+    <UnavailableMask
+      leftWidth={leftUnallowedPercent > 0 ? leftMaskWidth : undefined}
+      rightWidth={rightUnallowedPercent > 0 ? rightMaskWidth : undefined}
+      title="Outside rewind range"
+    />
+  </div>
 
   <div
     class="pointer-events-none absolute inset-y-0 z-50"
-    style="left: -10px; right: -10px;"
+    style="left: -{thumbOffset}px; right: -{thumbOffset}px;"
   >
     <Slider.Root
       type="single"
@@ -136,14 +157,14 @@
       class="pointer-events-auto relative flex h-full w-full touch-none items-center"
     >
       <Slider.Track
-        class="relative h-full w-full overflow-hidden rounded-full bg-transparent"
+        class="relative h-full w-full overflow-hidden rounded-2xl bg-transparent"
       >
         <Slider.Range class="absolute h-full bg-transparent" />
       </Slider.Track>
 
       <Slider.Thumb
         index={0}
-        class="block flex size-9 cursor-ew-resize items-center justify-center rounded-full bg-[var(--rewyt-selected)]! shadow-xs transition-opacity outline-none
+        class="block flex size-9 cursor-ew-resize items-center justify-center rounded-full bg-[var(--rewyt-selected)]! shadow-sm transition-opacity outline-none
                 {slider.thumbHidden
           ? 'pointer-events-none opacity-0'
           : 'opacity-100'}"

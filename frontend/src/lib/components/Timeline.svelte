@@ -12,6 +12,7 @@
   } from "$lib/utils/timelineUtils";
   import IntervalSlider from "$lib/components/sliders/IntervalSlider.svelte";
   import RewindSlider from "$lib/components/sliders/RewindSlider.svelte";
+  import UnavailableMask from "$lib/components/UnavailableMask.svelte";
 
   import {
     ArrowUpRight,
@@ -198,9 +199,7 @@
         class="absolute text-sm whitespace-nowrap"
         class:text-foreground={!tick.dayLabel}
         class:text-muted-foreground={!!tick.dayLabel}
-        class:text-gray-300={!isAvailable(
-          pixelToTime(tick.px, range!, bar.width),
-        )}
+        class:text-gray-300={!isAvailable(tick.ts)}
         style="left: {tick.px}px; transform: translateX(-50%);"
         >{tick.dayLabel ?? tick.label}</span
       >
@@ -215,32 +214,24 @@
     onpointerleave={onPointerLeave}
     onclick={onClick}
   >
-    {#if seekableLeft !== null && seekableRight !== null}
-      <div
-        class="pointer-events-none absolute top-0 bottom-0 rounded-xl bg-[var(--rewyt-play-300)]/60"
-        style="left: {seekableLeft}px; width: {seekableRight - seekableLeft}px"
-      ></div>
-    {/if}
+    <div class="absolute inset-0 overflow-hidden rounded-2xl">
+      {#if seekableLeft !== null && seekableRight !== null}
+        <div
+          class="pointer-events-none absolute top-0 bottom-0 rounded-xl bg-[var(--rewyt-play-300)]/60"
+          style="left: {seekableLeft}px; width: {seekableRight - seekableLeft}px"
+        ></div>
+      {/if}
 
-    {#if unavailableLeftPx !== null}
-      <div
+      <UnavailableMask
+        leftWidth={unavailableLeftPx !== null ? `${unavailableLeftPx}px` : undefined}
+        rightWidth={unavailableRightPx !== null ? `calc(100% - ${unavailableRightPx}px)` : undefined}
         title={notAvailableMessage}
-        class="unavailable-back absolute top-0 bottom-0 left-0"
-        style="width: {unavailableLeftPx}px;"
-      ></div>
-    {/if}
-
-    {#if unavailableRightPx !== null}
-      <div
-        title={notAvailableMessage}
-        class="unavailable-back absolute top-0 right-0 bottom-0"
-        style="left: {unavailableRightPx}px;"
-      ></div>
-    {/if}
+      />
+    </div>
 
     {#each ticks as tick}
       <div
-        class="absolute z-30 bg-black/30"
+        class="absolute z-30 {isAvailable(tick.ts) ? 'bg-black/30' : 'bg-transparent'}"
         style="left: {tick.px}px; height: {tick.major ? 10 : 6}px; width: 1px;"
       ></div>
     {/each}
@@ -291,10 +282,4 @@
   </div>
 </div>
 
-<style>
-  @reference "tailwindcss";
-  .unavailable-back {
-    @apply cursor-not-allowed rounded-md backdrop-blur-md backdrop-grayscale;
-    background: --alpha(var(--background) / 70%);
-  }
-</style>
+

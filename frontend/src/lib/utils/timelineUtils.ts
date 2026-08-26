@@ -5,6 +5,7 @@ import { timeToPixel } from "./timePixelUtils";
 
 export interface Tick {
   px: number;
+  ts: Timestamp;
   label: string | null;
   major: boolean;
 }
@@ -109,6 +110,7 @@ export function buildTicks(
     if (px !== null) {
       result.push({
         px,
+        ts: t,
         major: isMajor,
         label: isMajor ? formatTickLabel(t, offsetMinutes) : null,
       });
