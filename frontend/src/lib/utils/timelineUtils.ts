@@ -164,9 +164,8 @@ export function formatHoverTime(
 }
 
 // Background
-const tickWidthPx = 30;
-const tickColor = "#d0d0d0";
-const tickFadeColor = "rgb(217 217 217 / 60%)";
+const fadeWidthPx = 10;
+const darkColor = "#d9d9d9";
 
 export function getStripeBackground(
   range: ViewRange,
@@ -176,9 +175,7 @@ export function getStripeBackground(
   const spanMs = range.end - range.start;
   const stripeMs = spanMs <= 12 * MS_PER_HOUR ? MS_PER_HOUR : 24 * MS_PER_HOUR;
 
-  const stripeWidthPx = (stripeMs / spanMs) * barWidth;
-
-  const tickOffsetPx =
+  const stripeOffsetPx =
     stripeMs >= 12 * MS_PER_HOUR
       ? -(
           ((((range.start + timezoneOffsetMs) % stripeMs) + stripeMs) %
@@ -187,15 +184,18 @@ export function getStripeBackground(
         ) * barWidth
       : -((range.start % stripeMs) / spanMs) * barWidth;
 
-  const stripeOffsetPx = tickOffsetPx + stripeWidthPx / 2;
+  const stripeWidthPx = (stripeMs / spanMs) * barWidth;
 
-  const left = stripeWidthPx / 2 - tickWidthPx / 2;
-  const right = stripeWidthPx / 2 + tickWidthPx / 2;
-  const stripeGradient =
-    `linear-gradient(90deg, ` +
-    `${tickFadeColor} 0, ${tickFadeColor} ${left}px, ` +
-    `${tickColor} ${stripeWidthPx / 2}px, ` +
-    `${tickFadeColor} ${right}px, ${tickFadeColor} 100%)`;
+  let stripeGradient: string;
+  if (stripeMs >= 24 * MS_PER_HOUR) {
+    stripeGradient = `repeating-linear-gradient(90deg, ${darkColor} 0%, rgb(0 0 0 / 2%) 100%)`;
+  } else {
+    const lightPercent = Math.max(0, 100 - (fadeWidthPx / stripeWidthPx) * 100);
+    stripeGradient =
+      lightPercent >= 100
+        ? `repeating-linear-gradient(90deg, ${darkColor} 0%, rgb(0 0 0 / 2%) 100%)`
+        : `repeating-linear-gradient(90deg, ${darkColor} 0%, rgb(0 0 0 / 2%) ${lightPercent}%, ${darkColor} 100%)`;
+  }
 
   return {
     stripeWidthPx,
