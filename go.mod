@@ -7,8 +7,11 @@ require (
 	github.com/xymaxim/ypb v0.0.0-20260805152336-f59a8d12d42a
 )
 
+replace github.com/xymaxim/ypb => ../ypb
+
 require (
 	dario.cat/mergo v1.0.2 // indirect
+	github.com/Eyevinn/mp4ff v0.55.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.3.0 // indirect
 	github.com/adrg/xdg v0.5.3 // indirect
