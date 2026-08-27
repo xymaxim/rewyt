@@ -164,6 +164,8 @@ export function formatHoverTime(
 }
 
 // Background
+const fadeWidthPx = 10;
+
 export function getStripeBackground(
   range: ViewRange,
   barWidth: number,
@@ -181,11 +183,22 @@ export function getStripeBackground(
         ) * barWidth
       : -((range.start % stripeMs) / spanMs) * barWidth;
 
-  const stripeGradient =
-    "repeating-linear-gradient(90deg, rgb(0 0 0 / 2%) 0%, #d9d9d9 5%, rgb(0 0 0 / 2%) 100%)";
+  const stripeWidthPx = (stripeMs / spanMs) * barWidth;
+
+  let stripeGradient: string;
+  if (stripeMs >= 24 * MS_PER_HOUR) {
+    stripeGradient =
+      "repeating-linear-gradient(90deg, #d9d9d9 0%, rgb(0 0 0 / 2%) 100%)";
+  } else {
+    const faintPct = Math.max(0, 100 - (fadeWidthPx / stripeWidthPx) * 100);
+    stripeGradient =
+      faintPct >= 100
+        ? "repeating-linear-gradient(90deg, #d9d9d9 0%, rgb(0 0 0 / 2%) 100%)"
+        : `repeating-linear-gradient(90deg, #d9d9d9 0%, rgb(0 0 0 / 2%) ${faintPct}%, #d9d9d9 100%)`;
+  }
 
   return {
-    stripeWidthPx: (stripeMs / spanMs) * barWidth,
+    stripeWidthPx,
     stripeOffsetPx,
     stripeGradient,
   };
