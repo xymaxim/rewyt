@@ -27,12 +27,8 @@ tasks:
 
   install:frontend:deps:bun:
     dir: frontend
-    sources:
-      - package.json
-      - bun.lock
-      - bun.lockb
-    generates:
-      - node_modules
+    status:
+      - test -d node_modules
     preconditions:
       - sh: bun --version
         msg: "bun not found"

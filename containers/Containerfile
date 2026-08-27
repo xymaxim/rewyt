@@ -1,9 +1,15 @@
+# Frontend build stage
+FROM oven/bun:alpine AS frontend-builder
+WORKDIR /app
+COPY frontend/ frontend/
+RUN cd frontend && bun install --frozen-lockfile && bun run build
+
 # Build stage
 FROM golang:alpine AS builder
 WORKDIR /app
-RUN apk add --no-cache git nodejs npm
+RUN apk add --no-cache git
 COPY . .
-RUN cd frontend && npm ci && npm run build
+COPY --from=frontend-builder /app/frontend/dist frontend/dist
 RUN go mod tidy
 RUN CGO_ENABLED=0 go build -tags server -ldflags="-s -w" -o rewyt .
 

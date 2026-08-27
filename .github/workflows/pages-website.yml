@@ -21,14 +21,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 'lts/*'
-      - run: cd frontend && npm install
-
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
+      - run: cd frontend && bun install --frozen-lockfile
+
       - run: |
           cd website
           bun install --frozen-lockfile
