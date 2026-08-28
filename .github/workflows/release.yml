@@ -18,8 +18,10 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Setup Go
         uses: actions/setup-go@v6
@@ -68,8 +70,10 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Setup Go
         uses: actions/setup-go@v6
@@ -110,8 +114,10 @@ jobs:
           fetch-depth: 0
           fetch-tags: true
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
 
       - name: Setup Go
         uses: actions/setup-go@v6
