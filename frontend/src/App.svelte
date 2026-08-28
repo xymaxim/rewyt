@@ -17,6 +17,7 @@
   import StartingPane from "./lib/components/StartingPane.svelte";
   import StartingProgress from "./lib/components/StartingProgress.svelte";
   import StartingError from "./lib/components/StartingError.svelte";
+  import RewindError from "./lib/components/RewindError.svelte";
   import PlayerControls from "./lib/components/PlayerControls.svelte";
 
   export const StreamStatus = {
@@ -273,18 +274,7 @@
       {/if}
 
       {#if player.rewindError}
-        <div
-          class="items-left absolute inset-0 z-30 flex flex-col justify-center gap-3 rounded-lg bg-[#f4e2e0] px-10 text-center"
-        >
-          <span class="text-xl font-semibold">Oops! Rewind failed</span>
-          <p class="max-w-xl text-left text-sm">
-            <span class="text-sm">Error:</span>
-            {player.rewindError}
-          </p>
-          <p class="max-w-xl text-left text-base">
-            Try rewinding again or choose another time.
-          </p>
-        </div>
+        <RewindError error={player.rewindError} />
       {/if}
       <div
         class="video-stage group relative flex w-full justify-center"
