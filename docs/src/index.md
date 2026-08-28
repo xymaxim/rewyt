@@ -7,7 +7,7 @@ Available on Linux, macOS, and Windows. Built on top of
 [ypb](https://xymaxim.github.io/ypb) and
 [yt-dlp](https://github.com/yt-dlp/yt-dlp/).
 
-![Main screenshot](./welcome-files/screenshot.png)
+![Main screenshot](./index-files/screenshot.png)
 
 <h2>Get started</h2>
 
