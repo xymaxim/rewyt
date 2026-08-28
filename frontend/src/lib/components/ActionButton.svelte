@@ -82,6 +82,7 @@
 
   <Button
     {...buttonProps}
+    class="rounded-full"
     disabled={disabled || ui.loading}
     onclick={handleClick}
   >

@@ -1,5 +1,7 @@
 <script lang="ts">
   import * as Alert from "$lib/components/ui/alert";
+  import { Copy } from "lucide-svelte";
+  import ActionButton from "./ActionButton.svelte";
 
   interface Props {
     error: unknown;
@@ -18,21 +20,40 @@
     }
     return String(raw ?? error);
   });
+
+  let copyText = $derived(
+    stdout ? `${message}\n${stdout}` : `${message}`,
+  );
+
+  function copyError() {
+    return navigator.clipboard.writeText(copyText);
+  }
 </script>
 
 <Alert.Root
   class="relative mt-2 min-w-[640px] gap-0 rounded-2xl border-0 bg-[var(--color-destructive)]/5"
 >
-  <Alert.Title
-    class="mb-0 flex items-center gap-2 text-base text-[var(--color-destructive)]"
-  >
+  <Alert.Title class="mb-0 text-base text-[var(--color-destructive)]">
     Stream start failed
   </Alert.Title>
-  <Alert.Description class="mt-2 text-sm text-primary">
+  <div class="absolute top-3 right-3">
+    <ActionButton
+      variant="ghost"
+      size="icon-sm"
+      title="Copy error"
+      notification={{ message: "Copied" }}
+      action={copyError}
+    >
+      <Copy />
+    </ActionButton>
+  </div>
+  <Alert.Description
+      class="mt-2 max-h-[calc(100vh-32rem)] overflow-y-auto text-sm text-primary"
+  >
     <p class="text-sm"><span class="font-semibold">Error:</span> {message}</p>
     {#if stdout}
       <span class="font-semibold">Output:</span>
-      <p class="max-h-36 overflow-y-auto whitespace-pre-wrap">{stdout}</p>
+      <p class="whitespace-pre-wrap">{stdout}</p>
     {/if}
   </Alert.Description>
 </Alert.Root>
