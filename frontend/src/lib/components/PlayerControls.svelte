@@ -178,7 +178,7 @@
     const codec = track.codec?.match(/;codecs="([^"]+)"/)?.[1];
     return codec
       ? `${track.mimeType ?? ""} (${codec})`
-      : (track.codec ?? 'unknown');
+      : (track.codec ?? "unknown");
   }
 
   function refreshMenus(player: MediaPlayerClass) {

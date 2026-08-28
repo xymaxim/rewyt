@@ -218,20 +218,27 @@
       {#if seekableLeft !== null && seekableRight !== null}
         <div
           class="pointer-events-none absolute top-0 bottom-0 rounded-xl bg-[var(--rewyt-play-300)]/60"
-          style="left: {seekableLeft}px; width: {seekableRight - seekableLeft}px"
+          style="left: {seekableLeft}px; width: {seekableRight -
+            seekableLeft}px"
         ></div>
       {/if}
 
       <UnavailableMask
-        leftWidth={unavailableLeftPx !== null ? `${unavailableLeftPx}px` : undefined}
-        rightWidth={unavailableRightPx !== null ? `calc(100% - ${unavailableRightPx}px)` : undefined}
+        leftWidth={unavailableLeftPx !== null
+          ? `${unavailableLeftPx}px`
+          : undefined}
+        rightWidth={unavailableRightPx !== null
+          ? `calc(100% - ${unavailableRightPx}px)`
+          : undefined}
         title={notAvailableMessage}
       />
     </div>
 
     {#each ticks as tick}
       <div
-        class="absolute z-30 {isAvailable(tick.ts) ? 'bg-black/30' : 'bg-transparent'}"
+        class="absolute z-30 {isAvailable(tick.ts)
+          ? 'bg-black/30'
+          : 'bg-transparent'}"
         style="left: {tick.px}px; height: {tick.major ? 10 : 6}px; width: 1px;"
       ></div>
     {/each}
@@ -281,5 +288,3 @@
     {/if}
   </div>
 </div>
-
-

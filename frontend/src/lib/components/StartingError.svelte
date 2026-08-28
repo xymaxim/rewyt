@@ -21,9 +21,7 @@
     return String(raw ?? error);
   });
 
-  let copyText = $derived(
-    stdout ? `${message}\n${stdout}` : `${message}`,
-  );
+  let copyText = $derived(stdout ? `${message}\n${stdout}` : `${message}`);
 
   function copyError() {
     return navigator.clipboard.writeText(copyText);
@@ -48,7 +46,7 @@
     </ActionButton>
   </div>
   <Alert.Description
-      class="mt-2 max-h-[calc(100vh-32rem)] overflow-y-auto text-sm text-primary"
+    class="mt-2 max-h-[calc(100vh-32rem)] overflow-y-auto text-sm text-primary"
   >
     <p class="text-sm"><span class="font-semibold">Error:</span> {message}</p>
     {#if stdout}

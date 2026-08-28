@@ -28,9 +28,7 @@
     </ActionButton>
   </div>
   <span class="text-xl font-semibold">Oops! Rewind failed</span>
-  <p class="text-left text-base">
-    Try rewinding again or choose another time.
-  </p>
+  <p class="text-left text-base">Try rewinding again or choose another time.</p>
   <p class="max-h-50 overflow-y-auto text-left text-sm">
     <span class="text-sm">Error:</span>
     {error}

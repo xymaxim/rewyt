@@ -352,7 +352,7 @@
             </Popover.Content>
           </Popover.Root>
         </div>
-        <div class="hidden items-center md:flex transition-all ease-in-out">
+        <div class="hidden items-center transition-all ease-in-out md:flex">
           <Expandable.Root
             open={true}
             trigger="click"
