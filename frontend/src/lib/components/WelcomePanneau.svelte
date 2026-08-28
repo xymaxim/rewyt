@@ -18,7 +18,7 @@
 
   const w = 600;
   const h = 320;
-  const exclusion = { x: w / 2 - 200, y: h / 2 - 50, w: 400, h: 100 };
+  const exclusion = { x: w / 2 - 220, y: h / 2 - 50, w: 440, h: 100 };
   const shapeKinds = [
     "selectedCircle",
     "rewindCircle",
@@ -30,18 +30,77 @@
 
   type Placement = { x: number; y: number; angle: number };
 
+  const maxAttempts = 1000;
+
   function circleOverlapsRect(
     cx: number,
     cy: number,
     r: number,
-    rx: number,
-    ry: number,
-    rw: number,
-    rh: number,
+    rect: { x: number; y: number; w: number; h: number },
   ): boolean {
-    const nearestX = Math.max(rx, Math.min(cx, rx + rw));
-    const nearestY = Math.max(ry, Math.min(cy, ry + rh));
+    const nearestX = Math.max(rect.x, Math.min(cx, rect.x + rect.w));
+    const nearestY = Math.max(rect.y, Math.min(cy, rect.y + rect.h));
     return Math.hypot(cx - nearestX, cy - nearestY) < r;
+  }
+
+  function countCircleOverlaps(
+    cx: number,
+    cy: number,
+    r: number,
+    circles: { x: number; y: number; r: number }[],
+  ): number {
+    return circles.filter((c) => Math.hypot(c.x - cx, c.y - cy) < c.r + r)
+      .length;
+  }
+
+  // Avoiding the exclusion zone matters more than avoiding other shapes, so
+  // an exclusion hit always outweighs any number of shape overlaps.
+  function scoreCandidate(hitsExclusion: boolean, shapeOverlaps: number) {
+    return (hitsExclusion ? 1000 : 0) + shapeOverlaps;
+  }
+
+  // Tries random points for one shape and keeps the best-scoring candidate
+  // seen, exiting early once a fully-clear spot turns up.
+  function findPlacement(
+    r: number,
+    placed: { x: number; y: number; r: number }[],
+  ): { x: number; y: number } {
+    let best = { x: w / 2, y: h / 2 };
+    let bestScore = Infinity;
+
+    for (let attempt = 0; attempt < maxAttempts && bestScore > 0; attempt++) {
+      const candidate = {
+        x: r + Math.random() * (w - r * 2),
+        y: r + Math.random() * (h - r * 2),
+      };
+      const hitsExclusion = circleOverlapsRect(
+        candidate.x,
+        candidate.y,
+        r,
+        exclusion,
+      );
+      const shapeOverlaps = countCircleOverlaps(
+        candidate.x,
+        candidate.y,
+        r,
+        placed,
+      );
+      const score = scoreCandidate(hitsExclusion, shapeOverlaps);
+
+      if (score < bestScore) {
+        best = candidate;
+        bestScore = score;
+      }
+    }
+
+    return best;
+  }
+
+  function randomAngle(kind: string): number {
+    // The rewind icon reads oddly upside-down, so keep it near-horizontal.
+    return kind === "rewindCircle"
+      ? -60 + Math.random() * 90
+      : Math.random() * 360;
   }
 
   function randomizePlacements(
@@ -51,68 +110,31 @@
     const placed: { x: number; y: number; r: number }[] = [];
 
     return radii.map((r, idx) => {
-      // Fall back to the least-bad candidate if no fully-clear spot is
-      // found; avoiding the exclusion zone beats avoiding other shapes.
-      let best = { x: w / 2, y: h / 2 };
-      let bestHitsExclusion = true;
-      let bestOtherOverlaps = Infinity;
-
-      for (let attempt = 0; attempt < 1000; attempt++) {
-        const nx = r + Math.random() * (w - r * 2);
-        const ny = r + Math.random() * (h - r * 2);
-        const hitsExclusion = circleOverlapsRect(
-          nx,
-          ny,
-          r,
-          exclusion.x,
-          exclusion.y,
-          exclusion.w,
-          exclusion.h,
-        );
-        const otherOverlaps = placed.filter(
-          (p) => Math.hypot(p.x - nx, p.y - ny) < p.r + r,
-        ).length;
-
-        if (!hitsExclusion && otherOverlaps === 0) {
-          best = { x: nx, y: ny };
-          bestHitsExclusion = false;
-          bestOtherOverlaps = 0;
-          break;
-        }
-
-        const isBetter =
-          (bestHitsExclusion && !hitsExclusion) ||
-          (hitsExclusion === bestHitsExclusion &&
-            otherOverlaps < bestOtherOverlaps);
-
-        if (isBetter) {
-          best = { x: nx, y: ny };
-          bestHitsExclusion = hitsExclusion;
-          bestOtherOverlaps = otherOverlaps;
-        }
-      }
-
-      placed.push({ x: best.x, y: best.y, r });
-
-      const angle =
-        kinds[idx] === "rewindCircle"
-          ? -60 + Math.random() * 90
-          : Math.random() * 360;
-
-      return { x: best.x, y: best.y, angle };
+      const { x, y } = findPlacement(r, placed);
+      placed.push({ x, y, r });
+      return { x, y, angle: randomAngle(kinds[idx]) };
     });
   }
 
   let gEls = $state<SVGGElement[]>([]);
 
+  // A near-square bbox is almost always a circle, whose radius is half its
+  // side, not half its diagonal (that would overstate it by ~40%). A
+  // clearly non-square bbox (e.g. the bar) can swing a corner out to the
+  // diagonal as it rotates, so the diagonal is the right bound there.
+  function boundingRadius(box: DOMRect): number {
+    if (!box.width && !box.height) return NaN;
+    const isRoughlySquare = Math.abs(box.width - box.height) < 1;
+    return isRoughlySquare
+      ? Math.max(box.width, box.height) / 2
+      : Math.hypot(box.width, box.height) / 2;
+  }
+
   // A 0x0 bbox means the shape hasn't finished laying out yet; treating
   // that as radius 0 would disable its collision checks, so fall back to
   // the largest valid radius measured this pass instead.
   function measureRadii(): number[] {
-    const boxes = gEls.map((g) => g.getBBox());
-    const measured = boxes.map((box) =>
-      box.width || box.height ? Math.hypot(box.width, box.height) / 2 : NaN,
-    );
+    const measured = gEls.map((g) => boundingRadius(g.getBBox()));
     const validMax = Math.max(0, ...measured.filter((r) => !Number.isNaN(r)));
     const fallback = validMax || 60;
     return measured.map((r) => (Number.isNaN(r) ? fallback : r));
