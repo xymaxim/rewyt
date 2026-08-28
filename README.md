@@ -30,8 +30,11 @@ ypb, which proxies media segments from YouTube and handles connection errors. Se
 
 ## Installation
 
-Rewyt runs either as a **desktop app** via pre-built binaries or as a **web
-app** you run locally with Compose and access through your browser. See the
+Rewyt runs either as a [desktop
+app](https://xymaxim.github.io/rewyt/docs/guides/install/binaries.html) via
+pre-built binaries or as a [web
+app](https://xymaxim.github.io/rewyt/docs/guides/install/web.html) you run
+locally with Compose and access through your browser. See the
 [Installation](https://xymaxim.github.io/rewyt/docs/guides/install/install.html)
 guide for setup instructions.
 
