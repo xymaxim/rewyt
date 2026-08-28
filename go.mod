@@ -4,10 +4,10 @@ go 1.25.5
 
 require (
 	github.com/wailsapp/wails/v3 v3.0.0-alpha.98
-	github.com/xymaxim/ypb v0.0.0-20260805152336-f59a8d12d42a
+	github.com/xymaxim/ypb v0.0.0-20260828133333-309e3a620427
 )
 
-replace github.com/xymaxim/ypb => ../ypb
+// replace github.com/xymaxim/ypb => ../ypb
 
 require (
 	dario.cat/mergo v1.0.2 // indirect
