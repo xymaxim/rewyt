@@ -2,6 +2,7 @@
   import { fly } from "svelte/transition";
   import { Button } from "$lib/components/ui/button";
   import type { ButtonProps } from "$lib/components/ui/button";
+  import { cn } from "$lib/utils";
 
   interface NotificationConfig {
     message: string;
@@ -19,6 +20,7 @@
     action,
     children,
     disabled = false,
+    class: className,
     ...buttonProps
   }: Props = $props();
 
@@ -82,7 +84,7 @@
 
   <Button
     {...buttonProps}
-    class="rounded-full"
+    class={cn("rounded-full", className)}
     disabled={disabled || ui.loading}
     onclick={handleClick}
   >

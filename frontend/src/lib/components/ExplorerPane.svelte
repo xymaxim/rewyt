@@ -19,7 +19,6 @@
     onReplay: () => void;
     onRewind: (isoTime: string, pause?: boolean) => Promise<boolean>;
     onRewindToLive: () => void;
-    onScreenshot: (ts: number) => void;
     onSeekTo: (time: number, pause?: boolean) => void;
     onStep: (seconds: number) => void;
     onStopInterval: () => void;
@@ -39,7 +38,6 @@
     onReplay,
     onRewind,
     onRewindToLive,
-    onScreenshot,
     onSeekTo,
     onStep,
     onStopInterval,
@@ -86,7 +84,6 @@
       {onReplay}
       {onRewindToLive}
       {onRewind}
-      {onScreenshot}
       {onStep}
       {onTogglePlayPause}
     />

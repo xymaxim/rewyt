@@ -8,6 +8,7 @@
     VolumeOff,
     Proportions,
     ListVideo,
+    Camera,
   } from "lucide-svelte";
   import { Slider } from "bits-ui";
   import {
@@ -18,15 +19,18 @@
   } from "dashjs";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
   import { clampSeekTarget, getSeekMargin } from "$lib/player.svelte";
+  import ActionButton from "./ActionButton.svelte";
 
   interface Props {
     videoEl: HTMLVideoElement | null;
     stageEl: HTMLElement | null;
     dashPlayer: MediaPlayerClass | null;
     onTogglePlayPause: () => void;
+    onScreenshot: () => void | Promise<void>;
   }
 
-  let { videoEl, stageEl, dashPlayer, onTogglePlayPause }: Props = $props();
+  let { videoEl, stageEl, dashPlayer, onTogglePlayPause, onScreenshot }: Props =
+    $props();
 
   // Playback state
   let isPlaying = $state(false);
@@ -347,6 +351,16 @@
             <Volume2 size={22} strokeWidth={2} />
           {/if}
         </button>
+        <ActionButton
+          variant="ghost"
+          size="icon-lg"
+          title="Take screenshot"
+          notification={{ message: "Screenshot saved" }}
+          action={onScreenshot}
+          class="pointer-events-auto size-10 text-white hover:bg-white/25 hover:text-white"
+        >
+          <Camera class="size-[22px]" />
+        </ActionButton>
         <DropdownMenu.Root
           open={qualityOpen}
           onOpenChange={(open) => {

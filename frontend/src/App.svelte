@@ -289,6 +289,9 @@
           {stageEl}
           dashPlayer={player.dashPlayer}
           onTogglePlayPause={() => player.togglePlayPause()}
+          onScreenshot={() =>
+            handleScreenshot(player.playheadTime?.getTime() ?? Date.now())
+          }
         />
       </div>
     </div>
@@ -330,7 +333,6 @@
           onReplay={() => player.replay()}
           onRewind={(isoTime, pause) => player.rewind(isoTime, pause)}
           onRewindToLive={() => player.rewindToLive()}
-          onScreenshot={(ts) => handleScreenshot(ts)}
           onSeekTo={(time, pause) => player.seekTo(time, pause)}
           onStep={(s) => player.step(s)}
           onStopInterval={() => player.stopInterval(explorer.marks.A)}

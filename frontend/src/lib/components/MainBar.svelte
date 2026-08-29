@@ -14,7 +14,6 @@
   import {
     ArrowUpRight,
     ArrowDown,
-    Camera,
     Circle,
     FastForward,
     Pause,
@@ -44,7 +43,6 @@
     onRewind: (isoTime: string, pause?: boolean) => Promise<boolean>;
     onRewindToLive: () => void;
     onReplay: () => void;
-    onScreenshot: (ts: number) => void;
   }
 
   const {
@@ -55,7 +53,6 @@
     onReplay,
     onRewind,
     onRewindToLive,
-    onScreenshot,
     onStep,
     onTogglePlayPause,
   }: Props = $props();
