@@ -1,18 +1,13 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import { CheckAllDependencies } from "../../../bindings/rewyt/services/dependenciesservice";
   import * as Alert from "$lib/components/ui/alert";
-  import { CircleAlert } from "lucide-svelte";
 
-  let missingDependencies = $state<string[]>([]);
+  interface Props {
+    missingDependencies: string[];
+  }
+
+  let { missingDependencies }: Props = $props();
+
   let isMissingOne = $derived(missingDependencies.length === 1);
-
-  onMount(async () => {
-    const dependencies = await CheckAllDependencies();
-    missingDependencies = dependencies
-      .filter((d) => !d.available)
-      .map((d) => d.name);
-  });
 </script>
 
 {#if missingDependencies.length > 0}

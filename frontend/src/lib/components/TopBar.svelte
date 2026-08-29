@@ -12,9 +12,11 @@
     streamTitle: string | null;
     streamStatus: string;
     videoId: string | null;
+    hasMissingDependencies?: boolean;
   }
 
-  let { onStreamStart, streamTitle, streamStatus, videoId }: Props = $props();
+  let { onStreamStart, streamTitle, streamStatus, videoId, hasMissingDependencies }: Props =
+    $props();
 
   let inputEl = $state<HTMLInputElement | null>(null);
   let inputValue = $state("");
@@ -94,7 +96,10 @@
         class="text-center text-sm font-medium focus-visible:ring-0!"
         type="text"
         placeholder="Paste YouTube video link"
-        disabled={loading || streamStatus === "starting"}
+        disabled={loading || streamStatus === "starting" || hasMissingDependencies}
+        title={hasMissingDependencies
+          ? "Install missing tools to enable"
+          : undefined}
         aria-invalid={error}
         onfocus={() => {
           focused = true;

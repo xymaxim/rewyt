@@ -4,6 +4,7 @@
     StartStream,
     CancelStreamStart,
   } from "../bindings/rewyt/services/streamservice";
+  import { CheckAllDependencies } from "../bindings/rewyt/services/dependenciesservice";
   import { Events } from "@wailsio/runtime";
   import { Button } from "$lib/components/ui/button/index.js";
   import { createExplorer, setExplorerContext } from "./lib/explorer.svelte";
@@ -46,6 +47,8 @@
   let unlistenStdout: (() => void) | null = null;
   let showStdoutLog = $state(false);
   let lastError = $state<unknown>(null);
+  let missingDependencies = $state<string[]>([]);
+  let hasMissingDependencies = $derived(missingDependencies.length > 0);
 
   // Effects: player-explorer wiring
   $effect(() => {
@@ -198,6 +201,13 @@
       player.destroy();
     };
   });
+
+  onMount(async () => {
+    const dependencies = await CheckAllDependencies();
+    missingDependencies = dependencies
+      .filter((d) => !d.available)
+      .map((d) => d.name);
+  });
 </script>
 
 <main
@@ -212,6 +222,7 @@
     streamTitle={player.streamInfo?.title ?? null}
     {streamStatus}
     videoId={player.streamInfo?.id ?? null}
+    {hasMissingDependencies}
   />
 
   <div
@@ -303,7 +314,7 @@
     {#if lastError}
       <StartingError error={lastError} stdout={ytdlpStdout} />
     {/if}
-    <DependencyNotice />
+    <DependencyNotice {missingDependencies} />
   {:else if streamStatus === StreamStatus.STARTING}
     <StartingProgress
       onCancel={onCancelStreamStart}
