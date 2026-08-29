@@ -235,12 +235,14 @@
           class="absolute top-0 right-0 left-0 z-10 flex flex-col gap-0.5 px-4 py-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
           style="background: linear-gradient(to bottom, rgba(0,0,0,0.65), transparent);"
         >
-          <h1 class="text-md leading-tight text-white">
-            {player.streamInfo.title}
-          </h1>
+          <a
+            href="https://www.youtube.com/watch?v={player.streamInfo.id}"
+            class="text-md leading-tight text-white font-bold hover:text-neutral-200"
+            target="_blank"
+            rel="noopener noreferrer">{player.streamInfo.title}</a>
           <a
             href="https://youtube.com/channel/{player.streamInfo.channelId}"
-            class="text-sm text-white/60 transition-colors hover:text-white/90"
+            class="text-sm text-neutral-100 font-medium hover:text-neutral-200"
             target="_blank"
             rel="noopener noreferrer">{player.streamInfo.channelTitle}</a
           >
