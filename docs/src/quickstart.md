@@ -16,6 +16,8 @@ Download the binary for your platform from the [latest
 release](https://github.com/xymaxim/rewyt/releases/latest) and unzip it to your
 working directory.
 
+*Latest release {{ git.short_tag }}*
+
 <div class="grid cards three-cols" markdown>
 
 -   :material-linux:{ .lg } **Linux**
