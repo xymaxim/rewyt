@@ -4,7 +4,7 @@
 
 [![Release](https://img.shields.io/github/v/release/xymaxim/rewyt)](https://github.com/xymaxim/rewyt/releases/latest)
 
-[Source](https://github.com/xymaxim/rewyt) &nbsp; [Website](https://xymaxim.github.io/rewyt) &nbsp; [Documentation](https://xymaxim.github.io/rewyt/docs) &nbsp; [Changelog](https://xymaxim.github.io/rewyt/docs/changelog.html)
+[Source](https://github.com/xymaxim/rewyt) &nbsp; [Website](https://xymaxim.github.io/rewyt) &nbsp; [Documentation](https://xymaxim.github.io/rewyt/docs) &nbsp; [Changelog](https://xymaxim.github.io/rewyt/docs/changelog/)
 
 *Rewind and play YouTube live streams*
 
@@ -26,16 +26,16 @@ moment, the Svelte frontend requests an MPEG-DASH manifest from ypb, which
 generates one with proxied URLs. During playback, [Shaka
 Player](https://github.com/shaka-project/shaka-player) streams video through
 ypb, which proxies media segments from YouTube and handles connection errors. See
-[Overview](https://xymaxim.github.io/rewyt/docs/overview.html) for more details.
+[Overview](https://xymaxim.github.io/rewyt/docs/overview/) for more details.
 
 ## Installation
 
 Rewyt runs either as a [desktop
-app](https://xymaxim.github.io/rewyt/docs/guides/install/binaries.html) via
+app](https://xymaxim.github.io/rewyt/docs/guides/install/desktop/) via
 pre-built binaries or as a [web
-app](https://xymaxim.github.io/rewyt/docs/guides/install/web.html) you run
+app](https://xymaxim.github.io/rewyt/docs/guides/install/web/) you run
 locally with Compose and access through your browser. See the
-[Installation](https://xymaxim.github.io/rewyt/docs/guides/install/install.html)
+[Install](https://xymaxim.github.io/rewyt/docs/guides/install/install/)
 guide for setup instructions.
 
 ## Etymology
