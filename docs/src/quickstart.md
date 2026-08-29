@@ -1,4 +1,4 @@
-# Get started with Rewyt
+# Quickstart
 
 Learn how to install Rewyt and start rewatching YouTube live streams.
 
@@ -7,8 +7,8 @@ Learn how to install Rewyt and start rewatching YouTube live streams.
 Rewyt comes as a **desktop app** (pre-built binary) or a **web app**
 (container).
 
-- **Desktop app**: choose this if you already have `yt-dlp` installed
-- **Web app**: choose this if you don't, or prefer a self-contained setup
+- [Desktop app](guides/install/desktop.md): choose this if you already have `yt-dlp` installed
+- [Web app](guides/install/web.md): choose this if you don't, or prefer a self-contained setup
 
 ### Desktop app
 
@@ -16,13 +16,38 @@ Download the binary for your platform from the [latest
 release](https://github.com/xymaxim/rewyt/releases/latest) and unzip it to your
 working directory.
 
-> For prerequisites and platform details, see [Desktop
-> app](guides/install/desktop.md).
+<div class="grid cards three-cols" markdown>
+
+-   :material-linux:{ .lg } **Linux**
+
+    [x64][Rewyt-linux-x64]
+
+-   :material-apple:{ .lg } **macOS**
+
+    [universal][Rewyt-macos-universal]
+    
+-   :material-microsoft-windows:{ .lg } **Windows**
+
+    [x64][Rewyt-windows-x64]
+
+</div>
+
+[Rewyt-linux-x64]: https://github.com/xymaxim/rewyt/releases/download/{{ git.short_tag }}/Rewyt-{{ git.short_tag[1:] }}-linux_x64.zip
+[Rewyt-macOS-universal]: https://github.com/xymaxim/rewyt/releases/download/{{ git.short_tag }}/Rewyt-{{ git.short_tag[1:] }}-macos_universal.zip
+[Rewyt-windows-x64]: https://github.com/xymaxim/rewyt/releases/download/{{ git.short_tag }}/Rewyt-{{ git.short_tag[1:] }}-windows_x64.zip
+
+<div class="grid" markdown>
+
+:lucide-forward: See [Desktop app](guides/install/desktop.md) for
+prerequisites and platform details.
+{ .card }
+
+</div>
 
 ### Web app
 
 Running Rewyt in containers gives you an isolated environment with `yt-dlp`,
-`ffmpeg`, and `ypb` pre-installed, along with the PO token provider.
+`ffprobe`, and `ypb` pre-installed, along with the PO token provider.
 
 **Prerequisites:** [Podman](https://podman.io/getting-started/installation) or
 [Docker](https://docs.docker.com/get-docker/), with Compose.
@@ -45,33 +70,31 @@ Open the app in your browser:
 
     http://localhost:8080
 
-> See [Web app](guides/install/web.md) for configuration options and more
-> details.
+<div class="grid" markdown>
+
+:lucide-forward: See [Web app](guides/install/web.md) for configuration options
+and more details.
+{ .card }
+
+</div>
+
+## Initial setup
+
+YouTube might responds with a "Sign in to confirm you're not a bot" error while
+loading a stream, so you'll need to provide cookies from a signed-in browser
+session. How to set them depends on how you installed Rewyt:
+
+- **Desktop app**: uses your yt-dlp configuration file, see [Sign in with
+  cookies](http://localhost:8000/rewyt/docs/guides/install/desktop/#sign-in-with-cookies)
+  for details
+- **Web app**: uses a configuration file mounted into the container, see
+  [Set up cookies](guides/install/web.md#set-up-cookies-recommended) for details
 
 ## Verify installation
 
 Open the app to see a welcome screen, where you can verify that your
 installation is complete. If something's missing, you'll see a warning
 describing what's needed. Otherwise, you're ready to go.
-
-## Initial setup
-
-Rewyt relies on yt-dlp's network-related options and cookies. Where you set them
-depends on how you installed Rewyt:
-
-- **Desktop app**: uses your local [yt-dlp configuration
-  file](https://github.com/yt-dlp/yt-dlp#configuration) directly
-- **Web app**: uses a yt-dlp configuration file mounted into the container, set
-  by editing the `.env` file, see
-  [Configuration](guides/install/web.md#configuration) for details
-
-If YouTube responds with a "Sign in to confirm you're not a bot" error while
-loading a stream, you'll need to provide cookies from a signed-in browser
-session. See yt-dlp's wiki on how to
-[export](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies)
-and
-[pass](https://github.com/yt-dlp/yt-dlp/wiki/FAQ#how-do-i-pass-cookies-to-yt-dlp)
-cookies to yt-dlp.
 
 ## Rewatch a specific moment
 
@@ -90,9 +113,11 @@ main controls, timeline, and sliders.
 
 <figure>
 <img src="./quickstart-files/quickstart-main.png"/>
-<figcaption aria-hidden="true">Main interface showing the main controls with
+<figcaption aria-hidden="true">
+Main interface showing the main controls with
 timeline zoom levels, timeline, rewind slider with the rewind button, days
-slider, and day slider</figcaption>
+slider, and day slider. (A sample stream is used for demonstration.)
+</figcaption>
 </figure>
 
 ### Set a timezone

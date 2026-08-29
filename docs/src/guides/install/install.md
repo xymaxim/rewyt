@@ -1,4 +1,4 @@
-# Installation
+# Install
 
 Available on Linux, macOS, and Windows.
 

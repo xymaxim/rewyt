@@ -46,7 +46,7 @@ The machine starts automatically on subsequent reboots.
    containing configuration variables, including ypb's — see
    [Configuration](#configuration) below for what's available.
 
-2. Copy `.env.template` to `.env` and edit that copy:
+2. Copy `.env.template` to `.env`:
 
    ```shell
    cp .env.template .env
@@ -60,7 +60,7 @@ YouTube may respond with a "Sign in to confirm you're not a bot" error
 without cookies, so setting them up is recommended. To avoid this:
 
 1. Export cookies from your browser into a `cookies.txt` file.
-2. In `.env`, set `YPB_YTDLP_CONFIG_DIR` to the directory where you want
+2. In `.env` (see [Set up](#set-up) above), set `YPB_YTDLP_CONFIG_DIR` to the directory where you want
    to store yt-dlp related config files.
 3. Place `cookies.txt` inside that directory.
 4. Reference it from your yt-dlp config file:
