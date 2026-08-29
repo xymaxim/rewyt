@@ -258,7 +258,7 @@
   <span class="md-ellipsis">
     
   
-  Get started with Rewyt
+  Quickstart
 
     
   </span>
@@ -332,7 +332,7 @@
   <span class="md-ellipsis">
     
   
-  Installation
+  Install
 
     
   </span>
@@ -446,6 +446,67 @@
       </span>
     </span>
   </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Setup
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#update-yt-dlp-to-nightly" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Update yt-dlp to nightly
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sign-in-with-cookies" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Sign in with cookies
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-a-javascript-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Install a JavaScript runtime
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avoid-http-403-errors-with-a-po-token-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Avoid HTTP 403 errors with a PO token provider
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -871,6 +932,67 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Setup
+      </span>
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#update-yt-dlp-to-nightly" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Update yt-dlp to nightly
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sign-in-with-cookies" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Sign in with cookies
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#install-a-javascript-runtime" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Install a JavaScript runtime
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#avoid-http-403-errors-with-a-po-token-provider" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Avoid HTTP 403 errors with a PO token provider
+      </span>
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -890,9 +1012,13 @@
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <p>Rewyt relies on yt-dlp:</p>
 <ul>
-<li><a href="https://github.com/yt-dlp/yt-dlp/wiki/Installation">yt-dlp</a>: For video info
-  extraction and downloading. Nightly builds are recommended. If you use
-  binaries, update with: <code>yt-dlp --update-to nightly</code>.</li>
+<li>
+<p><a href="https://github.com/yt-dlp/yt-dlp/wiki/Installation">yt-dlp</a>: For video
+  information fetching. <em>Nightly builds are recommended.</em></p>
+</li>
+<li>
+<p><a href="https://ffmpeg.org/">FFprobe</a>: For inspecting media segments.</p>
+</li>
 </ul>
 <h3 id="additional-dependencies">Additional dependencies<a class="headerlink" href="#additional-dependencies" title="Permanent link">&para;</a></h3>
 <p>The following dependencies are optional, but strongly recommended in practice:</p>
@@ -910,23 +1036,70 @@
 <h2 id="install-from-binaries">Install from binaries<a class="headerlink" href="#install-from-binaries" title="Permanent link">&para;</a></h2>
 <p>Pre-built binaries for different platforms are available on the GitHub <a href="https://github.com/xymaxim/rewyt/releases/latest">latest
 release</a> page.</p>
-<table>
-<thead>
-<tr>
-<th>Linux</th>
-<th>Windows</th>
-<th>macOS</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.8.28/Rewyt-2026.8.28-linux_x64.zip">x64</a></td>
-<td><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.8.28/Rewyt-2026.8.28-windows_x64.zip">x64</a></td>
-<td><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.8.28/Rewyt-2026.8.28-macos_universal.zip">universal</a></td>
-</tr>
-</tbody>
-</table>
+<div class="grid cards three-cols">
+<ul>
+<li>
+<p><span class="twemoji lg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.62 8.35c-.42.28-1.75 1.04-1.95 1.19-.39.31-.75.29-1.14-.01-.2-.16-1.53-.92-1.95-1.19-.48-.31-.45-.7.08-.92 1.64-.69 3.28-.64 4.91.03.49.21.51.6.05.9m7.22 7.28c-.93-2.09-2.2-3.99-3.84-5.66a4.3 4.3 0 0 1-1.06-1.88c-.1-.33-.17-.67-.24-1.01-.2-.88-.29-1.78-.7-2.61-.73-1.58-2-2.4-3.84-2.47-1.81.05-3.16.81-3.95 2.4-.21.43-.36.88-.46 1.34-.17.76-.32 1.55-.5 2.32-.15.65-.45 1.21-.96 1.71-1.61 1.57-2.9 3.37-3.88 5.35-.14.29-.28.58-.37.88-.19.66.29 1.12.99.96.44-.09.88-.18 1.3-.31.41-.15.57-.05.67.35.65 2.15 2.07 3.66 4.24 4.5 4.12 1.56 8.93-.66 9.97-4.58.07-.27.17-.37.47-.27.46.14.93.24 1.4.35.49.09.85-.16.92-.64.03-.26-.06-.49-.16-.73"/></svg></span> <strong>Linux</strong></p>
+<p><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.8.28/Rewyt-2026.8.28-linux_x64.zip">x64</a></p>
+</li>
+<li>
+<p><span class="twemoji lg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11"/></svg></span> <strong>macOS</strong></p>
+<p><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.8.28/Rewyt-2026.8.28-macos_universal.zip">universal</a></p>
+</li>
+<li>
+<p><span class="twemoji lg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 12V6.75l6-1.32v6.48zm17-9v8.75l-10 .15V5.21zM3 13l6 .09v6.81l-6-1.15zm17 .25V22l-10-1.91V13.1z"/></svg></span> <strong>Windows</strong></p>
+<p><a href="https://github.com/xymaxim/rewyt/releases/download/v2026.8.28/Rewyt-2026.8.28-windows_x64.zip">x64</a></p>
+</li>
+</ul>
+</div>
 <p>Download the binary for your platform and unzip it to your working directory.</p>
+<h2 id="setup">Setup<a class="headerlink" href="#setup" title="Permanent link">&para;</a></h2>
+<p>While optional, the setup steps below are strongly recommended.</p>
+<h3 id="update-yt-dlp-to-nightly">Update yt-dlp to nightly<a class="headerlink" href="#update-yt-dlp-to-nightly" title="Permanent link">&para;</a></h3>
+<p>YouTube changes frequently, and the stable yt-dlp release can be outdated.
+Switch to the nightly build, which is updated daily:</p>
+<div class="language-shell highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>yt-dlp<span class="w"> </span>--update-to<span class="w"> </span>nightly
+</span></code></pre></div>
+<p>Check the result with <code>yt-dlp --version</code>.</p>
+<h3 id="sign-in-with-cookies">Sign in with cookies<a class="headerlink" href="#sign-in-with-cookies" title="Permanent link">&para;</a></h3>
+<p>Some streams respond with a &ldquo;Sign in to confirm you&rsquo;re not a bot&rdquo; error unless
+you provide cookies. Export your YouTube cookies from a logged-in browser (see
+<a href="https://github.com/yt-dlp/yt-dlp/wiki/Extractors#exporting-youtube-cookies">yt-dlp&rsquo;s instructions</a>),
+then add a line to your <a href="https://github.com/yt-dlp/yt-dlp#configuration">yt-dlp configuration
+file</a>:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>--cookies cookies.txt
+</span></code></pre></div>
+<h3 id="install-a-javascript-runtime">Install a JavaScript runtime<a class="headerlink" href="#install-a-javascript-runtime" title="Permanent link">&para;</a></h3>
+<p>If yt-dlp cannot find a JavaScript runtime, you will see this warning:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>WARNING: [youtube] No supported JavaScript runtime could be found. Only deno is
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>enabled by default; to use another runtime add --js-runtimes RUNTIME[:PATH] to
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>your command/config. YouTube extraction without a JS runtime has been
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>deprecated, and some formats may be missing. See
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>https://github.com/yt-dlp/yt-dlp/wiki/EJS for details on installing one
+</span></code></pre></div>
+<p>Install <a href="https://deno.com/">Deno</a> (version 2.0 or later). If it is not detected
+automatically, point <code>yt-dlp</code> at it:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>--js-runtimes deno:/path/to/deno
+</span></code></pre></div>
+<p>See the <a href="https://github.com/yt-dlp/yt-dlp/wiki/EJS">EJS wiki</a> for other
+supported runtimes.</p>
+<h3 id="avoid-http-403-errors-with-a-po-token-provider">Avoid HTTP 403 errors with a PO token provider<a class="headerlink" href="#avoid-http-403-errors-with-a-po-token-provider" title="Permanent link">&para;</a></h3>
+<p>During playback you may get transient HTTP 403 errors, caused by YouTube&rsquo;s bot
+verification. yt-dlp works around them with a Proof-of-Origin (PO) token
+provider plugin:</p>
+<ol>
+<li>Install the
+   <a href="https://github.com/Brainicism/bgutil-ytdlp-pot-provider">bgutil-ytdlp-pot-provider</a>
+   plugin.</li>
+<li>Run the provider&rsquo;s HTTP server, which listens on <code>http://127.0.0.1:4416</code> by
+   default.</li>
+</ol>
+<p>With the default address, no further configuration is needed. If you run the
+server elsewhere, point yt-dlp at it:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>--extractor-args &quot;youtubepot-bgutilhttp:base_url=http://127.0.0.1:8080&quot;
+</span></code></pre></div>
+<p>See yt-dlp&rsquo;s <a href="https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide">PO Token Guide</a>
+for details.</p>
 
 
 

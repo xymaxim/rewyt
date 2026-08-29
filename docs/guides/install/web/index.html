@@ -258,7 +258,7 @@
   <span class="md-ellipsis">
     
   
-  Get started with Rewyt
+  Quickstart
 
     
   </span>
@@ -332,7 +332,7 @@
   <span class="md-ellipsis">
     
   
-  Installation
+  Install
 
     
   </span>
@@ -1028,7 +1028,7 @@ it once:</p>
    containing configuration variables, including ypb&rsquo;s — see
    <a href="#configuration">Configuration</a> below for what&rsquo;s available.</p>
 <ol>
-<li>Copy <code>.env.template</code> to <code>.env</code> and edit that copy:</li>
+<li>Copy <code>.env.template</code> to <code>.env</code>:</li>
 </ol>
 <div class="language-shell highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>cp<span class="w"> </span>.env.template<span class="w"> </span>.env
 </span></code></pre></div>
@@ -1038,7 +1038,7 @@ it once:</p>
 without cookies, so setting them up is recommended. To avoid this:</p>
 <ol>
 <li>Export cookies from your browser into a <code>cookies.txt</code> file.</li>
-<li>In <code>.env</code>, set <code>YPB_YTDLP_CONFIG_DIR</code> to the directory where you want
+<li>In <code>.env</code> (see <a href="#set-up">Set up</a> above), set <code>YPB_YTDLP_CONFIG_DIR</code> to the directory where you want
    to store yt-dlp related config files.</li>
 <li>Place <code>cookies.txt</code> inside that directory.</li>
 <li>Reference it from your yt-dlp config file:<div class="language-text highlight"><pre><span></span><code>--cookies /path/to/cookies.txt
