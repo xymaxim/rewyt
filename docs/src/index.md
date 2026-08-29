@@ -9,7 +9,24 @@ Available on Linux, macOS, and Windows. Built on top of
 
 ![Main screenshot](./index-files/screenshot.png)
 
-<h2>Get started</h2>
+## Start here
 
-- [**Quickstart**](quickstart.md) — Get up and running with Rewyt
-- [**Installation options**](guides/install/install.md) — Choose your installation method
+<div class="grid cards" markdown>
+
+- **Getting started**
+
+    ---
+
+    A tour of the main usage in five minutes.
+
+    :lucide-arrow-right: [Quickstart](quickstart.md)
+
+- **Installation guide**
+
+    ---
+
+    How to install and run Rewyt.
+
+    :lucide-arrow-right: [Install](guides/install/install.md)
+
+</div>
