@@ -3,6 +3,9 @@
 site_name = "Rewyt documentation"
 site_url = "https://xymaxim.github.io/rewyt/docs/"
 
+repo_url = "https://github.com/xymaxim/rewyt"
+repo_name = "xymaxim/rewyt"
+
 docs_dir = "docs/src"
 site_dir = "docs/site"
 
@@ -34,6 +37,12 @@ nav = [
 [project.theme]
 font.text = "Atkinson Hyperlegible Next"
 font.code = "Atkinson Hyperlegible Mono"
+
+features = [
+  "navigation.path",
+  "navigation.top",
+]
+
 
 [project.markdown_extensions.abbr]
 [project.markdown_extensions.admonition]
