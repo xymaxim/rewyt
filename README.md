@@ -12,21 +12,22 @@ Rewyt is a desktop app for rewatching past moments of live streams beyond
 YouTube's limits.
 
 Built with [Go](https://go.dev/), [Svelte](https://github.com/sveltejs/svelte/),
-[Shaka Player](https://github.com/shaka-project/shaka-player/), and packaged
-with [Wails](https://github.com/wailsapp/wails/). Available on Linux, macOS, and
+[dash.js](http://dashif.org/dash.js/), and packaged with
+[Wails](https://github.com/wailsapp/wails/). Available on Linux, macOS, and
 Windows.
 
 ![Main screenshot](images/screenshot.png)
 
 ## Overview
 
-On startup, the Go backend starts [ypb](https://github.com/xymaxim/ypb), which
-fetches video info via [yt-dlp](github.com/yt-dlp/yt-dlp). When you rewind to a
-moment, the Svelte frontend requests an MPEG-DASH manifest from ypb, which
-generates one with proxied URLs. During playback, [Shaka
-Player](https://github.com/shaka-project/shaka-player) streams video through
-ypb, which proxies media segments from YouTube and handles connection errors. See
-[Overview](https://xymaxim.github.io/rewyt/docs/overview/) for more details.
+Rewyt runs on top of [ypb](https://github.com/xymaxim/ypb), a playback proxy
+built around MPEG-DASH. It wraps
+[yt-dlp](https://github.com/xymaxim/rewyt/blob/main/github.com/yt-dlp/yt-dlp),
+which fetches media segment base URLs for each available format. When you rewind
+to a moment, the frontend asks for an MPEG-DASH manifest started from that
+moment, then dash.js player streams the video from YouTube through proxied
+URLs. See [Overview](https://xymaxim.github.io/rewyt/docs/overview/) for more
+details.
 
 ## Installation
 

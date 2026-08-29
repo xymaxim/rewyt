@@ -1,8 +1,9 @@
 # Overview
 
-Rewyt is built with Go, Svelte, [Shaka
-Player](https://github.com/shaka-project/shaka-player), and packaged with
-[Wails](https://wails.io).
+Rewyt is built with Go, Svelte, [dash.js](https://dashif.org/dash.js/), and
+packaged with [Wails](https://wails.io). It runs on top of
+[ypb](https://github.com/xymaxim/ypb), a playback proxy built around MPEG-DASH
+to provide access to past moments in YouTube live streams.
 
 ```mermaid
 sequenceDiagram
@@ -31,9 +32,8 @@ sequenceDiagram
     end
 ```
 
-On startup, the Go backend starts [ypb](https://github.com/xymaxim/ypb), which
-fetches video info via [yt-dlp](https://github.com/yt-dlp/yt-dlp). When you rewind to a
-moment, the Svelte frontend requests an MPEG-DASH manifest from ypb, which
-generates one with proxied URLs. During playback, [Shaka
-Player](https://github.com/shaka-project/shaka-player) streams video through
-ypb, which proxies media segments from YouTube and handles connection errors.
+On startup, the Go backend starts ypb, which fetches video information via
+yt-dlp, including media segment base URLs for each available format. When you
+rewind to a moment, the frontend asks for an MPEG-DASH manifest started from
+that moment. During playback, the dash.js player streams video from YouTube
+through ypb, using its proxied URLs.
