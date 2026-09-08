@@ -10,6 +10,7 @@
   import { Camera } from "lucide-svelte";
   import { createExplorer, setExplorerContext } from "./lib/explorer.svelte";
   import { createPlayer } from "./lib/player.svelte";
+  import { clampViewRange } from "./lib/utils/timelineUtils";
   import { setToastContext, type ToastIcon } from "./lib/toast.svelte";
   import { formatOffset } from "./lib/utils/dateTimeUtils";
   import TopBar from "./lib/components/TopBar.svelte";
@@ -72,6 +73,22 @@
   });
 
   // Events
+  async function onRewindToLive() {
+    const ok = await player.rewindToLive();
+    if (!ok) return;
+    const t = player.mpdStartTime?.getTime() ?? null;
+    if (t === null) return;
+    explorer.setSelectedTime(t);
+    explorer.setViewRange(
+      clampViewRange(
+        t,
+        explorer.zoomLevel,
+        explorer.days,
+        explorer.centeredOnMidnight,
+      ),
+    );
+  }
+
   async function onStreamStart(videoId: string) {
     streamStatus = StreamStatus.STARTING;
     lastError = null;
@@ -333,7 +350,7 @@
           onTogglePlayPause={() => player.togglePlayPause()}
           onScreenshot={() =>
             handleScreenshot(player.playheadTime?.getTime() ?? Date.now())}
-          onRewindToLive={() => player.rewindToLive()}
+          onRewindToLive={onRewindToLive}
           isAtLiveEdge={player.isAtLiveEdge}
         />
       </div>
@@ -376,7 +393,7 @@
           onPlayInterval={(a, b) => player.playInterval(a, b)}
           onReplay={() => player.replay()}
           onRewind={(isoTime, pause) => player.rewind(isoTime, pause)}
-          onRewindToLive={() => player.rewindToLive()}
+          onRewindToLive={onRewindToLive}
           onSeekTo={(time, pause) => player.seekTo(time, pause)}
           onStep={(s) => player.step(s)}
           onStopInterval={() => player.stopInterval(explorer.marks.A)}
