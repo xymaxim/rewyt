@@ -62,8 +62,8 @@ You can support this project by [sponsoring](SPONSORING.md) it.
 
 ## Credits
 
-The font used in the application is [Geist](https://vercel.com/font). The
-icons are from [Lucide Icons](https://lucide.dev/).
+The font used in the application is [Geist](https://vercel.com/font). The icons,
+including the one in the logo, are from [Lucide Icons](https://lucide.dev/).
 
 ## License
 
