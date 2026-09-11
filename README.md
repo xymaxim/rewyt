@@ -1,4 +1,4 @@
-<img src="images/icon.svg" alt="Rewyt icon" width="100px" align="center" />
+<img src="images/logo.svg" alt="Rewyt logo" width="256px" align="center" />
 
 # Rewyt
 
