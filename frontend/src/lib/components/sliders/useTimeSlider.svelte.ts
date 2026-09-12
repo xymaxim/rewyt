@@ -1,6 +1,6 @@
 import { onMount } from "svelte";
 import { getExplorerContext } from "$lib/explorer.svelte";
-import { clampViewRange } from "$lib/utils/timelineUtils";
+import { clampViewRange, snapTime } from "$lib/utils/timelineUtils";
 
 export interface TimeSliderOptions {
   getMin: () => number;
@@ -31,7 +31,10 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
   let barWidth = $state(0);
   let isSliding = $state(false);
 
+  let dragValue = $state<number | null>(null);
+
   const sliderValue = $derived.by<number>(() => {
+    if (dragValue !== null) return dragValue;
     const min = getMin();
     const max = getMax();
 
@@ -44,15 +47,12 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
     return Math.min(Math.max((vr.start + vr.end) / 2, min), max);
   });
 
-  let bindableValue = $state(0);
-  $effect(() => {
-    bindableValue = sliderValue;
-  });
-
   const thumbHidden = $derived(explorer.viewRange === null);
 
   function onValueChange(value: number) {
     if (!isSliding) return;
+
+    dragValue = value;
 
     const center = clampToSpan
       ? Math.min(
@@ -61,7 +61,11 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
         )
       : value;
 
-    explorer.setSelectedTime(value);
+    const vr = explorer.viewRange;
+    const spanMs = vr ? vr.end - vr.start : 0;
+    const snapped = spanMs > 0 ? Math.round(snapTime(value, spanMs)) : value;
+
+    explorer.setSelectedTime(snapped);
     options.onTimeChange?.();
     if (options.updateViewRange !== false) {
       explorer.setViewRange(
@@ -81,6 +85,7 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
   }
   function onPointerUp() {
     isSliding = false;
+    dragValue = null;
     explorer.setIsSliding(false);
   }
 
@@ -96,6 +101,7 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
   onMount(() => {
     const handler = () => {
       isSliding = false;
+      dragValue = null;
       explorer.setIsSliding(false);
     };
     window.addEventListener("pointerup", handler);
@@ -119,7 +125,7 @@ export function useTimeSlider(options: TimeSliderOptions): TimeSliderState {
       return sliderValue;
     },
     set sliderValue(v) {
-      bindableValue = v;
+      if (isSliding) dragValue = v;
     },
     get thumbHidden() {
       return thumbHidden;

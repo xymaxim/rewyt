@@ -81,7 +81,7 @@
 
   const snappedValue = $derived(snapTime(slider.sliderValue, spanMs));
   const label = $derived(
-    formatHoverTime(snappedValue, spanMs, explorer.timezoneOffset),
+    formatHoverTime(slider.sliderValue, spanMs, explorer.timezoneOffset),
   );
   const isLabelFlipped = $derived(thumbPercent > 85);
 
@@ -103,7 +103,7 @@
       return ts !== null && ts >= allowedStart && ts <= allowedEnd ? ts : null;
     }
     if (explorer.isSliding && explorer.selectedTime !== null) {
-      const ts = explorer.selectedTime;
+      const ts = slider.sliderValue;
       return ts >= allowedStart && ts <= allowedEnd ? ts : null;
     }
     return null;
