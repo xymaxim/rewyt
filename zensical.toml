@@ -27,6 +27,9 @@ nav = [
     "guides/download-excerpts-compose.md",
     "guides/share-timestamps.md",
   ]},
+  { "Reference" = [
+    "reference/snapping.md",
+  ]},
   { "About" = [
     "disclaimer.md",
     { "Support" = "support.md" },
