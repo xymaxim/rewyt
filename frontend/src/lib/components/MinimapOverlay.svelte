@@ -90,14 +90,13 @@
 
   const intervalRounding = $derived.by<string>(() => {
     if (intervalFrame === null) return "";
-    const size = "xl";
     switch (intervalFrame.kind) {
       case "closed":
-        return `rounded-${size}`;
+        return "rounded-xl";
       case "open-right":
-        return `rounded-l-${size}`;
+        return "rounded-l-xl";
       case "open-left":
-        return `rounded-r-${size}`;
+        return "rounded-r-xl";
     }
   });
 
