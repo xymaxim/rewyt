@@ -4,12 +4,20 @@
   import { Input } from "$lib/components/ui/input/index.js";
   import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
   import * as Select from "$lib/components/ui/select/index.js";
-  import { ChevronDown, Undo, Redo, EllipsisVertical } from "lucide-svelte";
+  import {
+    ChevronDown,
+    Undo,
+    Redo,
+    EllipsisVertical,
+    Pen,
+    ArrowDownToDot,
+  } from "lucide-svelte";
   import { getExplorerContext } from "../explorer.svelte";
   import { MS_PER_HOUR } from "$lib/utils/dateUtils";
   import { clampViewRange } from "../utils/timelineUtils";
   import { formatDateTime, formatISOString } from "../utils/dateTimeUtils";
   import * as Expandable from "$lib/components/expandable";
+  import EditSelectedTimeModal from "./EditSelectedTimeModal.svelte";
 
   interface Props {
     seekableRange: { start: number; end: number } | null;
@@ -24,6 +32,7 @@
   let stepMs = $state(MS_PER_HOUR);
   let stepInputValue = $state("1");
   let stepUnit = $state("h");
+  let editOpen = $state(false);
 
   const unitLabels: Record<string, string> = {
     s: "sec",
@@ -87,9 +96,14 @@
       formatISOString(explorer.selectedTime, explorer.timezoneOffset),
     );
   }
+
+  function usePlayhead() {
+    if (explorer.playheadTime === null) return;
+    explorer.setSelectedTime(explorer.playheadTime);
+  }
 </script>
 
-<div class="mr-5 flex items-baseline">
+<div class="mr-5 flex items-center gap-2">
   <div
     title="Rewind to selected"
     class="group flex cursor-pointer flex-row"
@@ -99,6 +113,28 @@
       {formatDateTime(explorer.selectedTime!, explorer.timezoneOffset, false)}
     </span>
   </div>
+
+  <Button
+    title="Edit selected time"
+    variant="ghost"
+    size="icon-sm"
+    class="rounded-full bg-neutral-300 hover:bg-neutral-200"
+    disabled={explorer.selectedTime === null}
+    onclick={() => (editOpen = true)}
+  >
+    <Pen />
+  </Button>
+
+  <Button
+    title="Use playhead"
+    variant="ghost"
+    size="icon-sm"
+    class="rounded-full bg-[var(--color-play-lighter)] hover:bg-[var(--color-play-light)]"
+    disabled={explorer.playheadTime === null}
+    onclick={usePlayhead}
+  >
+    <ArrowDownToDot class="text-black" />
+  </Button>
 </div>
 
 <div class="selection-toolbar__row overflow-hidden">
@@ -202,6 +238,8 @@
     </DropdownMenu.Content>
   </DropdownMenu.Root>
 </div>
+
+<EditSelectedTimeModal bind:open={editOpen} />
 
 <style>
   :global([data-tabs-content]) {
