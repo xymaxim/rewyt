@@ -1,6 +1,6 @@
 module rewyt
 
-go 1.25.5
+go 1.26
 
 require (
 	github.com/wailsapp/wails/v3 v3.0.0-alpha.98
