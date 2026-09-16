@@ -166,9 +166,7 @@
   function onPointerUp() {
     isSliding = false;
     slider.onPointerUp();
-    const snapped = snappedValue;
-    explorer.setSelectedTime(snapped);
-    onRewind(new Date(snapped).toISOString(), explorer.pauseAfterRewind);
+    explorer.setSelectedTime(snappedValue);
   }
 
   onMount(() => {
