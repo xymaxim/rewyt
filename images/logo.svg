@@ -3,7 +3,7 @@
   <circle cx="50" cy="50" r="50" fill="#d0e758"/>
 
   <!-- Undo Lucide icon, centered in circle 1 -->
-  <g transform="translate(50,50) scale(2.6) translate(-12,-12)">
+  <g transform="translate(50,50) scale(3) translate(-12,-12)">
     <path d="M3 7v6h6" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </g>
