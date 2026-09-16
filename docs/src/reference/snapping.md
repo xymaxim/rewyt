@@ -1,4 +1,4 @@
-# Selected time snapping
+# Time selection snapping
 
 Whenever a time is selected, the value snaps to a round value. This applies to
 clicking the timeline, hovering it, and dragging the rewind, day, or days
