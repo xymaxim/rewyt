@@ -66,9 +66,6 @@
   const playheadLabel = $derived(
     explorer ? formatLocalTime(explorer.playheadTime ?? Date.now()) : "",
   );
-  const selectedLabel = $derived(
-    explorer ? formatLocalTime(explorer.selectedTime ?? Date.now()) : "",
-  );
 
   const isRewound = $derived(
     lastRewindTarget !== null &&
@@ -87,20 +84,10 @@
 
 <div class="flex w-full flex-col items-center">
   <div
-    class="text-muted-foreground flex w-full flex-col justify-start gap-0 font-medium md:flex-row md:gap-8"
+    class="text-muted-foreground flex w-full flex-col justify-start font-medium"
   >
     <span
-      class="flex items-center gap-1 tabular-nums {selectedLabel !=
-      playheadLabel
-        ? 'opacity-50'
-        : ''} transition-opacity"
-      >{playheadLabel}</span
-    >
-    <span
-      class:opacity-0={selectedLabel == playheadLabel}
-      class="flex items-center gap-1 tabular-nums transition-opacity"
-      ><span class="inline-block size-2.5 rounded-full bg-[#d0e758]"
-      ></span>{selectedLabel}</span
+      class="flex items-center gap-1 tabular-nums">{playheadLabel}</span
     >
   </div>
 
