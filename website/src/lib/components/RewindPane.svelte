@@ -7,10 +7,35 @@
     type ExplorerCell,
   } from "@rewyt-frontend/lib/explorer.svelte";
   import Timeline from "@rewyt-frontend/lib/components/Timeline.svelte";
+  import {
+    getTickIntervals,
+    zoomLevelForSpan,
+    type TickIntervals,
+    type TickIntervalResolver,
+  } from "@rewyt-frontend/lib/utils/timelineUtils";
+  import type { ZoomLevelKey } from "@rewyt-frontend/lib/types";
+  import {
+    MS_PER_HOUR,
+    MS_PER_MINUTE,
+    MS_PER_DAY,
+  } from "@rewyt-frontend/lib/utils/dateUtils";
   import { formatLocalTime } from "$lib/time";
 
-  const DAY_MS = 24 * 60 * 60 * 1000;
   const DEPTH_DAYS = 7;
+
+  const compactBarWidth = 520;
+  const compactTickIntervals: Record<ZoomLevelKey, TickIntervals> = {
+    "10m": { minor: MS_PER_MINUTE, major: 2 * MS_PER_MINUTE },
+    "1h": { minor: 5 * MS_PER_MINUTE, major: 15 * MS_PER_MINUTE },
+    "2h": { minor: 15 * MS_PER_MINUTE, major: MS_PER_HOUR },
+    "12h": { minor: MS_PER_HOUR, major: 3 * MS_PER_HOUR },
+    "1d": { minor: 2 * MS_PER_HOUR, major: 4 * MS_PER_HOUR },
+  };
+
+  const resolveTickIntervals: TickIntervalResolver = (spanMs, barWidth) =>
+    barWidth < compactBarWidth
+      ? compactTickIntervals[zoomLevelForSpan(spanMs)]
+      : getTickIntervals(spanMs);
 
   let { selected = $bindable(0) }: { selected?: number } = $props();
 
@@ -23,7 +48,7 @@
   onMount(() => {
     const e = createExplorer({ depthHours: DEPTH_DAYS * 24 });
     const now = Date.now();
-    e.setStreamStartTime(now - DEPTH_DAYS * DAY_MS);
+    e.setStreamStartTime(now - DEPTH_DAYS * MS_PER_DAY);
     e.setSelectedTime(now);
     e.setPlayheadTime(now);
     cell.current = e;
@@ -87,6 +112,7 @@
         {isRewound}
         onRewind={handleRewind}
         onSeekTo={() => {}}
+        tickIntervals={resolveTickIntervals}
       />
     {/if}
   </div>

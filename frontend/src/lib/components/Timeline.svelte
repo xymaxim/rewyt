@@ -8,7 +8,9 @@
     buildTicks,
     findDay,
     getStripeBackground,
+    getTickIntervals,
     snapTime,
+    type TickIntervalResolver,
   } from "$lib/utils/timelineUtils";
   import PanGuideButton from "$lib/components/PanGuideButton.svelte";
   import IntervalSlider from "$lib/components/sliders/IntervalSlider.svelte";
@@ -33,6 +35,7 @@
     onRewind: (isoTime: string, pause?: boolean) => Promise<boolean>;
     onSeekTo: (time: number, pause?: boolean) => void;
     onTimeChange?: () => void;
+    tickIntervals?: TickIntervalResolver;
   }
 
   let {
@@ -42,6 +45,7 @@
     onRewind,
     onSeekTo,
     onTimeChange,
+    tickIntervals = getTickIntervals,
   }: Props = $props();
 
   const explorer = getExplorerContext();
@@ -62,18 +66,22 @@
     const day = findDay(center, explorer.days);
     const dayStart =
       day?.dayStart ?? Math.floor(center / MS_PER_HOUR) * MS_PER_HOUR;
-    return buildTicks(range, bar.width, dayStart, explorer.timezoneOffset).map(
-      (tick) => {
-        if (!tick.major || tick.label !== "00:00")
-          return { ...tick, dayLabel: null };
-        const ts = pixelToTime(tick.px, range, bar.width);
-        return {
-          ...tick,
-          dayLabel:
-            ts !== null ? formatDayLabel(ts, explorer.timezoneOffset) : null,
-        };
-      },
-    );
+    return buildTicks(
+      range,
+      bar.width,
+      dayStart,
+      explorer.timezoneOffset,
+      tickIntervals,
+    ).map((tick) => {
+      if (!tick.major || tick.label !== "00:00")
+        return { ...tick, dayLabel: null };
+      const ts = pixelToTime(tick.px, range, bar.width);
+      return {
+        ...tick,
+        dayLabel:
+          ts !== null ? formatDayLabel(ts, explorer.timezoneOffset) : null,
+      };
+    });
   });
 
   const { stripeWidthPx, stripeOffsetPx, stripeGradient } = $derived.by(() =>

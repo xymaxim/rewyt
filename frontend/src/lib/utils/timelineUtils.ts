@@ -1,5 +1,5 @@
 import { ZOOM_LEVELS } from "../types";
-import type { DayEntry, ViewRange, Timestamp } from "../types";
+import type { DayEntry, ViewRange, Timestamp, ZoomLevelKey } from "../types";
 import { MS_PER_SECOND, MS_PER_MINUTE, MS_PER_HOUR } from "./dateUtils";
 import { timeToPixel } from "./timePixelUtils";
 
@@ -66,10 +66,32 @@ export function clampViewRange(
 }
 
 // Ticks
-export function getTickIntervals(spanMs: number): {
+export interface TickIntervals {
   minor: number;
   major: number;
-} {
+}
+
+export type TickIntervalResolver = (
+  spanMs: number,
+  barWidth: number,
+) => TickIntervals;
+
+export function zoomLevelForSpan(spanMs: number): ZoomLevelKey {
+  switch (true) {
+    case spanMs <= 30 * MS_PER_MINUTE:
+      return "10m";
+    case spanMs <= ZOOM_LEVELS["1h"]:
+      return "1h";
+    case spanMs <= ZOOM_LEVELS["2h"]:
+      return "2h";
+    case spanMs <= ZOOM_LEVELS["12h"]:
+      return "12h";
+    default:
+      return "1d";
+  }
+}
+
+export function getTickIntervals(spanMs: number): TickIntervals {
   switch (true) {
     case spanMs <= 30 * MS_PER_MINUTE:
       return { minor: 0.5 * MS_PER_MINUTE, major: MS_PER_MINUTE };
@@ -98,9 +120,10 @@ export function buildTicks(
   barWidth: number,
   dayStart: Timestamp,
   offsetMinutes: number,
+  resolveIntervals: TickIntervalResolver = getTickIntervals,
 ): Tick[] {
   const spanMs = range.end - range.start;
-  const { minor, major } = getTickIntervals(spanMs);
+  const { minor, major } = resolveIntervals(spanMs, barWidth);
   const alignAnchor = Math.floor(dayStart / MS_PER_HOUR) * MS_PER_HOUR;
   const result: Tick[] = [];
   let t = Math.ceil(range.start / minor) * minor;
