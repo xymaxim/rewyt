@@ -46,7 +46,7 @@
     {#each subjects as subject}
       <a
         href="#{subjectSlug(subject)}"
-        class="text-[var(--color-rewind-darkest)]">{subject}</a
+        class="text-[var(--color-selected-darkest)]">{subject}</a
       >
     {/each}
   </nav>
