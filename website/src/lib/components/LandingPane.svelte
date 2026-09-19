@@ -2,27 +2,27 @@
   import { Slider } from "bits-ui";
   import cn from "clsx";
 
-  import Pill from "rewyt/src/lib/components/panneau/primitives/Pill.svelte";
-  import Bead from "rewyt/src/lib/components/panneau/primitives/Bead.svelte";
-  import Empty from "rewyt/src/lib/components/panneau/primitives/Empty.svelte";
-  import Rectangle from "rewyt/src/lib/components/panneau/primitives/Rectangle.svelte";
-  import GradientRectangle from "rewyt/src/lib/components/panneau/primitives/GradientRectangle.svelte";
-  import AnimatedPanneau from "rewyt/src/lib/components/panneau/AnimatedPanneau.svelte";
+  import Pill from "@rewyt-frontend/lib/components/panneau/primitives/Pill.svelte";
+  import Bead from "@rewyt-frontend/lib/components/panneau/primitives/Bead.svelte";
+  import Empty from "@rewyt-frontend/lib/components/panneau/primitives/Empty.svelte";
+  import Rectangle from "@rewyt-frontend/lib/components/panneau/primitives/Rectangle.svelte";
+  import GradientRectangle from "@rewyt-frontend/lib/components/panneau/primitives/GradientRectangle.svelte";
+  import AnimatedPanneau from "@rewyt-frontend/lib/components/panneau/AnimatedPanneau.svelte";
   import { FastForward, Play, Square, Rewind } from "lucide-svelte";
 
   import type {
     PrimitiveDescriptor,
     OklchRange,
-  } from "rewyt/src/lib/components/panneau/types";
+  } from "@rewyt-frontend/lib/components/panneau/types";
   import {
     resolveRectangle,
     resolveBead,
     resolveEmpty,
-  } from "rewyt/src/lib/components/panneau/resolvers";
+  } from "@rewyt-frontend/lib/components/panneau/resolvers";
   import {
     ellipseSkippedPositions,
     tanPositions,
-  } from "rewyt/src/lib/components/panneau/positions";
+  } from "@rewyt-frontend/lib/components/panneau/positions";
 
   interface Props {
     playing?: boolean;
