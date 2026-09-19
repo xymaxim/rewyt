@@ -11,9 +11,9 @@
   } from "lucide-svelte";
   import LandingPane from "/src/lib/components/LandingPane.svelte";
   import RewindPane from "/src/lib/components/RewindPane.svelte";
+  import IntervalPane from "/src/lib/components/IntervalPane.svelte";
   import screenshot from "$lib/assets/screenshot.png";
-  import { Popover, Slider } from "bits-ui";
-  import { onMount } from "svelte";
+  import { Popover } from "bits-ui";
   import { formatLocalIso } from "$lib/time";
 
   let playing = $state(false);
@@ -22,31 +22,9 @@
   let inputOpen = $state(true);
   let etymologySourceOpen = $state(false);
 
-  let clipRange = $state([0.5, 1]);
-  let intervalMin = $state(0);
-  let intervalMax = $state(1);
   let selected = $state(0);
 
-  let aTime = $derived(
-    new Date(intervalMin + clipRange[0] * (intervalMax - intervalMin))
-      .toISOString()
-      .slice(0, 19) + "+00",
-  );
-  let bTime = $derived(
-    new Date(intervalMin + clipRange[1] * (intervalMax - intervalMin))
-      .toISOString()
-      .slice(0, 19) + "+00",
-  );
-
-  const DAY_MS = 24 * 60 * 60 * 1000;
-
   let selectedTimeIso = $derived(formatLocalIso(selected));
-
-  onMount(() => {
-    const now = Date.now();
-    intervalMax = now;
-    intervalMin = now - 7 * DAY_MS;
-  });
 </script>
 
 <div class="relative mt-4 flex flex-col items-center gap-4">
@@ -234,58 +212,6 @@
         ><ArrowUpRight size={14} />ypb</a
       >. Great for clipping and saving an interesting moment.
     </p>
-    <div class="mt-8 flex w-full flex-col items-center justify-center gap-4">
-      <div
-        class="relative top-[-14px] z-10 flex w-full items-center justify-center"
-      >
-        <Slider.Root
-          type="multiple"
-          bind:value={clipRange}
-          min={0}
-          max={1}
-          step={0.001}
-          thumbPositioning="exact"
-          autoSort={true}
-          class="relative h-7 w-full select-none"
-        >
-          <div
-            class="absolute inset-0 rounded-full bg-neutral-200"
-            style="background: repeating-linear-gradient(90deg, rgb(0 0 0 / 10%) 0%, rgb(0 0 0 / 2%) 92%, rgb(0 0 0 / 10%) 100%)"
-          ></div>
-          <Slider.Range
-            class="absolute inset-y-0 rounded-full bg-[oklch(0.85_0.07_307)]"
-          />
-          <Slider.Thumb
-            index={0}
-            class="absolute top-0 flex size-7 [translate:-100%_0]! items-center justify-center rounded-full bg-[oklch(0.66_0.17_304)] text-sm font-extrabold text-neutral-100 hover:cursor-grab focus:ring-0 focus:outline-none"
-            >A</Slider.Thumb
-          >
-          <Slider.Thumb
-            index={1}
-            class="absolute top-0 flex size-7 [translate:0%_0]! items-center justify-center rounded-full bg-[oklch(0.66_0.17_304)] text-sm font-extrabold text-neutral-100 hover:cursor-grab focus:ring-0 focus:outline-none"
-            >B</Slider.Thumb
-          >
-        </Slider.Root>
-      </div>
-      <div class="max-w-120">
-        <span
-          class="inline rounded-xl bg-neutral-200/50 box-decoration-clone px-2 py-1 font-mono text-sm font-medium"
-          >$ ypb download -i {aTime}/{bTime} abcdefgh123</span
-        >
-      </div>
-    </div>
-    <div class="mt-8 flex flex-col gap-1">
-      <p class="text-sm">
-        Or capture frames for a <a
-          href="https://xymaxim.github.io/ypb/tutorials/timelapse/"
-          class="font-medium text-[oklch(0.44_0.21_299)]">time-lapse video</a
-        >:
-      </p>
-      <div class="max-w-120">
-        <span class="rounded-xl px-2 py-1 font-mono text-xs/snug font-medium"
-          >$ ypb capture timelapse -i {aTime}/{bTime} --every 10m abcdefgh123</span
-        >
-      </div>
-    </div>
+    <IntervalPane />
   </div>
 </div>

@@ -46,7 +46,7 @@
   let lastRewindTarget = $state<number | null>(null);
 
   onMount(() => {
-    const e = createExplorer({ depthHours: DEPTH_DAYS * 24 });
+    const e = createExplorer({ depthHours: DEPTH_DAYS * 24, live: false });
     const now = Date.now();
     e.setStreamStartTime(now - DEPTH_DAYS * MS_PER_DAY);
     e.setSelectedTime(now);

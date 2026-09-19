@@ -17,14 +17,18 @@ export const DEPTH_HOURS = 167;
 export function createExplorer(
   options: {
     depthHours?: number;
+    live?: boolean;
   } = {},
 ): Explorer {
-  const { depthHours = DEPTH_HOURS } = options;
+  const { depthHours = DEPTH_HOURS, live = true } = options;
 
   let now = $state(Date.now());
-  const nowInterval = setInterval(() => {
-    now = Date.now();
-  }, 1000);
+  let nowInterval: ReturnType<typeof setInterval> | null = null;
+  if (live) {
+    nowInterval = setInterval(() => {
+      now = Date.now();
+    }, 1000);
+  }
 
   // State
   let isRewinding = $state(false);
@@ -241,7 +245,7 @@ export function createExplorer(
   }
 
   function destroy(): void {
-    clearInterval(nowInterval);
+    if (nowInterval !== null) clearInterval(nowInterval);
   }
 
   return {
