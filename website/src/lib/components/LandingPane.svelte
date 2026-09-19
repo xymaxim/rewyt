@@ -153,9 +153,12 @@
 <div class="flex w-full flex-col items-center gap-4 px-4">
   <div
     bind:this={containerEl}
-    class="relative w-full max-w-[720px] rounded-2xl {rewinding
-      ? 'bg-[var(--color-rewind-lighter)]/40'
-      : 'bg-[var(--color-rewind-lighter)]/80'} transition-colors"
+    class="pane-bg relative w-full max-w-[720px] rounded-2xl transition-colors"
+    style="--mix: {Math.min(
+      100,
+      ((playing && !rewinding ? playValue : rewindValue) / (10 * Math.PI)) *
+        100,
+    )}%"
   >
     <AnimatedPanneau
       class="relative {rewinding ? 'rewinding' : ''} {rewinding || playing
@@ -223,14 +226,16 @@
       ></div>
 
       <span
-        class="relative h-2 w-full grow cursor-pointer overflow-hidden rounded-full bg-neutral-200/50"
+        class="relative h-2 w-full grow cursor-pointer overflow-hidden rounded-full {rewinding
+          ? 'bg-gradient-to-r from-[oklch(0.9078_0.0763_80.82)] to-[oklch(0.9231_0.1009_119.69)]'
+          : 'bg-neutral-200/50'}"
       >
         <Slider.Range class="absolute inset-0 h-full w-full" />
       </span>
 
       <Slider.Thumb
         index={0}
-        class="items-centerrelative top-2 z-20 block h-10 w-10 translate-y-full cursor-grab touch-none rounded-full border-17 border-[var(--color-rewind-light)] bg-black/80 outline-none select-none active:cursor-grabbing"
+        class="relative top-2 z-20 block h-10 w-10 translate-y-full cursor-grab touch-none items-center rounded-full border-18 border-[var(--color-selected)] bg-black/80 outline-none select-none active:cursor-grabbing"
       ></Slider.Thumb>
     </Slider.Root>
   </div>
@@ -242,5 +247,12 @@
   }
   :global(.playing .slot.playing) {
     transition: none;
+  }
+  .pane-bg {
+    background-color: color-mix(
+      in oklch,
+      oklch(0.9078 0.0763 80.82),
+      oklch(0.9231 0.1009 119.69) var(--mix, 0%)
+    );
   }
 </style>

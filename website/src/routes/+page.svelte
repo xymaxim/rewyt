@@ -1,12 +1,63 @@
 <script lang="ts">
-  import { ArrowRight, Rewind, Play } from "lucide-svelte";
+  import {
+    ArrowRight,
+    ArrowUpRight,
+    BookOpen,
+    ChevronRight,
+    EllipsisVertical,
+    Pen,
+    Rewind,
+    TextCursor,
+  } from "lucide-svelte";
   import LandingPane from "/src/lib/components/LandingPane.svelte";
+  import RewindPane from "/src/lib/components/RewindPane.svelte";
+  import screenshot from "$lib/assets/screenshot.png";
+  import { Popover, Slider } from "bits-ui";
+  import { onMount } from "svelte";
+  import { formatLocalIso } from "$lib/time";
 
   let playing = $state(false);
   let rewinding = $state(false);
+  let copyOpen = $state(true);
+  let inputOpen = $state(true);
+  let etymologySourceOpen = $state(false);
+
+  let clipRange = $state([0.5, 1]);
+  let intervalMin = $state(0);
+  let intervalMax = $state(1);
+  let selected = $state(0);
+
+  let aTime = $derived(
+    new Date(intervalMin + clipRange[0] * (intervalMax - intervalMin))
+      .toISOString()
+      .slice(0, 19) + "+00",
+  );
+  let bTime = $derived(
+    new Date(intervalMin + clipRange[1] * (intervalMax - intervalMin))
+      .toISOString()
+      .slice(0, 19) + "+00",
+  );
+
+  const DAY_MS = 24 * 60 * 60 * 1000;
+
+  let selectedTimeIso = $derived(formatLocalIso(selected));
+
+  onMount(() => {
+    const now = Date.now();
+    intervalMax = now;
+    intervalMin = now - 7 * DAY_MS;
+  });
 </script>
 
-<div class="relative mt-8 flex justify-center">
+<div class="relative mt-4 flex flex-col items-center gap-4">
+  <a
+    href="https://video.liberta.vip/w/jSCtepm8BfAE6oZN7qJXB2?start=1m4s"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="flex cursor-pointer items-center gap-1 rounded-full border-1 border-[oklch(0.44_0.21_299)]/40 bg-[oklch(0.95_0.03_308)] px-2 py-0 text-sm font-medium text-[oklch(0.44_0.21_299)]! text-[var(--color-muted-foreground)] transition hover:bg-[oklch(0.85_0.07_307)]"
+  >
+    Watch: a showcase of real usage <ChevronRight size={14} strokeWidth={3} />
+  </a>
   <LandingPane bind:playing bind:rewinding />
   <div
     class="pointer-events-none absolute inset-x-0 top-[-40px] bottom-0 flex flex-col items-center justify-center gap-0 transition sm:gap-2"
@@ -33,9 +84,10 @@
     </a>
     <a
       href="https://xymaxim.github.io/rewyt/docs/quickstart.html"
-      class="cursor-pointer rounded-2xl px-4 py-3 text-sm font-semibold transition hover:scale-105 active:scale-95"
-      >Quickstart</a
+      class="flex cursor-pointer items-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition hover:scale-105 active:scale-95"
     >
+      Quickstart <BookOpen />
+    </a>
   </div>
   <div class="flex flex-col items-center gap-2">
     <p class="text-sm">Available for Linux, macOS, and Windows</p>
@@ -45,5 +97,195 @@
         class="text-foreground cursor-pointer font-medium">disclaimer</a
       > before using
     </p>
+  </div>
+
+  <img
+    src={screenshot}
+    alt="Rewyt screenshot"
+    class="mt-10 w-full max-w-[720px] rounded-2xl"
+  />
+  <div
+    class="mt-10 w-full max-w-2xl rounded-2xl bg-amber-100 px-6 py-4 text-left"
+  >
+    <p class="flex items-baseline">
+      <span class="text-xl font-extrabold">rewyt</span>
+      <span class="ml-2 font-normal text-gray-500">/rɪˈwɪt/</span>
+    </p>
+    <ol class="mt-3 space-y-2 text-gray-700">
+      <li>
+        <span class="shrink-0 text-gray-500 italic">1. (n.)</span>
+        from
+        <Popover.Root bind:open={etymologySourceOpen}>
+          <Popover.Trigger>
+            {#snippet child({ props })}
+              <span
+                {...props}
+                role="button"
+                tabindex="0"
+                class="cursor-pointer border-b border-dotted border-amber-700 font-medium text-amber-800"
+                >Old English</span
+              >
+            {/snippet}
+          </Popover.Trigger>
+          <Popover.Content
+            side="top"
+            align="center"
+            sideOffset={8}
+            class="z-10 w-80 rounded-2xl border border-gray-200 bg-white px-4 py-2 text-gray-600 shadow-lg md:w-100"
+          >
+            <p class="leading-tight">
+              Thorpe, Benjamin. <em>Analecta Anglo-Saxonica</em>. John and
+              Arthur Arch, 1834, p. 240.
+              <a
+                href="https://archive.org/details/analectaanglosa02thorgoog/page/240"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="ml-1 font-medium text-amber-700"
+              >
+                [archive.org]
+              </a>
+            </p>
+          </Popover.Content>
+        </Popover.Root>
+        <em>"rewyt,"</em>
+        <a
+          href="https://archive.org/details/analectaanglosax00tho/page/240/mode/2up?q=rewyt"
+          >meaning</a
+        > <em>navigation</em>, <em>voyage</em>.
+      </li>
+      <li>
+        <span class="shrink-0 text-gray-500 italic">2. (v.)</span>
+        to rewatch YouTube live streams, navigating through past moments
+      </li>
+    </ol>
+  </div>
+
+  <div
+    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-10 py-5 text-center"
+  >
+    <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
+      Rewyt past moments
+    </h3>
+    <p class="text-muted-foreground text-md mb-8 w-full font-medium md:w-2/3">
+      Rewind through a YouTube live stream and play it back. Explore a stream or
+      rewatch specific moments.
+    </p>
+
+    <RewindPane bind:selected />
+  </div>
+
+  <div
+    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-10 py-5 text-center"
+  >
+    <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
+      Share timestamps
+    </h3>
+    <p class="text-muted-foreground text-md w-full font-medium md:w-2/3">
+      Copy a timestamp for the moment you found, or paste one to jump right to
+      it. Perfect for sharing with others.
+    </p>
+    <div class="mt-10 flex w-full max-w-120 items-end justify-between">
+      <div class="flex -rotate-7 flex-col gap-2">
+        <div
+          class="rounded-xl border-1 border-neutral-300 bg-neutral-100/50 px-3 py-2 text-sm shadow-md"
+          class:invisible={!copyOpen}
+        >
+          Copy timestamp
+        </div>
+        <div
+          class="relative inline-flex h-11 w-9 items-center justify-center rounded-2xl bg-[oklch(0.9001_0.1264_120.7)] hover:cursor-pointer active:top-[1px]"
+          onclick={() => (copyOpen = !copyOpen)}
+        >
+          <EllipsisVertical size={22} />
+        </div>
+      </div>
+
+      <div class="flex rotate-3 flex-col items-center gap-2">
+        <div
+          class="rounded-2xl border-1 border-neutral-200 bg-neutral-100/50 p-4 shadow-md"
+          class:invisible={!inputOpen}
+        >
+          <div
+            class="inline-flex items-center rounded-xl border-1 border-neutral-300 bg-white px-8 py-2 text-sm"
+          >
+            {selectedTimeIso}<TextCursor size={18} class="hidden" />
+          </div>
+        </div>
+        <div
+          class="relative inline-flex size-12 items-center justify-center rounded-full bg-gradient-to-r from-[oklch(0.9001_0.1264_120.7)] to-[oklch(0.85_0.07_307)] hover:cursor-pointer active:top-[1px]"
+          onclick={() => (inputOpen = !inputOpen)}
+        >
+          <Pen size={22} />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="mb-15 flex max-w-[720px] flex-col items-center gap-2 rounded-2xl bg-gradient-to-b from-[oklch(0.9547_0.0571_118.13)]/0 to-70% px-10 py-5 text-center"
+  >
+    <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
+      Highlight and save clips
+    </h3>
+    <p class="text-muted-foreground text-md w-full font-medium md:w-2/3">
+      Mark an interval and save it to a file with <a
+        href="https://xymaxim.github.io/ypb/"
+        class="inline-flex items-baseline gap-0.5 font-bold text-[#6d8c17]"
+        ><ArrowUpRight size={14} />ypb</a
+      >. Great for clipping and saving an interesting moment.
+    </p>
+    <div class="mt-8 flex w-full flex-col items-center justify-center gap-4">
+      <div
+        class="relative top-[-14px] z-10 flex w-full items-center justify-center"
+      >
+        <Slider.Root
+          type="multiple"
+          bind:value={clipRange}
+          min={0}
+          max={1}
+          step={0.001}
+          thumbPositioning="exact"
+          autoSort={true}
+          class="relative h-7 w-full select-none"
+        >
+          <div
+            class="absolute inset-0 rounded-full bg-neutral-200"
+            style="background: repeating-linear-gradient(90deg, rgb(0 0 0 / 10%) 0%, rgb(0 0 0 / 2%) 92%, rgb(0 0 0 / 10%) 100%)"
+          ></div>
+          <Slider.Range
+            class="absolute inset-y-0 rounded-full bg-[oklch(0.85_0.07_307)]"
+          />
+          <Slider.Thumb
+            index={0}
+            class="absolute top-0 flex size-7 [translate:-100%_0]! items-center justify-center rounded-full bg-[oklch(0.66_0.17_304)] text-sm font-extrabold text-neutral-100 hover:cursor-grab focus:ring-0 focus:outline-none"
+            >A</Slider.Thumb
+          >
+          <Slider.Thumb
+            index={1}
+            class="absolute top-0 flex size-7 [translate:0%_0]! items-center justify-center rounded-full bg-[oklch(0.66_0.17_304)] text-sm font-extrabold text-neutral-100 hover:cursor-grab focus:ring-0 focus:outline-none"
+            >B</Slider.Thumb
+          >
+        </Slider.Root>
+      </div>
+      <div class="max-w-120">
+        <span
+          class="inline rounded-xl bg-neutral-200/50 box-decoration-clone px-2 py-1 font-mono text-sm font-medium"
+          >$ ypb download -i {aTime}/{bTime} abcdefgh123</span
+        >
+      </div>
+    </div>
+    <div class="mt-8 flex flex-col gap-1">
+      <p class="text-sm">
+        Or capture frames for a <a
+          href="https://xymaxim.github.io/ypb/tutorials/timelapse/"
+          class="font-medium text-[oklch(0.44_0.21_299)]">time-lapse video</a
+        >:
+      </p>
+      <div class="max-w-120">
+        <span class="rounded-xl px-2 py-1 font-mono text-xs/snug font-medium"
+          >$ ypb capture timelapse -i {aTime}/{bTime} --every 10m abcdefgh123</span
+        >
+      </div>
+    </div>
   </div>
 </div>
