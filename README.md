@@ -41,10 +41,10 @@ guide for setup instructions.
 
 ## Etymology
 
-1. *(n.)* from Anglo-Saxon "rewyt",
-   [meaning](https://archive.org/details/analectaanglosax00tho/page/240/mode/2up?q=rewyt)
-   *navigation*, *voyage*
-2. *(v.)* to rewind and rewatch YouTube live streams, navigating back through
+1. *(n.)* from [Old
+   English](https://archive.org/details/analectaanglosax00tho/page/240/mode/2up?q=rewyt)
+   "rewyt", meaning *navigation*, *voyage*
+2. *(v.)* to rewind and rewatch YouTube live streams, navigating through
    past moments
 
 ## Disclaimer
