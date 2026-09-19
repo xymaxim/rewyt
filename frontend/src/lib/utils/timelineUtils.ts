@@ -124,12 +124,12 @@ export function buildTicks(
 ): Tick[] {
   const spanMs = range.end - range.start;
   const { minor, major } = resolveIntervals(spanMs, barWidth);
-  const alignAnchor = Math.floor(dayStart / MS_PER_HOUR) * MS_PER_HOUR;
+  const anchor = dayStart;
   const result: Tick[] = [];
-  let t = Math.ceil(range.start / minor) * minor;
+  let t = anchor + Math.ceil((range.start - anchor) / minor) * minor;
   while (t <= range.end) {
     const px = timeToPixel(t, range, barWidth);
-    const isMajor = (t - alignAnchor) % major === 0;
+    const isMajor = (((t - anchor) % major) + major) % major === 0;
     if (px !== null) {
       result.push({
         px,
