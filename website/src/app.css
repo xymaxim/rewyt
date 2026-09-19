@@ -13,7 +13,8 @@
   --font-sans: "Atkinson Hyperlegible Next Variable", ui-sans-serif, system-ui;
   --font-mono: "Atkinson Hyperlegible Mono Variable", monospace;
 
-  --background: oklch(0.985 0 0);
+  /* --background: oklch(0.985 0 0); */
+  --background: color-mix(in oklab, var(--color-selected), white 80%);
   --foreground: oklch(0.145 0 0);
 
   --color-primary: #111;
