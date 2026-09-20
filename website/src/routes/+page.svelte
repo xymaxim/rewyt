@@ -54,7 +54,7 @@
 <div class="mt-12 flex flex-col items-center gap-4">
   <div class="flex items-center gap-4">
     <a
-      href="https://xymaxim.github.io/rewyt/docs/guides/install/desktop.html"
+      href="https://xymaxim.github.io/rewyt/docs/guides/install/install/"
       class="flex cursor-pointer items-center gap-1 rounded-2xl bg-neutral-200 px-4 py-2.5 text-sm font-semibold transition hover:scale-105 active:scale-95"
     >
       Get Rewyt <ArrowRight />
