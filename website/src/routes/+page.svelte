@@ -60,19 +60,19 @@
       Get Rewyt <ArrowRight />
     </a>
     <a
-      href="https://xymaxim.github.io/rewyt/docs/quickstart.html"
+      href="https://xymaxim.github.io/rewyt/docs/quickstart/"
       class="flex cursor-pointer items-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition hover:scale-105 active:scale-95"
     >
       Quickstart <BookOpen />
     </a>
   </div>
-  <div class="flex flex-col items-center gap-2">
+  <div class="flex flex-col items-center gap-1">
     <p class="text-sm">Available for Linux, macOS, and Windows</p>
-    <p class="text-muted-foreground text-xs">
+    <p class="text-muted-foreground text-sm">
       <a
-        href="https://xymaxim.github.io/rewyt/docs/disclaimer.html"
-        class="text-foreground cursor-pointer font-medium"
-        >Rewyt usage disclaimer</a
+        href="https://xymaxim.github.io/rewyt/docs/disclaimer/"
+        class="text-[var(--color-selected-darkest)] cursor-pointer font-medium underline hover:no-underline"
+        >Rewyt Usage Disclaimer</a
       >
     </p>
   </div>
@@ -96,7 +96,7 @@
                 {...props}
                 role="button"
                 tabindex="0"
-                class="cursor-pointer border-b border-dotted border-amber-700 font-medium text-amber-800"
+                class="cursor-pointer underline border-amber-700 font-medium text-amber-800 hover:no-underline"
                 >Old English</span
               >
             {/snippet}

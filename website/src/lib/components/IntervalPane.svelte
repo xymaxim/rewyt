@@ -65,7 +65,7 @@
   <p class="text-sm">
     Or capture frames for a <a
       href="https://xymaxim.github.io/ypb/tutorials/timelapse/"
-      class="font-medium text-[oklch(0.44_0.21_299)]">time-lapse video</a
+      class="font-medium text-[var(--color-interval-600)] underline hover:no-underline">time-lapse video</a
     >:
   </p>
   <div class="max-w-120">
