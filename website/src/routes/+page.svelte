@@ -11,7 +11,7 @@
   import LandingPane from "/src/lib/components/LandingPane.svelte";
   import RewindPane from "/src/lib/components/RewindPane.svelte";
   import IntervalPane from "/src/lib/components/IntervalPane.svelte";
-  import screenshot from "$lib/assets/screenshot.png";
+  import ScreenshotPane from "/src/lib/components/ScreenshotPane.svelte";
   import { Popover } from "bits-ui";
   import { formatLocalIso } from "$lib/time";
 
@@ -77,11 +77,7 @@
     </p>
   </div>
 
-  <img
-    src={screenshot}
-    alt="Rewyt screenshot"
-    class="mt-10 w-full max-w-[720px] rounded-2xl"
-  />
+  <ScreenshotPane />
   <div
     class="mt-10 w-full max-w-2xl rounded-2xl bg-amber-100 px-6 py-4 text-left"
   >

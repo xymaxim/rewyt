@@ -7,3 +7,6 @@ bun.lockb
 
 # Miscellaneous
 /static/
+
+# Generated annotation data (kept one object per line)
+src/lib/data/screenshot-annotations.json
