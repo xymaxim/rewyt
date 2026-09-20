@@ -102,8 +102,8 @@
       <rect
         width="1011"
         height="740"
-        fill="var(--color-selected-darkest, #d4d4d4)"
-        fill-opacity="0.5"
+        fill="var(--color-selected-darkest)"
+        fill-opacity="0.55"
       />
     </g>
   </svg>
