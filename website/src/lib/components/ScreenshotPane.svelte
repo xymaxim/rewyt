@@ -90,7 +90,6 @@
       class="motion-safe:transition-opacity motion-safe:duration-150"
       class:opacity-0={!showMask}
       class:opacity-100={showMask}
-      filter="url(#screenshot-desaturate)"
       mask="url(#screenshot-annotations-mask)"
     >
       <image
@@ -98,12 +97,13 @@
         width="1011"
         height="740"
         preserveAspectRatio="none"
+        filter="url(#screenshot-desaturate)"
       />
       <rect
         width="1011"
         height="740"
         fill="var(--color-selected-darkest, #d4d4d4)"
-        fill-opacity="0.6"
+        fill-opacity="0.5"
       />
     </g>
   </svg>
