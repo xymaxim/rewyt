@@ -127,7 +127,7 @@
         onblur={() => (showMask = false)}
       >
         <span
-          class="pointer-events-none absolute size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black ring-3 ring-white transition-shadow group-hover:ring-5 group-focus-visible:ring-5"
+          class="pointer-events-none absolute size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black ring-5 ring-[var(--color-selected-dark)] transition-shadow group-hover:size-1 group-hover:ring-9 group-hover:ring-[var(--color-selected)] group-focus-visible:size-1 group-focus-visible:ring-9 group-focus-visible:ring-[var(--color-selected)]"
           style="left: {32 * scale}px; top: {(g.centerY - g.bbox[1]) * scale}px"
         ></span>
       </button>
