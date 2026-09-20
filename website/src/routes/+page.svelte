@@ -6,7 +6,6 @@
     ChevronRight,
     EllipsisVertical,
     Pen,
-    Rewind,
     TextCursor,
   } from "lucide-svelte";
   import LandingPane from "/src/lib/components/LandingPane.svelte";
@@ -70,10 +69,11 @@
   <div class="flex flex-col items-center gap-2">
     <p class="text-sm">Available for Linux, macOS, and Windows</p>
     <p class="text-muted-foreground text-xs">
-      Read the <a
+      <a
         href="https://xymaxim.github.io/rewyt/docs/disclaimer.html"
-        class="text-foreground cursor-pointer font-medium">disclaimer</a
-      > before using
+        class="text-foreground cursor-pointer font-medium"
+        >Rewyt usage disclaimer</a
+      >
     </p>
   </div>
 
