@@ -7,6 +7,7 @@
     type ExplorerCell,
   } from "@rewyt-frontend/lib/explorer.svelte";
   import Timeline from "@rewyt-frontend/lib/components/Timeline.svelte";
+  import TimelineZoomControl from "@rewyt-frontend/lib/components/TimelineZoomControl.svelte";
   import DaysSlider from "@rewyt-frontend/lib/components/sliders/DaysSlider.svelte";
   import {
     getTickIntervals,
@@ -85,9 +86,12 @@
 
 <div class="flex w-full flex-col items-center">
   <div
-    class="text-muted-foreground flex w-full flex-col justify-start font-medium"
+    class="text-muted-foreground flex w-full flex-col gap-2 font-medium sm:flex-row sm:items-center sm:justify-between"
   >
     <span class="flex items-center gap-1 tabular-nums">{playheadLabel}</span>
+    {#if explorer}
+      <TimelineZoomControl />
+    {/if}
   </div>
 
   <div class="relative mt-2 w-full">
