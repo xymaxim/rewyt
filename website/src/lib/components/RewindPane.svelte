@@ -7,6 +7,7 @@
     type ExplorerCell,
   } from "@rewyt-frontend/lib/explorer.svelte";
   import Timeline from "@rewyt-frontend/lib/components/Timeline.svelte";
+  import DaysSlider from "@rewyt-frontend/lib/components/sliders/DaysSlider.svelte";
   import {
     getTickIntervals,
     zoomLevelForSpan,
@@ -86,12 +87,10 @@
   <div
     class="text-muted-foreground flex w-full flex-col justify-start font-medium"
   >
-    <span
-      class="flex items-center gap-1 tabular-nums">{playheadLabel}</span
-    >
+    <span class="flex items-center gap-1 tabular-nums">{playheadLabel}</span>
   </div>
 
-  <div class="mt-2 w-full">
+  <div class="relative mt-2 w-full">
     {#if explorer}
       <Timeline
         seekableRange={null}
@@ -101,6 +100,9 @@
         onSeekTo={() => {}}
         tickIntervals={resolveTickIntervals}
       />
+      <div class="relative mt-2 w-full rounded-2xl bg-neutral-200 px-4">
+        <DaysSlider />
+      </div>
     {/if}
   </div>
 </div>
