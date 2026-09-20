@@ -6,10 +6,10 @@
     type Explorer,
     type ExplorerCell,
   } from "@rewyt-frontend/lib/explorer.svelte";
+  import { MS_PER_DAY } from "@rewyt-frontend/lib/utils/dateUtils";
   import IntervalSlider from "@rewyt-frontend/lib/components/sliders/IntervalSlider.svelte";
 
-  const DAY_MS = 24 * 60 * 60 * 1000;
-  const DEPTH_DAYS = 7;
+  const depthDays = 7;
 
   const cell = { current: null } as unknown as ExplorerCell;
   setExplorerContext(cell);
@@ -17,9 +17,9 @@
   let explorer = $state<Explorer | null>(null);
 
   onMount(() => {
-    const e = createExplorer({ depthHours: DEPTH_DAYS * 24, live: false });
+    const e = createExplorer({ depthHours: depthDays * 24, live: false });
     const now = Date.now();
-    const start = now - DEPTH_DAYS * DAY_MS;
+    const start = now - depthDays * MS_PER_DAY;
     e.setStreamStartTime(start);
     e.setViewRange({ start, end: now });
     e.assignMark("A", start + 0.5 * (now - start));
