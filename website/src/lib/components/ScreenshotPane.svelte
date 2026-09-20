@@ -4,16 +4,17 @@
 
   const holes = annotations.filter((a) => a.type !== "window");
 
-  const groups = [...new Set(annotations.map((a) => a.group))].map((id) => ({
-    id,
-  }));
-
-  const groupCenterY = groups.map((g) => {
-    const items = annotations.filter((a) => a.group === g.id);
+  const groups = [...new Set(annotations.map((a) => a.group))].map((id) => {
+    const items = annotations.filter((a) => a.group === id);
     const top = Math.min(...items.map((a) => a.bbox[1]));
     const bottom = Math.max(...items.map((a) => a.bbox[3]));
-    return (top + bottom) / 2;
+    return { id, bbox: [0, top, 1011, bottom], centerY: (top + bottom) / 2 };
   });
+
+  const groupDepth = (g: (typeof groups)[number]) =>
+    groups.filter(
+      (o) => o.id !== g.id && o.bbox[1] <= g.bbox[1] && o.bbox[3] >= g.bbox[3],
+    ).length;
 
   const holePaddingPx = 5;
   const holeRadiusPx = 12;
@@ -31,14 +32,6 @@
   const scale = $derived(screenshotWidth / 1011);
   const holePadding = $derived(holePaddingPx * pxToUnits);
   const holeRadius = $derived(holeRadiusPx * pxToUnits);
-
-  const hotspots = $derived(
-    groups.map((g, i) => ({
-      id: g.id,
-      x: 32 * scale,
-      y: groupCenterY[i] * scale,
-    })),
-  );
 </script>
 
 <div
@@ -100,23 +93,30 @@
     />
   </svg>
   <div class="pointer-events-none absolute inset-0">
-    {#each hotspots as h (h.id)}
+    {#each groups as g (g.id)}
+      {@const depth = groupDepth(g)}
       <button
         type="button"
-        class="pointer-events-auto absolute size-2 -translate-x-1/2 -translate-y-1/2 cursor-pointer rounded-full bg-black ring-3 ring-white transition-shadow hover:ring-5"
-        style="left: {h.x}px; top: {h.y}px"
-        aria-label={h.id}
+        class="group pointer-events-auto absolute inset-x-0 cursor-pointer"
+        style="top: {g.bbox[1] * scale}px; height: {(g.bbox[3] - g.bbox[1]) *
+          scale}px; z-index: {depth}"
+        aria-label={g.id}
         onpointerenter={() => {
-          maskedGroup = h.id;
+          maskedGroup = g.id;
           showMask = true;
         }}
         onpointerleave={() => (showMask = false)}
         onfocus={() => {
-          maskedGroup = h.id;
+          maskedGroup = g.id;
           showMask = true;
         }}
         onblur={() => (showMask = false)}
-      ></button>
+      >
+        <span
+          class="pointer-events-none absolute size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black ring-3 ring-white transition-shadow group-hover:ring-5 group-focus-visible:ring-5"
+          style="left: {32 * scale}px; top: {(g.centerY - g.bbox[1]) * scale}px"
+        ></span>
+      </button>
     {/each}
   </div>
 </div>
