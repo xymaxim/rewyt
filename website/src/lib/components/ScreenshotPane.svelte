@@ -25,7 +25,7 @@
   let showMask = $state(false);
 
   const visibleHoles = $derived(
-    maskedGroup ? holes.filter((a) => a.group === maskedGroup) : [],
+    maskedGroup ? holes.filter((a) => a.group === maskedGroup) : holes,
   );
 
   const pxToUnits = $derived(screenshotWidth > 0 ? 1011 / screenshotWidth : 1);
@@ -37,6 +37,8 @@
 <div
   class="relative mt-10 w-full max-w-[720px]"
   bind:clientWidth={screenshotWidth}
+  onpointerenter={() => (showMask = true)}
+  onpointerleave={() => (showMask = false)}
 >
   <img src={screenshot} alt="Rewyt screenshot" class="w-full" />
   {#snippet outline(a: (typeof annotations)[number])}
@@ -105,7 +107,6 @@
           maskedGroup = g.id;
           showMask = true;
         }}
-        onpointerleave={() => (showMask = false)}
         onfocus={() => {
           maskedGroup = g.id;
           showMask = true;
