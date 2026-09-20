@@ -82,17 +82,30 @@
           {@render outline(a)}
         {/each}
       </mask>
+      <filter id="screenshot-desaturate">
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
     </defs>
-    <rect
+    <g
       class="motion-safe:transition-opacity motion-safe:duration-150"
       class:opacity-0={!showMask}
       class:opacity-100={showMask}
-      width="1011"
-      height="740"
-      fill="var(--color-selected-darkest, #d4d4d4)"
-      fill-opacity="0.6"
+      filter="url(#screenshot-desaturate)"
       mask="url(#screenshot-annotations-mask)"
-    />
+    >
+      <image
+        href={screenshot}
+        width="1011"
+        height="740"
+        preserveAspectRatio="none"
+      />
+      <rect
+        width="1011"
+        height="740"
+        fill="var(--color-selected-darkest, #d4d4d4)"
+        fill-opacity="0.6"
+      />
+    </g>
   </svg>
   <div class="pointer-events-none absolute inset-0">
     {#each groups as g (g.id)}
