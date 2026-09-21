@@ -1,6 +1,7 @@
 <script lang="ts">
   import {
-    ArrowRight,
+    ArrowDown,
+    ArrowUp,
     ArrowUpRight,
     BookOpen,
     ChevronRight,
@@ -12,7 +13,9 @@
   import RewindPane from "/src/lib/components/RewindPane.svelte";
   import IntervalPane from "/src/lib/components/IntervalPane.svelte";
   import ScreenshotPane from "/src/lib/components/ScreenshotPane.svelte";
+  import MoreAboutPane from "/src/lib/components/MoreAboutPane.svelte";
   import { Popover } from "bits-ui";
+  import { page } from "$app/state";
   import { formatLocalIso } from "$lib/time";
 
   let playing = $state(false);
@@ -33,7 +36,7 @@
     rel="noopener noreferrer"
     class="flex cursor-pointer items-center gap-1 rounded-full border-1 border-[oklch(0.44_0.21_299)]/40 bg-[oklch(0.95_0.03_308)] px-2 py-0 text-sm font-medium text-[oklch(0.44_0.21_299)]! text-[var(--color-muted-foreground)] transition hover:bg-[oklch(0.85_0.07_307)]"
   >
-    Watch: a showcase of real usage <ChevronRight size={14} strokeWidth={3} />
+    Watch a two-minute demo <ChevronRight size={14} strokeWidth={3} />
   </a>
   <LandingPane bind:playing bind:rewinding />
   <div
@@ -54,10 +57,10 @@
 <div class="mt-12 flex flex-col items-center gap-4">
   <div class="flex items-center gap-4">
     <a
-      href="https://xymaxim.github.io/rewyt/docs/guides/install/install/"
-      class="flex cursor-pointer items-center gap-1 rounded-2xl bg-neutral-200 px-4 py-2.5 text-sm font-semibold transition hover:scale-105 active:scale-95"
+      href="#get-rewyt"
+      class="flex cursor-pointer items-center gap-1 rounded-2xl bg-[var(--color-selected)] px-4 py-2.5 text-sm font-semibold transition hover:scale-105 hover:bg-[var(--color-selected-dark)] active:scale-95"
     >
-      Get Rewyt <ArrowRight />
+      Get Rewyt <ArrowDown />
     </a>
     <a
       href="https://xymaxim.github.io/rewyt/docs/quickstart/"
@@ -71,7 +74,7 @@
     <p class="text-muted-foreground text-sm">
       <a
         href="https://xymaxim.github.io/rewyt/docs/disclaimer/"
-        class="text-[var(--color-selected-darkest)] cursor-pointer font-medium underline hover:no-underline"
+        class="cursor-pointer font-medium text-[var(--color-selected-darkest)] underline hover:no-underline"
         >Rewyt Usage Disclaimer</a
       >
     </p>
@@ -96,7 +99,7 @@
                 {...props}
                 role="button"
                 tabindex="0"
-                class="cursor-pointer underline border-amber-700 font-medium text-amber-800 hover:no-underline"
+                class="cursor-pointer border-amber-700 font-medium text-amber-800 underline hover:no-underline"
                 >Old English</span
               >
             {/snippet}
@@ -209,5 +212,100 @@
       >. Great for clipping and saving an interesting moment.
     </p>
     <IntervalPane />
+  </div>
+
+  <MoreAboutPane />
+
+  <div
+    id="get-rewyt"
+    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-8 py-4"
+  >
+    <h3 class="text-center text-2xl font-medium">Get Rewyt</h3>
+
+    <p>Latest version: v2026.9.9 (9 September 2026)</p>
+    <div class="mt-4 flex w-full flex-col gap-6">
+      <p>
+        Not sure which to choose? <a
+          href="https://xymaxim.github.io/rewyt/docs/guides/install/install/"
+          class="font-medium text-[var(--color-selected-darkest)] underline hover:no-underline"
+          >Compare the installation options</a
+        >.
+      </p>
+      <div
+        class="flex flex-col gap-2 rounded-2xl bg-[var(--color-selected-lighter)] p-4"
+      >
+        <p class="text-lg font-medium">Desktop app</p>
+        <p>Download pre-built binaries. Requires yt-dlp, FFmpeg, etc.</p>
+        <p>
+          <a
+            href="https://xymaxim.github.io/rewyt/docs/guides/install/desktop/"
+            class="font-medium text-[var(--color-selected-darkest)] underline hover:no-underline"
+            >Read the desktop guide</a
+          >
+        </p>
+        <div class="mt-2 flex flex-col gap-2 md:flex-row md:gap-4">
+          <a
+            href="https://github.com/xymaxim/rewyt/releases/latest"
+            class="relative flex flex-1 flex-col rounded-2xl bg-[var(--color-selected-lightest)] px-5 py-4 transition hover:bg-neutral-100"
+          >
+            <ArrowUpRight
+              size={16}
+              class="text-muted-foreground absolute top-5 right-3"
+            />
+            <span class="font-medium">Linux</span>
+            <span class="text-muted-foreground text-sm">For x64</span>
+          </a>
+          <a
+            href="https://github.com/xymaxim/rewyt/releases/latest"
+            class="relative flex flex-1 flex-col rounded-2xl bg-[var(--color-selected-lightest)] px-5 py-4 transition hover:bg-neutral-100"
+          >
+            <ArrowUpRight
+              size={16}
+              class="text-muted-foreground absolute top-5 right-3"
+            />
+            <span class="font-medium">macOS</span>
+            <span class="text-muted-foreground text-sm"
+              >For Intel & Apple Silicon</span
+            >
+          </a>
+          <a
+            href="https://github.com/xymaxim/rewyt/releases/latest"
+            class="relative flex flex-1 flex-col rounded-2xl border-0 border-neutral-200 bg-[var(--color-selected-lightest)] px-5 py-4 transition hover:bg-neutral-100"
+          >
+            <ArrowUpRight
+              size={16}
+              class="text-muted-foreground absolute top-5 right-3"
+            />
+            <span class="font-medium">Windows</span>
+            <span class="text-muted-foreground text-sm">For x64</span>
+          </a>
+        </div>
+      </div>
+
+      <div
+        class="flex flex-col gap-2 rounded-2xl bg-[var(--color-selected-lighter)] p-4"
+      >
+        <p class="text-lg font-medium">Compose</p>
+        <p>Run it with Podman/Docker, everything included</p>
+        <p>
+          <a
+            href="https://xymaxim.github.io/rewyt/docs/guides/install/web/"
+            class="cursor-pointer font-medium text-[var(--color-selected-darkest)] underline hover:no-underline"
+            >Read the Compose guide</a
+          >
+        </p>
+      </div>
+    </div>
+
+    {#if page.url.hash === "#get-rewyt"}
+      <a
+        href={page.url.pathname}
+        aria-label="Back to top"
+        onclick={() => window.scrollTo({ top: 0 })}
+        class="mt-4 mx-auto flex size-10 items-center justify-center rounded-full bg-neutral-200/80 hover:bg-neutral-300"
+      >
+        <ArrowUp />
+      </a>
+    {/if}
   </div>
 </div>
