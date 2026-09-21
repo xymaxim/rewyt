@@ -227,15 +227,15 @@
 
       <span
         class="relative h-2 w-full grow cursor-pointer overflow-hidden rounded-full {rewinding
-          ? 'bg-gradient-to-r from-[oklch(0.9078_0.0763_80.82)] to-[oklch(0.9231_0.1009_119.69)]'
-          : 'bg-neutral-200/50'}"
+          ? 'bg-gradient-to-r from-[var(--color-selected)] to-[var(--color-play-300)]'
+          : 'bg-neutral-200'}"
       >
         <Slider.Range class="absolute inset-0 h-full w-full" />
       </span>
 
       <Slider.Thumb
         index={0}
-        class="relative top-2 z-20 block h-10 w-10 translate-y-full cursor-grab touch-none items-center rounded-full border-18 border-[var(--color-selected)] bg-black/80 outline-none select-none active:cursor-grabbing"
+        class="relative top-2 z-20 block h-10 w-10 translate-y-full cursor-grab touch-none items-center rounded-full border-18 border-[var(--color-selected)] bg-black outline-none select-none active:cursor-grabbing"
       ></Slider.Thumb>
     </Slider.Root>
   </div>
@@ -251,8 +251,9 @@
   .pane-bg {
     background-color: color-mix(
       in oklch,
-      oklch(0.9078 0.0763 80.82),
-      oklch(0.9231 0.1009 119.69) var(--mix, 0%)
+      var(--color-selected-light),
+      var(--color-play-200)
+      var(--mix, 100%)
     );
   }
 </style>
