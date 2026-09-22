@@ -2,6 +2,8 @@
   import screenshot from "$lib/assets/screenshot.png";
   import annotations from "$lib/data/screenshot-annotations.json";
   import { layoutLabels, labelY } from "$lib/labelPlacement";
+  import { MediaQuery } from "svelte/reactivity";
+  import { EyeOff, MousePointer2, Pointer } from "lucide-svelte";
 
   const labelledAnnotations = annotations.filter((a) => a.label);
 
@@ -35,6 +37,13 @@
 
   let maskedGroup = $state<string | null>(null);
   let showMask = $state(false);
+  let showHotspots = $state(false);
+
+  const isMobile = new MediaQuery("(max-width: 639px)");
+  const labelsVisible = $derived(
+    isMobile.current ? maskedGroup !== null || showHotspots : showMask,
+  );
+  const hotspotsVisible = $derived(isMobile.current ? showHotspots : showMask);
 
   const visibleHoles = $derived(
     maskedGroup
@@ -44,6 +53,9 @@
   const labelItems = $derived(
     maskedGroup ? (labelsByGroup.get(maskedGroup) ?? []) : [],
   );
+  const numberedItems = $derived(
+    labelItems.map((item, i) => ({ ...item, number: i + 1 })),
+  );
 
   const pxToUnits = $derived(screenshotWidth > 0 ? 1011 / screenshotWidth : 1);
   const scale = $derived(screenshotWidth / 1011);
@@ -51,11 +63,26 @@
   const holeRadius = $derived(holeRadiusPx * pxToUnits);
 </script>
 
+<!-- svelte-ignore a11y_click_events_have_key_events -->
+<!-- svelte-ignore a11y_no_static_element_interactions -->
 <div
   class="relative mt-10 w-full max-w-[720px]"
   bind:clientWidth={screenshotWidth}
   onpointerenter={() => (showMask = true)}
   onpointerleave={() => (showMask = false)}
+  onclick={(e) => {
+    if ((e.target as HTMLElement).closest("button")) return;
+    if (isMobile.current) {
+      if (maskedGroup !== null || showHotspots) {
+        maskedGroup = null;
+        showHotspots = false;
+      } else {
+        showHotspots = true;
+      }
+    } else {
+      maskedGroup = null;
+    }
+  }}
 >
   <img src={screenshot} alt="Rewyt screenshot" class="w-full" />
   {#snippet outline(a: (typeof annotations)[number])}
@@ -105,8 +132,8 @@
     </defs>
     <g
       class="motion-safe:transition-opacity motion-safe:duration-150"
-      class:opacity-0={!showMask}
-      class:opacity-100={showMask}
+      class:opacity-0={!labelsVisible}
+      class:opacity-100={labelsVisible}
       mask="url(#screenshot-annotations-mask)"
     >
       <image
@@ -132,8 +159,8 @@
         stroke="var(--color-selected-light)"
         stroke-width="3"
         class="motion-safe:transition-opacity motion-safe:duration-150"
-        class:opacity-0={!showMask}
-        class:opacity-100={showMask}
+        class:opacity-0={!labelsVisible}
+        class:opacity-100={labelsVisible}
       />
       <circle
         cx={item.anchorX}
@@ -143,46 +170,119 @@
         stroke="white"
         stroke-width="3"
         class="motion-safe:transition-opacity motion-safe:duration-150"
-        class:opacity-0={!showMask}
-        class:opacity-100={showMask}
+        class:opacity-0={!labelsVisible}
+        class:opacity-100={labelsVisible}
       />
     {/each}
   </svg>
   <div class="pointer-events-none absolute inset-0">
     {#each labelItems as item (item.id)}
       <span
-        class="absolute z-100 -translate-x-1/2 rounded-lg bg-black px-2 py-0.5 text-sm font-medium whitespace-nowrap text-white motion-safe:transition-opacity motion-safe:duration-150"
+        class="absolute z-100 hidden -translate-x-1/2 rounded-lg bg-black px-2 py-0.5 text-sm font-medium whitespace-nowrap text-white motion-safe:transition-opacity motion-safe:duration-150 sm:block"
         class:-translate-y-full={item.side === "top"}
-        class:opacity-0={!showMask}
-        class:opacity-100={showMask}
+        class:opacity-0={!labelsVisible}
+        class:opacity-100={labelsVisible}
         style="left: {item.anchorX * scale}px; top: {labelY(item) * scale}px;"
       >
         {item.label}
       </span>
     {/each}
+    {#each numberedItems as item (item.id)}
+      <span
+        class="absolute z-100 flex size-6 -translate-x-1/2 items-center justify-center rounded-full bg-black text-sm font-medium text-white motion-safe:transition-opacity motion-safe:duration-150 sm:hidden"
+        class:-translate-y-full={item.side === "top"}
+        class:opacity-0={!labelsVisible}
+        class:opacity-100={labelsVisible}
+        style="left: {item.anchorX * scale}px; top: {labelY(item) * scale}px;"
+      >
+        {item.number}
+      </span>
+    {/each}
     {#each groups as g (g.id)}
       {@const depth = groupDepth(g)}
+      {@const isFocused = maskedGroup === g.id}
+      {@const hotspotClass = isFocused
+        ? "size-1 ring-9 ring-[var(--color-selected)]"
+        : "size-1.5 ring-5 ring-[var(--color-selected-dark)]"}
       <button
         type="button"
-        class="group pointer-events-auto absolute inset-x-0 cursor-pointer"
+        class="pointer-events-auto absolute inset-x-0 cursor-pointer"
         style="top: {g.bbox[1] * scale}px; height: {(g.bbox[3] - g.bbox[1]) *
           scale}px; z-index: {depth}"
         aria-label={g.id}
         onpointerenter={() => {
+          if (isMobile.current) return;
           maskedGroup = g.id;
           showMask = true;
         }}
         onfocus={() => {
+          if (isMobile.current) return;
           maskedGroup = g.id;
           showMask = true;
+        }}
+        onclick={() => {
+          if (!isMobile.current) return;
+          if (maskedGroup === g.id) {
+            maskedGroup = null;
+            showHotspots = false;
+          } else {
+            maskedGroup = g.id;
+            showHotspots = true;
+          }
         }}
         onblur={() => (showMask = false)}
       >
         <span
-          class="pointer-events-none absolute size-1.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black ring-5 ring-[var(--color-selected-dark)] transition-shadow group-hover:size-1 group-hover:ring-9 group-hover:ring-[var(--color-selected)] group-focus-visible:size-1 group-focus-visible:ring-9 group-focus-visible:ring-[var(--color-selected)]"
+          class="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-black motion-safe:transition-[opacity,box-shadow] motion-safe:duration-150 {hotspotClass}"
+          class:opacity-0={!hotspotsVisible}
+          class:opacity-60={hotspotsVisible &&
+            maskedGroup !== null &&
+            !isFocused}
+          class:opacity-100={hotspotsVisible &&
+            (maskedGroup === null || isFocused)}
           style="left: {36 * scale}px; top: {(g.centerY - g.bbox[1]) * scale}px"
         ></span>
       </button>
     {/each}
   </div>
+</div>
+
+{#if labelItems.length > 0}
+  <ol class="mt-4 flex w-full max-w-[720px] flex-col gap-2 px-4 sm:hidden">
+    {#each numberedItems as item (item.id)}
+      <li class="flex items-center gap-2 text-sm">
+        <span
+          class="flex size-6 shrink-0 items-center justify-center rounded-full bg-black font-medium text-white"
+          >{item.number}</span
+        >
+        <span>{item.label}</span>
+      </li>
+    {/each}
+  </ol>
+{/if}
+{#if hotspotsVisible}
+  <button
+    type="button"
+    aria-label="Hide annotations"
+    class="mx-auto mt-4 flex size-10 items-center justify-center rounded-full bg-neutral-200/80 hover:bg-neutral-300 sm:hidden"
+    onclick={() => {
+      maskedGroup = null;
+      showHotspots = false;
+      showMask = false;
+    }}
+  >
+    <EyeOff />
+  </button>
+{/if}
+
+<div
+  class="text-muted-foreground/70 mt-3 flex w-full max-w-[720px] items-center justify-center gap-2 text-sm font-medium select-none motion-safe:transition-opacity motion-safe:duration-150"
+  class:opacity-0={labelsVisible}
+  class:pointer-events-none={labelsVisible}
+  class:hidden={isMobile.current && labelItems.length > 0}
+>
+  <MousePointer2 size={18} class="hidden sm:block" />
+  <Pointer size={18} class="sm:hidden" />
+  <span class="hidden sm:inline">Hover the screenshot to show annotations</span>
+  <span class="sm:hidden">Tap the screenshot to show annotations</span>
 </div>
