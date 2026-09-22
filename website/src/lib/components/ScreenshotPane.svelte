@@ -129,8 +129,19 @@
         y1={item.anchorY}
         x2={item.anchorX}
         y2={labelY(item)}
-        stroke="var(--color-selected)"
-        stroke-width="2"
+        stroke="var(--color-selected-light)"
+        stroke-width="3"
+        class="motion-safe:transition-opacity motion-safe:duration-150"
+        class:opacity-0={!showMask}
+        class:opacity-100={showMask}
+      />
+      <circle
+        cx={item.anchorX}
+        cy={item.anchorY}
+        r={5}
+        fill="black"
+        stroke="white"
+        stroke-width="3"
         class="motion-safe:transition-opacity motion-safe:duration-150"
         class:opacity-0={!showMask}
         class:opacity-100={showMask}

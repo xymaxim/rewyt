@@ -52,7 +52,7 @@ export interface LabelLayoutOptions {
 
 export const defaultLabelLayoutOptions: LabelLayoutOptions = {
   levelGapY: 40,
-  edgeGapY: 20,
+  edgeGapY: 30,
   charWidth: 8,
   labelPaddingX: 14,
   labelGapX: 20,
