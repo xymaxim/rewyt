@@ -45,7 +45,7 @@
     class:scale-50={rewinding || playing}
   >
     <h1 class="mb-4 text-center text-3xl font-normal sm:text-5xl">
-      <p>Rewind and play</p>
+      <p>Rewind & play</p>
       <p>YouTube live streams</p>
     </h1>
     <p class="text-normal px-6 text-center">
