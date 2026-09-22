@@ -54,7 +54,7 @@
   </div>
 </div>
 
-<div class="mt-12 flex flex-col items-center gap-4">
+<div class="mt-12 flex flex-col items-center gap-4 px-4">
   <div class="flex items-center gap-4">
     <a
       href="#get-rewyt"
@@ -81,8 +81,9 @@
   </div>
 
   <ScreenshotPane />
+
   <div
-    class="mt-10 w-full max-w-2xl rounded-2xl bg-amber-100 px-6 py-4 text-left"
+    class="mt-10 flex w-full max-w-[720px] flex-col rounded-2xl bg-amber-100 px-4 py-4 text-left sm:px-6"
   >
     <p class="flex items-baseline">
       <span class="text-xl font-extrabold">rewyt</span>
@@ -138,7 +139,7 @@
   </div>
 
   <div
-    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-10 py-5 text-center"
+    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-4 py-5 text-center sm:px-10"
   >
     <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
       Rewyt past moments
@@ -152,7 +153,7 @@
   </div>
 
   <div
-    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-10 py-5 text-center"
+    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-4 py-5 text-center sm:px-10"
   >
     <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
       Share timestamps
@@ -199,7 +200,7 @@
   </div>
 
   <div
-    class="mb-15 flex max-w-[720px] flex-col items-center gap-2 rounded-2xl bg-gradient-to-b from-[oklch(0.9547_0.0571_118.13)]/0 to-70% px-10 py-5 text-center"
+    class="mb-15 flex max-w-[720px] flex-col items-center gap-2 rounded-2xl bg-gradient-to-b from-[oklch(0.9547_0.0571_118.13)]/0 to-70% px-4 py-5 text-center sm:px-10"
   >
     <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
       Highlight and save clips
@@ -218,7 +219,7 @@
 
   <div
     id="get-rewyt"
-    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-8 py-4"
+    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-0 py-4 sm:px-4"
   >
     <h3 class="text-center text-2xl font-medium">Get Rewyt</h3>
 
@@ -302,7 +303,7 @@
         href={page.url.pathname}
         aria-label="Back to top"
         onclick={() => window.scrollTo({ top: 0 })}
-        class="mt-4 mx-auto flex size-10 items-center justify-center rounded-full bg-neutral-200/80 hover:bg-neutral-300"
+        class="mx-auto mt-4 flex size-10 items-center justify-center rounded-full bg-neutral-200/80 hover:bg-neutral-300"
       >
         <ArrowUp />
       </a>
