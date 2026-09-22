@@ -32,7 +32,7 @@
   {"id": 35, "label": "Selected time", "group": "timeline", "bbox": [816, 600, 860, 612]},
   {"id": 36, "label": "Days slider", "group": "navigation", "bbox": [80, 635, 588, 671]},
   {"id": 37, "label": "Unavailable region", "group": "navigation", "bbox": [80, 635, 150, 671]},
-  {"id": 38, "label": "Minimap playhead", "group": "navigation", "bbox": [333, 663, 341, 671]},
+  {"id": 38, "label": "", "group": "navigation", "bbox": [333, 663, 341, 671]},
   {"id": 39, "label": "Selected day", "group": "navigation", "bbox": [338, 635, 375, 671]},
   {"id": 40, "label": "Unavailable region", "group": "navigation", "bbox": [561, 635, 588, 671]},
   {"id": 41, "label": "Day slider", "group": "navigation", "bbox": [592, 635, 930, 671]},
