@@ -1,8 +1,9 @@
 <script lang="ts">
   import screenshot from "$lib/assets/screenshot.png";
   import annotations from "$lib/data/screenshot-annotations.json";
+  import { layoutLabels, labelY } from "$lib/labelPlacement";
 
-  const holes = annotations.filter((a) => a.type !== "window");
+  const labelledAnnotations = annotations.filter((a) => a.label);
 
   const groups = [...new Set(annotations.map((a) => a.group))].map((id) => {
     const items = annotations.filter((a) => a.group === id);
@@ -16,6 +17,17 @@
       (o) => o.id !== g.id && o.bbox[1] <= g.bbox[1] && o.bbox[3] >= g.bbox[3],
     ).length;
 
+  const labelsByGroup = new Map(
+    groups.map((g) => [g.id, layoutLabels(labelledAnnotations, g)]),
+  );
+
+  const isRound = (a: (typeof annotations)[number]) => {
+    const w = a.bbox[2] - a.bbox[0];
+    const h = a.bbox[3] - a.bbox[1];
+    const ratio = w / h;
+    return ratio >= 0.85 && ratio <= 1.18;
+  };
+
   const holePaddingPx = 5;
   const holeRadiusPx = 12;
   const maskRadius = 10;
@@ -25,7 +37,12 @@
   let showMask = $state(false);
 
   const visibleHoles = $derived(
-    maskedGroup ? holes.filter((a) => a.group === maskedGroup) : holes,
+    maskedGroup
+      ? annotations.filter((a) => a.group === maskedGroup)
+      : annotations,
+  );
+  const labelItems = $derived(
+    maskedGroup ? (labelsByGroup.get(maskedGroup) ?? []) : [],
   );
 
   const pxToUnits = $derived(screenshotWidth > 0 ? 1011 / screenshotWidth : 1);
@@ -43,7 +60,7 @@
   <img src={screenshot} alt="Rewyt screenshot" class="w-full" />
   {#snippet outline(a: (typeof annotations)[number])}
     {@const [x1, y1, x2, y2] = a.bbox}
-    {#if a.type === "button"}
+    {#if isRound(a)}
       <ellipse
         cx={(x1 + x2) / 2}
         cy={(y1 + y2) / 2}
@@ -106,8 +123,32 @@
         fill-opacity="0.55"
       />
     </g>
+    {#each labelItems as item (item.id)}
+      <line
+        x1={item.anchorX}
+        y1={item.anchorY}
+        x2={item.anchorX}
+        y2={labelY(item)}
+        stroke="var(--color-selected)"
+        stroke-width="2"
+        class="motion-safe:transition-opacity motion-safe:duration-150"
+        class:opacity-0={!showMask}
+        class:opacity-100={showMask}
+      />
+    {/each}
   </svg>
   <div class="pointer-events-none absolute inset-0">
+    {#each labelItems as item (item.id)}
+      <span
+        class="absolute z-100 -translate-x-1/2 rounded-lg bg-black px-2 py-0.5 text-sm font-medium whitespace-nowrap text-white motion-safe:transition-opacity motion-safe:duration-150"
+        class:-translate-y-full={item.side === "top"}
+        class:opacity-0={!showMask}
+        class:opacity-100={showMask}
+        style="left: {item.anchorX * scale}px; top: {labelY(item) * scale}px;"
+      >
+        {item.label}
+      </span>
+    {/each}
     {#each groups as g (g.id)}
       {@const depth = groupDepth(g)}
       <button
