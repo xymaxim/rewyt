@@ -23,6 +23,7 @@
     MS_PER_DAY,
   } from "@rewyt-frontend/lib/utils/dateUtils";
   import { formatLocalTime } from "$lib/time";
+  import RewindTutorialPane from "$lib/components/RewindTutorialPane.svelte";
 
   const DEPTH_DAYS = 7;
 
@@ -47,6 +48,8 @@
 
   let explorer = $state<Explorer | null>(null);
   let lastRewindTarget = $state<number | null>(null);
+  let lastRewindSource = $state<"timeline" | "button" | null>(null);
+  let observedSelectedTime: number | null = null;
 
   onMount(() => {
     const e = createExplorer({ depthHours: DEPTH_DAYS * 24, live: false });
@@ -66,6 +69,10 @@
     if (explorer) selected = explorer.selectedTime ?? 0;
   });
 
+  $effect(() => {
+    observedSelectedTime = explorer?.selectedTime ?? null;
+  });
+
   const playheadLabel = $derived(
     explorer ? formatLocalTime(explorer.playheadTime ?? Date.now()) : "",
   );
@@ -79,6 +86,8 @@
   async function handleRewind(isoTime: string): Promise<boolean> {
     if (!explorer) return false;
     const target = new Date(isoTime).getTime();
+    lastRewindSource =
+      explorer.selectedTime !== observedSelectedTime ? "timeline" : "button";
     explorer.setPlayheadTime(target);
     lastRewindTarget = target;
     return true;
@@ -120,4 +129,8 @@
       </div>
     {/if}
   </div>
+
+  {#if explorer}
+    <RewindTutorialPane {explorer} {lastRewindSource} {lastRewindTarget} />
+  {/if}
 </div>
