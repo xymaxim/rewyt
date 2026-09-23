@@ -9,6 +9,7 @@
   import Timeline from "@rewyt-frontend/lib/components/Timeline.svelte";
   import TimelineZoomControl from "@rewyt-frontend/lib/components/TimelineZoomControl.svelte";
   import DaysSlider from "@rewyt-frontend/lib/components/sliders/DaysSlider.svelte";
+  import DaySlider from "@rewyt-frontend/lib/components/sliders/DaySlider.svelte";
   import {
     getTickIntervals,
     zoomLevelForSpan,
@@ -104,8 +105,18 @@
         onSeekTo={() => {}}
         tickIntervals={resolveTickIntervals}
       />
-      <div class="relative mt-2 w-full rounded-2xl bg-neutral-200 px-4">
-        <DaysSlider />
+
+      <div class="mt-1 mb-2 flex flex-col gap-2 md:flex-row">
+        <div
+          class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] md:w-[60%]"
+        >
+          <DaysSlider />
+        </div>
+        <div
+          class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] md:w-[40%]"
+        >
+          <DaySlider />
+        </div>
       </div>
     {/if}
   </div>
