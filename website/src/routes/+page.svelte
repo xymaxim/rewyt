@@ -139,7 +139,7 @@
   </div>
 
   <div
-    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-4 py-5 text-center sm:px-10"
+    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-4 py-5 text-center"
   >
     <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
       Rewyt past moments
