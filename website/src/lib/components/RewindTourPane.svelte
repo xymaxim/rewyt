@@ -10,14 +10,18 @@
   import type { Explorer } from "@rewyt-frontend/lib/explorer.svelte";
   import { ZOOM_LEVELS } from "@rewyt-frontend/lib/types";
 
+  export type TourFocus = "timeline" | "daysSlider" | "daySlider" | "zoom";
+
   let {
     explorer,
     lastRewindSource,
     lastRewindTarget,
+    onFocusChange,
   }: {
     explorer: Explorer;
     lastRewindSource: "timeline" | "button" | null;
     lastRewindTarget: number | null;
+    onFocusChange: (focus: TourFocus[] | null) => void;
   } = $props();
 
   type Part = { text: string; b?: boolean };
@@ -26,7 +30,7 @@
     title: string;
     description: string;
     success: string;
-    steps: { substeps: Substep[] }[];
+    steps: { substeps: Substep[]; focus: TourFocus[] }[];
   };
 
   const plain = (text: string): Part => ({ text });
@@ -109,6 +113,7 @@
               met: () => onTargetDay,
             },
           ],
+          focus: ["timeline", "daysSlider"],
         },
         {
           substeps: [
@@ -117,6 +122,7 @@
               met: () => rewoundBy("timeline", tutorialClickTime),
             },
           ],
+          focus: ["timeline"],
         },
       ],
     },
@@ -136,6 +142,7 @@
               met: () => selectedAt(tutorialSliderTime),
             },
           ],
+          focus: ["timeline"],
         },
         {
           substeps: [
@@ -144,6 +151,7 @@
               met: () => rewoundBy("button", tutorialSliderTime),
             },
           ],
+          focus: ["timeline"],
         },
       ],
     },
@@ -167,6 +175,7 @@
               met: () => selectedAt(tutorialSliderTime),
             },
           ],
+          focus: ["timeline", "daysSlider"],
         },
         {
           substeps: [
@@ -179,6 +188,7 @@
               met: () => selectedAt(zoom1hTime),
             },
           ],
+          focus: ["timeline", "zoom"],
         },
         {
           substeps: [
@@ -191,6 +201,7 @@
               met: () => selectedAt(zoom10mTime),
             },
           ],
+          focus: ["timeline", "zoom"],
         },
       ],
     },
@@ -250,6 +261,18 @@
 
   const current = $derived(tutorialsView[tutorialIndex]);
   const currentDone = $derived(current.allDone);
+
+  const activeFocus = $derived.by<TourFocus[] | null>(() => {
+    if (!tutorialOpen) return null;
+    const i = tutorialsView[tutorialIndex].steps.findIndex(
+      (step) => !step.complete,
+    );
+    return i < 0 ? null : tutorials[tutorialIndex].steps[i].focus;
+  });
+
+  $effect(() => {
+    onFocusChange(activeFocus);
+  });
 </script>
 
 {#snippet stepMarker(complete: boolean)}

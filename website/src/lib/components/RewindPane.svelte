@@ -23,9 +23,11 @@
     MS_PER_DAY,
   } from "@rewyt-frontend/lib/utils/dateUtils";
   import { formatLocalTime } from "$lib/time";
-  import RewindTutorialPane from "$lib/components/RewindTutorialPane.svelte";
+  import RewindTourPane, {
+    type TourFocus,
+  } from "$lib/components/RewindTourPane.svelte";
 
-  const DEPTH_DAYS = 7;
+  const depthDays = 7;
 
   const compactBarWidth = 520;
   const compactTickIntervals: Record<ZoomLevelKey, TickIntervals> = {
@@ -50,11 +52,19 @@
   let lastRewindTarget = $state<number | null>(null);
   let lastRewindSource = $state<"timeline" | "button" | null>(null);
   let observedSelectedTime: number | null = null;
+  let tourFocus = $state<TourFocus[] | null>(null);
+
+  const isDimmed = (key: TourFocus) =>
+    tourFocus !== null && !tourFocus.includes(key);
+
+  function handleFocusChange(focus: TourFocus[] | null) {
+    tourFocus = focus;
+  }
 
   onMount(() => {
-    const e = createExplorer({ depthHours: DEPTH_DAYS * 24, live: false });
+    const e = createExplorer({ depthHours: depthDays * 24, live: false });
     const now = Date.now();
-    e.setStreamStartTime(now - DEPTH_DAYS * MS_PER_DAY);
+    e.setStreamStartTime(now - depthDays * MS_PER_DAY);
     e.setSelectedTime(now);
     e.setPlayheadTime(now);
     cell.current = e;
@@ -100,29 +110,49 @@
   >
     <span class="flex items-center gap-1 tabular-nums">{playheadLabel}</span>
     {#if explorer}
-      <TimelineZoomControl />
+      <div
+        class="transition-opacity duration-200"
+        class:opacity-20={isDimmed("zoom")}
+        class:pointer-events-none={isDimmed("zoom")}
+        inert={isDimmed("zoom")}
+      >
+        <TimelineZoomControl />
+      </div>
     {/if}
   </div>
 
   <div class="relative mt-2 w-full">
     {#if explorer}
-      <Timeline
-        seekableRange={null}
-        mpdStartTime={0}
-        {isRewound}
-        onRewind={handleRewind}
-        onSeekTo={() => {}}
-        tickIntervals={resolveTickIntervals}
-      />
+      <div
+        class="transition-opacity duration-200"
+        class:opacity-20={isDimmed("timeline")}
+        class:pointer-events-none={isDimmed("timeline")}
+        inert={isDimmed("timeline")}
+      >
+        <Timeline
+          seekableRange={null}
+          mpdStartTime={0}
+          {isRewound}
+          onRewind={handleRewind}
+          onSeekTo={() => {}}
+          tickIntervals={resolveTickIntervals}
+        />
+      </div>
 
       <div class="mt-1 mb-2 flex flex-col gap-2 md:flex-row">
         <div
-          class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] md:w-[60%]"
+          class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200 md:w-[60%]"
+          class:opacity-20={isDimmed("daysSlider")}
+          class:pointer-events-none={isDimmed("daysSlider")}
+          inert={isDimmed("daysSlider")}
         >
           <DaysSlider />
         </div>
         <div
-          class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] md:w-[40%]"
+          class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200 md:w-[40%]"
+          class:opacity-20={isDimmed("daySlider")}
+          class:pointer-events-none={isDimmed("daySlider")}
+          inert={isDimmed("daySlider")}
         >
           <DaySlider />
         </div>
@@ -131,6 +161,11 @@
   </div>
 
   {#if explorer}
-    <RewindTutorialPane {explorer} {lastRewindSource} {lastRewindTarget} />
+    <RewindTourPane
+      {explorer}
+      {lastRewindSource}
+      {lastRewindTarget}
+      onFocusChange={handleFocusChange}
+    />
   {/if}
 </div>
