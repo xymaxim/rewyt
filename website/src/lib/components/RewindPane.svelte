@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { ArrowLeft, ArrowRight } from "lucide-svelte";
   import {
     createExplorer,
     setExplorerContext,
@@ -53,6 +54,7 @@
   let lastRewindSource = $state<"timeline" | "button" | null>(null);
   let observedSelectedTime: number | null = null;
   let tourFocus = $state<TourFocus[] | null>(null);
+  let isTourOpen = $state(false);
 
   const isDimmed = (key: TourFocus) =>
     tourFocus !== null && !tourFocus.includes(key);
@@ -161,11 +163,40 @@
   </div>
 
   {#if explorer}
-    <RewindTourPane
-      {explorer}
-      {lastRewindSource}
-      {lastRewindTarget}
-      onFocusChange={handleFocusChange}
-    />
+    <div class="mt-10 flex w-full flex-col items-start">
+      <button
+        type="button"
+        class="flex w-full items-center justify-between gap-2 text-left hover:cursor-pointer"
+        onclick={() => {
+          isTourOpen = !isTourOpen;
+          if (!isTourOpen) tourFocus = null;
+        }}
+      >
+        <span class="flex flex-col items-start">
+          <span
+            class="text-lg font-semibold text-[var(--color-selected-darker)]"
+          >
+            {isTourOpen ? "Hide the tour" : "Take the tour"}
+          </span>
+          <span class="text-muted-foreground">
+            Learn how to rewind and jump through the timeline
+          </span>
+        </span>
+        {#if isTourOpen}
+          <ArrowLeft size={28} class="shrink-0" />
+        {:else}
+          <ArrowRight size={28} class="shrink-0" />
+        {/if}
+      </button>
+
+      {#if isTourOpen}
+        <RewindTourPane
+          {explorer}
+          {lastRewindSource}
+          {lastRewindTarget}
+          onFocusChange={handleFocusChange}
+        />
+      {/if}
+    </div>
   {/if}
 </div>

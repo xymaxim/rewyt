@@ -1,12 +1,5 @@
 <script lang="ts">
-  import {
-    ArrowLeft,
-    ArrowRight,
-    Check,
-    ChevronLeft,
-    ChevronRight,
-    Circle,
-  } from "lucide-svelte";
+  import { Check, ChevronLeft, ChevronRight, Circle } from "lucide-svelte";
   import type { Explorer } from "@rewyt-frontend/lib/explorer.svelte";
   import { ZOOM_LEVELS } from "@rewyt-frontend/lib/types";
 
@@ -54,7 +47,6 @@
     },
   );
 
-  let tutorialOpen = $state(true);
   let tutorialIndex = $state(0);
 
   function pad(n: number): string {
@@ -263,7 +255,6 @@
   const currentDone = $derived(current.allDone);
 
   const activeFocus = $derived.by<TourFocus[] | null>(() => {
-    if (!tutorialOpen) return null;
     const i = tutorialsView[tutorialIndex].steps.findIndex(
       (step) => !step.complete,
     );
@@ -287,96 +278,72 @@
   {/if}
 {/snippet}
 
-<div class="mt-10 flex w-full flex-col items-start">
-  <button
-    type="button"
-    class="flex w-full items-center justify-between gap-2 text-left hover:cursor-pointer"
-    onclick={() => (tutorialOpen = !tutorialOpen)}
-  >
-    <span class="flex flex-col items-start">
-      <span class="text-lg font-semibold text-[var(--color-selected-darker)]">
-        {tutorialOpen ? "Hide the tour" : "Take the tour"}
-      </span>
-      <span class="text-muted-foreground">
-        Learn how to rewind and jump through the timeline
-      </span>
-    </span>
-    {#if tutorialOpen}
-      <ArrowLeft size={28} class="shrink-0" />
-    {:else}
-      <ArrowRight size={28} class="shrink-0" />
-    {/if}
-  </button>
+<div class="mt-3 w-full rounded-2xl bg-neutral-200/50 p-4 text-left">
+  <div class="flex gap-1.5">
+    {#each [0, 1, 2] as i (i)}
+      <span
+        class="h-1.5 flex-1 rounded-full"
+        class:bg-[var(--color-selected-dark)]={i <= tutorialIndex}
+        class:bg-neutral-300={i > tutorialIndex}
+      ></span>
+    {/each}
+  </div>
 
-  {#if tutorialOpen}
-    <div class="mt-3 w-full rounded-2xl bg-neutral-200/50 p-4 text-left">
-      <div class="flex gap-1.5">
-        {#each [0, 1, 2] as i (i)}
-          <span
-            class="h-1.5 flex-1 rounded-full"
-            class:bg-[var(--color-selected-dark)]={i <= tutorialIndex}
-            class:bg-neutral-300={i > tutorialIndex}
-          ></span>
-        {/each}
-      </div>
+  <div class="mt-2 text-sm font-semibold">
+    Tutorial {tutorialIndex + 1} of 3
+  </div>
 
-      <div class="mt-2 text-sm font-semibold">
-        Tutorial {tutorialIndex + 1} of 3
-      </div>
-
-      <div>
-        <div class="flex items-center justify-between text-lg font-semibold">
-          <span>{current.title}</span>
-        </div>
-        <p class="text-muted-foreground mt-1 text-sm">{current.description}</p>
-        <ol class="mt-2 flex flex-col gap-2">
-          {#each current.steps as step, si (si)}
-            <li class="flex items-start gap-3">
-              {@render stepMarker(step.complete)}
-              <span>
-                {#each step.substeps as sub, xi (xi)}
-                  {#if xi > 0}&nbsp;{/if}
-                  <span
-                    class:text-muted-foreground={sub.seen}
-                    class:line-through={sub.seen}
-                  >
-                    {#each sub.parts as part, pi (pi)}
-                      {#if part.b}<b>{part.text}</b>{:else}{part.text}{/if}
-                    {/each}
-                  </span>
+  <div>
+    <div class="flex items-center justify-between text-lg font-semibold">
+      <span>{current.title}</span>
+    </div>
+    <p class="text-muted-foreground mt-1 text-sm">{current.description}</p>
+    <ol class="mt-2 flex flex-col gap-2">
+      {#each current.steps as step, si (si)}
+        <li class="flex items-start gap-3">
+          {@render stepMarker(step.complete)}
+          <span>
+            {#each step.substeps as sub, xi (xi)}
+              {#if xi > 0}&nbsp;{/if}
+              <span
+                class:text-muted-foreground={sub.seen}
+                class:line-through={sub.seen}
+              >
+                {#each sub.parts as part, pi (pi)}
+                  {#if part.b}<b>{part.text}</b>{:else}{part.text}{/if}
                 {/each}
               </span>
-            </li>
-          {/each}
-        </ol>
-        {#if currentDone}
-          <p class="mt-2 text-sm font-medium text-green-700">
-            {current.success}
-          </p>
-        {/if}
-      </div>
+            {/each}
+          </span>
+        </li>
+      {/each}
+    </ol>
+    {#if currentDone}
+      <p class="mt-2 text-sm font-medium text-green-700">
+        {current.success}
+      </p>
+    {/if}
+  </div>
 
-      <div class="mt-4 flex items-center gap-2">
-        <button
-          type="button"
-          aria-label="Previous tutorial"
-          class="flex size-10 items-center justify-center rounded-full bg-neutral-200/80 hover:bg-neutral-300 disabled:pointer-events-none disabled:opacity-40"
-          disabled={tutorialIndex === 0}
-          onclick={() => (tutorialIndex -= 1)}
-        >
-          <ChevronLeft />
-        </button>
+  <div class="mt-4 flex items-center gap-2">
+    <button
+      type="button"
+      aria-label="Previous tutorial"
+      class="flex size-10 items-center justify-center rounded-full bg-neutral-200/80 hover:bg-neutral-300 disabled:pointer-events-none disabled:opacity-40"
+      disabled={tutorialIndex === 0}
+      onclick={() => (tutorialIndex -= 1)}
+    >
+      <ChevronLeft />
+    </button>
 
-        <button
-          type="button"
-          aria-label="Next tutorial"
-          class="flex size-10 items-center justify-center rounded-full bg-neutral-200/80 hover:bg-neutral-300 disabled:pointer-events-none disabled:opacity-40"
-          disabled={tutorialIndex === 2}
-          onclick={() => (tutorialIndex += 1)}
-        >
-          <ChevronRight />
-        </button>
-      </div>
-    </div>
-  {/if}
+    <button
+      type="button"
+      aria-label="Next tutorial"
+      class="flex size-10 items-center justify-center rounded-full bg-neutral-200/80 hover:bg-neutral-300 disabled:pointer-events-none disabled:opacity-40"
+      disabled={tutorialIndex === 2}
+      onclick={() => (tutorialIndex += 1)}
+    >
+      <ChevronRight />
+    </button>
+  </div>
 </div>
