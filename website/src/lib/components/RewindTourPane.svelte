@@ -278,7 +278,7 @@
     </span>
 {/snippet}
 
-<div class="mt-3 w-full rounded-2xl bg-slate-200/50 p-4 text-left">
+<div class="mt-3 w-full rounded-2xl bg-amber-100 p-4 text-left">
   <div class="flex gap-1">
     {#each [0, 1, 2] as i (i)}
       <span
