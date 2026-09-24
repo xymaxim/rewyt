@@ -11,13 +11,13 @@
   import * as Popover from "$lib/components/ui/popover/index.js";
   import TimelineZoomControl from "./TimelineZoomControl.svelte";
   import InputRewindModal from "./InputRewindModal.svelte";
+  import InputRewindButton from "./InputRewindButton.svelte";
   import {
     ArrowUpRight,
     ArrowDown,
     Circle,
     FastForward,
     Pause,
-    Pen,
     Play,
     Rewind,
     Radio,
@@ -202,13 +202,11 @@
     {/if}
 
     <div class="flex h-10 items-center gap-0 gap-1!">
-      <Button
+      <InputRewindButton
         title="Input and rewind"
-        class="text-normal main-bar__button bg-gradient-to-r from-[var(--color-selected-light)] to-[var(--color-interval-light)]"
+        size={40}
         onclick={() => (inputRewindDialogOpen = true)}
-      >
-        <Pen size={20} />
-      </Button>
+      />
       <Expandable.Root
         trigger="click"
         closeOnClickOutside={true}

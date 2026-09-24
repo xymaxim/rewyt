@@ -6,9 +6,9 @@
     BookOpen,
     ChevronRight,
     EllipsisVertical,
-    Pen,
     TextCursor,
   } from "lucide-svelte";
+  import InputRewindButton from "@rewyt-frontend/lib/components/InputRewindButton.svelte";
   import LandingPane from "/src/lib/components/LandingPane.svelte";
   import RewindPane from "/src/lib/components/RewindPane.svelte";
   import IntervalPane from "/src/lib/components/IntervalPane.svelte";
@@ -48,7 +48,7 @@
         <p>Rewind & play</p>
         <p>YouTube live streams</p>
       </h1>
-      <p class="text-normal sm:text-lg px-6 text-center">
+      <p class="text-normal px-6 text-center sm:text-lg">
         Rewyt is a desktop app for rewatching live streams beyond YouTube's
         limits
       </p>
@@ -191,12 +191,12 @@
             {selectedTimeIso}
           </div>
         </div>
-        <div
-          class="relative inline-flex size-13 items-center justify-center rounded-full bg-gradient-to-r from-[oklch(0.9001_0.1264_120.7)] to-[oklch(0.85_0.07_307)] hover:cursor-pointer active:top-[1px]"
+        <InputRewindButton
+          size={52}
+          iconSize={22}
+          aria-label="Toggle timestamp input"
           onclick={() => (inputOpen = !inputOpen)}
-        >
-          <Pen size={22} />
-        </div>
+        />
       </div>
     </div>
   </div>
