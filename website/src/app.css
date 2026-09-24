@@ -15,7 +15,8 @@
   --font-mono: "Atkinson Hyperlegible Mono Variable", monospace;
 
   /* --background: oklch(0.985 0 0); */
-  --background: color-mix(in oklab, var(--color-selected), white 80%);
+  /* --background: color-mix(in oklab, var(--color-selected), white 80%); */
+  --background: #f6f5df;
   --foreground: oklch(0.145 0 0);
 
   --color-primary: #111;
