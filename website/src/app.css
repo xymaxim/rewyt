@@ -1,5 +1,6 @@
 @import "@fontsource-variable/atkinson-hyperlegible-next";
 @import "@fontsource-variable/atkinson-hyperlegible-mono";
+@import "@fontsource-variable/geist";
 
 @import "tailwindcss";
 @import "tw-animate-css";
@@ -49,4 +50,9 @@
   .btn-primary {
     @apply bg-primary rounded-lg px-4 py-2 text-white hover:opacity-90;
   }
+}
+
+@utility font-geist {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-sans);
 }

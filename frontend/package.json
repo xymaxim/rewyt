@@ -42,7 +42,7 @@
     "vite": "catalog:"
   },
   "dependencies": {
-    "@fontsource-variable/geist": "^5.2.8",
+    "@fontsource-variable/geist": "catalog:",
     "@fontsource-variable/geist-mono": "^5.2.7",
     "@tailwindcss/vite": "catalog:",
     "@wailsio/runtime": "^3.0.0-alpha.79",

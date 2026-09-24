@@ -110,10 +110,10 @@
   <div
     class="text-muted-foreground flex w-full flex-col gap-2 font-medium sm:flex-row sm:items-center sm:justify-between"
   >
-    <span class="flex items-center gap-1 tabular-nums">{playheadLabel}</span>
+    <span class="flex items-center gap-1 font-geist tabular-nums">{playheadLabel}</span>
     {#if explorer}
       <div
-        class="transition-opacity duration-200"
+        class="font-geist transition-opacity duration-200"
         class:opacity-20={isDimmed("zoom")}
         class:pointer-events-none={isDimmed("zoom")}
         inert={isDimmed("zoom")}
@@ -123,7 +123,7 @@
     {/if}
   </div>
 
-  <div class="relative mt-2 w-full">
+  <div class="font-geist relative mt-2 w-full">
     {#if explorer}
       <div
         class="transition-opacity duration-200"

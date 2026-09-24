@@ -42,7 +42,7 @@
 
 <div class="mt-8 flex w-full flex-col items-center justify-center gap-4">
   <div
-    class="relative top-[-14px] z-10 flex w-full items-center justify-center"
+    class="relative top-[-14px] z-10 flex w-full items-center justify-center font-geist"
   >
     <div class="relative h-7 w-full select-none">
       <div
