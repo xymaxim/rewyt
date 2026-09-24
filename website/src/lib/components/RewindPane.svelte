@@ -141,9 +141,9 @@
         />
       </div>
 
-      <div class="mt-1 mb-2 flex flex-col gap-2 md:flex-row">
+      <div class="mt-1 mb-2 flex flex-col gap-2">
         <div
-          class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200 md:w-[60%]"
+          class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200"
           class:opacity-20={isDimmed("daysSlider")}
           class:pointer-events-none={isDimmed("daysSlider")}
           inert={isDimmed("daysSlider")}
@@ -151,7 +151,7 @@
           <DaysSlider />
         </div>
         <div
-          class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200 md:w-[40%]"
+          class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200"
           class:opacity-20={isDimmed("daySlider")}
           class:pointer-events-none={isDimmed("daySlider")}
           inert={isDimmed("daySlider")}
