@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
   import { X, ArrowRight } from "lucide-svelte";
+  import { Popover } from "bits-ui";
+  import InputRewindButton from "@rewyt-frontend/lib/components/InputRewindButton.svelte";
   import {
     createExplorer,
     setExplorerContext,
@@ -24,6 +26,10 @@
     MS_PER_DAY,
   } from "@rewyt-frontend/lib/utils/dateUtils";
   import { formatLocalTime } from "$lib/time";
+  import {
+    formatISOString,
+    parseTimestamp,
+  } from "@rewyt-frontend/lib/utils/dateTimeUtils";
   import RewindTourPane, {
     type TourFocus,
   } from "$lib/components/RewindTourPane.svelte";
@@ -51,10 +57,13 @@
 
   let explorer = $state<Explorer | null>(null);
   let lastRewindTarget = $state<number | null>(null);
-  let lastRewindSource = $state<"timeline" | "button" | null>(null);
+  let lastRewindSource = $state<"timeline" | "button" | "input" | null>(null);
   let observedSelectedTime: number | null = null;
   let tourFocus = $state<TourFocus[] | null>(null);
   let isTourOpen = $state(false);
+  let isTimeInputOpen = $state(false);
+  let timeInput = $state("");
+  let timeInputInvalid = $state(false);
   let playheadRowEl: HTMLElement | undefined = $state();
 
   const isDimmed = (key: TourFocus) =>
@@ -86,6 +95,16 @@
     observedSelectedTime = explorer?.selectedTime ?? null;
   });
 
+  $effect(() => {
+    if (isTimeInputOpen && explorer) {
+      timeInput = formatISOString(
+        explorer.selectedTime ?? explorer.playheadTime ?? Date.now(),
+        explorer.timezoneOffset,
+      );
+      timeInputInvalid = false;
+    }
+  });
+
   const playheadLabel = $derived(
     explorer ? formatLocalTime(explorer.playheadTime ?? Date.now()) : "",
   );
@@ -105,11 +124,25 @@
     lastRewindTarget = target;
     return true;
   }
+
+  function submitTimeInput() {
+    if (!explorer) return;
+    const target = parseTimestamp(timeInput);
+    if (target === null) {
+      timeInputInvalid = true;
+      return;
+    }
+    lastRewindSource = "input";
+    explorer.setSelectedTime(target);
+    explorer.setPlayheadTime(target);
+    lastRewindTarget = target;
+    isTimeInputOpen = false;
+  }
 </script>
 
 <div class="flex w-full flex-col items-center">
   <div
-    class="flex flex-col items-center self-stretch rounded-2xl transition-colors px-4"
+    class="flex flex-col items-center self-stretch rounded-2xl px-4 transition-colors"
     class:bg-amber-100={isTourOpen}
     class:px-8={isTourOpen}
     class:py-4={isTourOpen}
@@ -120,7 +153,56 @@
       bind:this={playheadRowEl}
       class="text-muted-foreground flex w-full scroll-mt-4 flex-col gap-2 font-medium sm:flex-row sm:items-center sm:justify-between"
     >
-      <span class="flex items-center gap-1 font-geist tabular-nums">{playheadLabel}</span>
+      <div class="flex items-center gap-8">
+        <span class="font-geist flex items-center gap-1 tabular-nums"
+          >{playheadLabel}</span
+        >
+        {#if explorer}
+          <div
+            class="transition-opacity duration-200"
+            class:opacity-20={isDimmed("timeInput")}
+            class:pointer-events-none={isDimmed("timeInput")}
+            inert={isDimmed("timeInput")}
+          >
+            <Popover.Root bind:open={isTimeInputOpen}>
+              <Popover.Trigger>
+                {#snippet child({ props })}
+                  <InputRewindButton
+                    {...props}
+                    size={36}
+                    aria-label="Input and rewind"
+                  />
+                {/snippet}
+              </Popover.Trigger>
+              <Popover.Content
+                side="bottom"
+                align="start"
+                sideOffset={8}
+                class="z-100 w-72 rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-lg"
+              >
+                <input
+                  bind:value={timeInput}
+                  onkeydown={(e) => {
+                    if (e.key === "Enter") submitTimeInput();
+                  }}
+                  placeholder="YYYY-MM-DDTHH:MM:SS+00:00"
+                  class="font-geist h-10 w-full rounded-xl border-1 px-3 text-sm outline-none"
+                  class:border-2={timeInputInvalid}
+                  class:border-red-400={timeInputInvalid}
+                  class:border-neutral-300={!timeInputInvalid}
+                />
+                <button
+                  type="button"
+                  class="font-geist mt-2 h-10 w-full rounded-xl bg-[var(--color-selected)] px-3 text-sm font-semibold hover:cursor-pointer hover:bg-[var(--color-selected-light)]"
+                  onclick={submitTimeInput}
+                >
+                  Rewind
+                </button>
+              </Popover.Content>
+            </Popover.Root>
+          </div>
+        {/if}
+      </div>
       {#if explorer}
         <div
           class="font-geist transition-opacity duration-200"
@@ -177,7 +259,7 @@
     <div class="mt-10 flex w-full flex-col items-start">
       <button
         type="button"
-        class="flex w-full items-center gap-6 text-left hover:cursor-pointer group"
+        class="group flex w-full items-center gap-6 text-left hover:cursor-pointer"
         onclick={() => {
           isTourOpen = !isTourOpen;
           if (isTourOpen) {
@@ -190,13 +272,21 @@
           }
         }}
       >
-      <div class="flex bg-[var(--color-selected)] rounded-full w-13 h-11 shrink-0 justify-center items-center group-hover:bg-[var(--color-selected-dark)]">
-      {#if isTourOpen}
-          <X size={28} class="shrink-0 text-[var(--color-selected-darkest)]" />
-        {:else}
-          <ArrowRight size={28} class="shrink-0 text-[var(--color-selected-darkest)]" />
-        {/if}
-      </div>
+        <div
+          class="flex h-11 w-13 shrink-0 items-center justify-center rounded-full bg-[var(--color-selected)] group-hover:bg-[var(--color-selected-dark)]"
+        >
+          {#if isTourOpen}
+            <X
+              size={28}
+              class="shrink-0 text-[var(--color-selected-darkest)]"
+            />
+          {:else}
+            <ArrowRight
+              size={28}
+              class="shrink-0 text-[var(--color-selected-darkest)]"
+            />
+          {/if}
+        </div>
         <span class="flex flex-col items-start">
           <span
             class="text-lg font-semibold text-[var(--color-selected-darker)]"
@@ -207,7 +297,6 @@
             Learn how to rewind and jump through the timeline
           </span>
         </span>
-        
       </button>
 
       {#if isTourOpen}
@@ -215,6 +304,7 @@
           {explorer}
           {lastRewindSource}
           {lastRewindTarget}
+          {isTimeInputOpen}
           onFocusChange={handleFocusChange}
         />
       {/if}
