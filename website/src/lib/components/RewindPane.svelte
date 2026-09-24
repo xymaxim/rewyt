@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { ArrowLeft, ArrowRight } from "lucide-svelte";
+  import { X, ArrowRight } from "lucide-svelte";
   import {
     createExplorer,
     setExplorerContext,
@@ -192,7 +192,7 @@
       >
       <div class="flex bg-[var(--color-selected)] rounded-full w-13 h-11 shrink-0 justify-center items-center group-hover:bg-[var(--color-selected-dark)]">
       {#if isTourOpen}
-          <ArrowLeft size={28} class="shrink-0 text-[var(--color-selected-darkest)]" />
+          <X size={28} class="shrink-0 text-[var(--color-selected-darkest)]" />
         {:else}
           <ArrowRight size={28} class="shrink-0 text-[var(--color-selected-darkest)]" />
         {/if}
