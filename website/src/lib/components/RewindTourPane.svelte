@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Check, ChevronLeft, ChevronRight, Circle } from "lucide-svelte";
+  import { CircleCheckBig, ChevronLeft, ChevronRight, Circle } from "lucide-svelte";
   import type { Explorer } from "@rewyt-frontend/lib/explorer.svelte";
   import { ZOOM_LEVELS } from "@rewyt-frontend/lib/types";
 
@@ -120,7 +120,7 @@
     },
     {
       title: "Rewind by pressing the rewind button",
-      description: "Choose a moment on the timeline before rewinding to it",
+      description: "Choose a moment on the timeline before rewinding to it.",
       success: `Great!`,
       steps: [
         {
@@ -149,7 +149,7 @@
     },
     {
       title: "Navigate by zooming in",
-      description: "Zoom in on the timeline to navigate with greater precision",
+      description: "Zoom in on the timeline to navigate with greater precision.",
       success: `Great!`,
       steps: [
         {
@@ -267,19 +267,19 @@
 </script>
 
 {#snippet stepMarker(complete: boolean)}
-  {#if complete}
     <span
-      class="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-green-600 text-white"
+      class="mt-0.5 flex shrink-0 items-center justify-center text-muted-foreground"
     >
-      <Check size={14} strokeWidth={3} />
+      {#if complete}
+      <CircleCheckBig size={20} />
+      {:else}
+      <Circle size={20} />
+      {/if}
     </span>
-  {:else}
-    <Circle size={20} class="text-muted-foreground mt-0.5 shrink-0" />
-  {/if}
 {/snippet}
 
-<div class="mt-3 w-full rounded-2xl bg-neutral-200/50 p-4 text-left">
-  <div class="flex gap-1.5">
+<div class="mt-3 w-full rounded-2xl bg-slate-200/50 p-4 text-left">
+  <div class="flex gap-1">
     {#each [0, 1, 2] as i (i)}
       <span
         class="h-1.5 flex-1 rounded-full"
@@ -294,11 +294,11 @@
   </div>
 
   <div>
-    <div class="flex items-center justify-between text-lg font-semibold">
+    <div class="flex items-center justify-between text-xl font-medium mt-2">
       <span>{current.title}</span>
     </div>
-    <p class="text-muted-foreground mt-1 text-sm">{current.description}</p>
-    <ol class="mt-2 flex flex-col gap-2">
+    <p class="text-muted-foreground">{current.description}</p>
+    <ol class="mt-2 flex flex-col gap-2 mt-4">
       {#each current.steps as step, si (si)}
         <li class="flex items-start gap-3">
           {@render stepMarker(step.complete)}
@@ -307,6 +307,7 @@
               {#if xi > 0}&nbsp;{/if}
               <span
                 class:text-muted-foreground={sub.seen}
+                class:opacity-50={sub.seen}
                 class:line-through={sub.seen}
               >
                 {#each sub.parts as part, pi (pi)}
@@ -329,7 +330,7 @@
     <button
       type="button"
       aria-label="Previous tutorial"
-      class="flex size-10 items-center justify-center rounded-full bg-neutral-200/80 hover:bg-neutral-300 disabled:pointer-events-none disabled:opacity-40"
+      class="flex size-10 items-center justify-center rounded-full bg-neutral-300 hover:bg-neutral-200 hover:cursor-pointer disabled:pointer-events-none disabled:opacity-0"
       disabled={tutorialIndex === 0}
       onclick={() => (tutorialIndex -= 1)}
     >
@@ -339,11 +340,11 @@
     <button
       type="button"
       aria-label="Next tutorial"
-      class="flex size-10 items-center justify-center rounded-full bg-neutral-200/80 hover:bg-neutral-300 disabled:pointer-events-none disabled:opacity-40"
+      class="flex size-10 items-center justify-center rounded-full bg-neutral-300 hover:bg-neutral-200 hover:cursor-pointer disabled:pointer-events-none disabled:opacity-0"
       disabled={tutorialIndex === 2}
       onclick={() => (tutorialIndex += 1)}
     >
-      <ChevronRight />
+      <ChevronRight/>
     </button>
   </div>
 </div>

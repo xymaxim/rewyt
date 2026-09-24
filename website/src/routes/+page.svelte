@@ -60,20 +60,20 @@
   <div class="flex items-center gap-4">
     <a
       href="#get-rewyt"
-      class="flex cursor-pointer items-center gap-1 rounded-2xl bg-[var(--color-selected)] px-4 py-2.5 text-sm font-semibold transition hover:scale-105 hover:bg-[var(--color-selected-dark)] active:scale-95"
+      class="flex cursor-pointer items-center gap-1 rounded-2xl bg-[var(--color-selected)] px-4 py-3 font-semibold transition hover:scale-105 hover:bg-[var(--color-selected-dark)] active:scale-95"
     >
       Get Rewyt <ArrowDown />
     </a>
     <a
       href="https://xymaxim.github.io/rewyt/docs/quickstart/"
-      class="flex cursor-pointer items-center gap-2 rounded-2xl px-4 py-3 text-sm font-semibold transition hover:scale-105 active:scale-95"
+      class="flex cursor-pointer items-center gap-2 rounded-2xl px-4 py-3 font-semibold transition hover:scale-105 active:scale-95"
     >
       Quickstart <BookOpen />
     </a>
   </div>
-  <div class="flex flex-col items-center gap-1">
-    <p class="text-sm">Available for Linux, macOS, and Windows</p>
-    <p class="text-muted-foreground text-sm">
+  <div class="flex flex-col items-center">
+    <p>Available for Linux, macOS, and Windows</p>
+    <p>
       <a
         href="https://xymaxim.github.io/rewyt/docs/disclaimer/"
         class="cursor-pointer font-medium text-[var(--color-selected-darkest)] underline hover:no-underline"
@@ -85,7 +85,7 @@
   <ScreenshotPane />
 
   <div
-    class="mt-10 flex w-full max-w-[720px] flex-col rounded-2xl bg-amber-100 px-4 py-4 text-left sm:px-6"
+    class="mt-10 flex w-full max-w-[720px] flex-col rounded-2xl bg-amber-200/80 px-4 py-4 text-left sm:px-6"
   >
     <p class="flex items-baseline">
       <span class="text-xl font-extrabold">rewyt</span>
@@ -144,7 +144,7 @@
     class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-4 py-5 text-center"
   >
     <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
-      Rewyt past moments
+      Rewind past moments
     </h3>
     <p class="text-muted-foreground text-md mb-8 w-full font-medium md:w-2/3">
       Rewind through a YouTube live stream and play it back. Explore a stream or
@@ -167,13 +167,13 @@
     <div class="mt-10 flex w-full max-w-120 items-end justify-between">
       <div class="flex -rotate-7 flex-col gap-2">
         <div
-          class="rounded-xl border-1 border-neutral-300 bg-neutral-100/50 px-3 py-2 text-sm shadow-md"
+          class="rounded-xl border-1 border-neutral-300 bg-neutral-100 px-3 py-2 text-sm shadow-md"
           class:invisible={!copyOpen}
         >
           Copy timestamp
         </div>
         <div
-          class="relative inline-flex h-11 w-9 items-center justify-center rounded-2xl bg-[oklch(0.9001_0.1264_120.7)] hover:cursor-pointer active:top-[1px]"
+          class="relative inline-flex h-12 w-9.5 items-center justify-center rounded-2xl bg-[oklch(0.9001_0.1264_120.7)] hover:cursor-pointer active:top-[1px]"
           onclick={() => (copyOpen = !copyOpen)}
         >
           <EllipsisVertical size={22} />
@@ -182,17 +182,17 @@
 
       <div class="flex rotate-3 flex-col items-center gap-2">
         <div
-          class="rounded-2xl border-1 border-neutral-200 bg-neutral-100/50 p-4 shadow-md"
+          class="rounded-2xl border-1 border-neutral-200 bg-neutral-100 p-4 shadow-md"
           class:invisible={!inputOpen}
         >
           <div
             class="inline-flex items-center rounded-xl border-1 border-neutral-300 bg-white px-8 py-2 text-sm"
           >
-            {selectedTimeIso}<TextCursor size={18} class="hidden" />
+            {selectedTimeIso}
           </div>
         </div>
         <div
-          class="relative inline-flex size-12 items-center justify-center rounded-full bg-gradient-to-r from-[oklch(0.9001_0.1264_120.7)] to-[oklch(0.85_0.07_307)] hover:cursor-pointer active:top-[1px]"
+          class="relative inline-flex size-13 items-center justify-center rounded-full bg-gradient-to-r from-[oklch(0.9001_0.1264_120.7)] to-[oklch(0.85_0.07_307)] hover:cursor-pointer active:top-[1px]"
           onclick={() => (inputOpen = !inputOpen)}
         >
           <Pen size={22} />

@@ -166,12 +166,19 @@
     <div class="mt-10 flex w-full flex-col items-start">
       <button
         type="button"
-        class="flex w-full items-center justify-between gap-2 text-left hover:cursor-pointer"
+        class="flex w-full items-center gap-6 text-left hover:cursor-pointer group"
         onclick={() => {
           isTourOpen = !isTourOpen;
           if (!isTourOpen) tourFocus = null;
         }}
       >
+      <div class="flex bg-[var(--color-selected)] rounded-full w-13 h-11 shrink-0 justify-center items-center group-hover:bg-[var(--color-selected-dark)]">
+      {#if isTourOpen}
+          <ArrowLeft size={28} class="shrink-0 text-[var(--color-selected-darkest)]" />
+        {:else}
+          <ArrowRight size={28} class="shrink-0 text-[var(--color-selected-darkest)]" />
+        {/if}
+      </div>
         <span class="flex flex-col items-start">
           <span
             class="text-lg font-semibold text-[var(--color-selected-darker)]"
@@ -182,11 +189,7 @@
             Learn how to rewind and jump through the timeline
           </span>
         </span>
-        {#if isTourOpen}
-          <ArrowLeft size={28} class="shrink-0" />
-        {:else}
-          <ArrowRight size={28} class="shrink-0" />
-        {/if}
+        
       </button>
 
       {#if isTourOpen}

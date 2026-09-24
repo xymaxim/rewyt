@@ -255,11 +255,13 @@
     transition: none;
   }
   .pane-bg {
-    background-color: color-mix(
+    background-color: color-mix( in oklch, color-mix(
       in oklch,
       var(--color-selected-light),
       var(--color-play-200)
       var(--mix, 100%)
+    ),
+    transparent 0%
     );
   }
 </style>

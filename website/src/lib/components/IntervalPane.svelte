@@ -62,14 +62,14 @@
   </div>
 </div>
 <div class="mt-8 flex flex-col gap-1">
-  <p class="text-sm">
+  <p class="text-base">
     Or capture frames for a <a
       href="https://xymaxim.github.io/ypb/tutorials/timelapse/"
       class="font-medium text-[var(--color-interval-600)] underline hover:no-underline">time-lapse video</a
     >:
   </p>
   <div class="max-w-120">
-    <span class="rounded-xl px-2 py-1 font-mono text-xs/snug font-medium"
+    <span class="rounded-xl px-2 py-1 font-mono text-sm"
       >$ ypb capture timelapse -i {aTime}/{bTime} --every 10m abcdefgh123</span
     >
   </div>

@@ -3,7 +3,7 @@
   import annotations from "$lib/data/screenshot-annotations.json";
   import { layoutLabels, labelY } from "$lib/labelPlacement";
   import { MediaQuery } from "svelte/reactivity";
-  import { EyeOff, MousePointer2, Pointer } from "lucide-svelte";
+  import { EyeOff, MousePointer, Pointer } from "lucide-svelte";
 
   const labelledAnnotations = annotations.filter((a) => a.label);
 
@@ -276,12 +276,12 @@
 {/if}
 
 <div
-  class="text-muted-foreground/70 mt-3 flex w-full max-w-[720px] items-center justify-center gap-2 text-sm font-medium select-none motion-safe:transition-opacity motion-safe:duration-150"
+  class="text-muted-foreground/70 mt-3 flex w-full max-w-[720px] items-center justify-center gap-2 select-none motion-safe:transition-opacity motion-safe:duration-150"
   class:opacity-0={labelsVisible}
   class:pointer-events-none={labelsVisible}
   class:hidden={isMobile.current && labelItems.length > 0}
 >
-  <MousePointer2 size={18} class="hidden sm:block" />
+  <MousePointer size={18} class="hidden sm:block" />
   <Pointer size={18} class="sm:hidden" />
   <span class="hidden sm:inline">Hover the screenshot to show annotations</span>
   <span class="sm:hidden">Tap the screenshot to show annotations</span>
