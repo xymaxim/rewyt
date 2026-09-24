@@ -55,6 +55,7 @@
   let observedSelectedTime: number | null = null;
   let tourFocus = $state<TourFocus[] | null>(null);
   let isTourOpen = $state(false);
+  let playheadRowEl: HTMLElement | undefined = $state();
 
   const isDimmed = (key: TourFocus) =>
     tourFocus !== null && !tourFocus.includes(key);
@@ -108,7 +109,8 @@
 
 <div class="flex w-full flex-col items-center">
   <div
-    class="text-muted-foreground flex w-full flex-col gap-2 font-medium sm:flex-row sm:items-center sm:justify-between"
+    bind:this={playheadRowEl}
+    class="text-muted-foreground flex w-full scroll-mt-4 flex-col gap-2 font-medium sm:flex-row sm:items-center sm:justify-between"
   >
     <span class="flex items-center gap-1 font-geist tabular-nums">{playheadLabel}</span>
     {#if explorer}
@@ -169,7 +171,14 @@
         class="flex w-full items-center gap-6 text-left hover:cursor-pointer group"
         onclick={() => {
           isTourOpen = !isTourOpen;
-          if (!isTourOpen) tourFocus = null;
+          if (isTourOpen) {
+            playheadRowEl?.scrollIntoView({
+              behavior: "smooth",
+              block: "start",
+            });
+          } else {
+            tourFocus = null;
+          }
         }}
       >
       <div class="flex bg-[var(--color-selected)] rounded-full w-13 h-11 shrink-0 justify-center items-center group-hover:bg-[var(--color-selected-dark)]">
