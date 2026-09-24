@@ -10,6 +10,7 @@
   import AnimatedPanneau from "@rewyt-frontend/lib/components/panneau/AnimatedPanneau.svelte";
   import { FastForward, Play, Square, Rewind } from "lucide-svelte";
 
+  import type { Snippet } from "svelte";
   import type {
     PrimitiveDescriptor,
     OklchRange,
@@ -27,10 +28,14 @@
   interface Props {
     playing?: boolean;
     rewinding?: boolean;
+    children?: Snippet;
   }
 
-  let { playing = $bindable(false), rewinding = $bindable(false) }: Props =
-    $props();
+  let {
+    playing = $bindable(false),
+    rewinding = $bindable(false),
+    children,
+  }: Props = $props();
 
   let seed = $state(0);
 
@@ -196,6 +201,7 @@
         <Play size={24} />
       {/if}
     </button>
+    {@render children?.()}
   </div>
 
   <div class="mt-2 flex w-full max-w-[720px] px-4">

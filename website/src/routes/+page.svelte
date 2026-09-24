@@ -38,20 +38,22 @@
   >
     Watch a two-minute demo <ChevronRight size={14} strokeWidth={3} />
   </a>
-  <LandingPane bind:playing bind:rewinding />
-  <div
-    class="pointer-events-none absolute inset-x-0 top-[-40px] bottom-0 flex flex-col items-center justify-center gap-0 transition sm:gap-2"
-    class:opacity-0={rewinding || playing}
-    class:scale-50={rewinding || playing}
-  >
-    <h1 class="mb-4 text-center text-3xl font-normal sm:text-5xl">
-      <p>Rewind & play</p>
-      <p>YouTube live streams</p>
-    </h1>
-    <p class="text-normal px-6 text-center">
-      Rewyt is a desktop app for rewatching live streams beyond YouTube's limits
-    </p>
-  </div>
+  <LandingPane bind:playing bind:rewinding>
+    <div
+      class="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-0 transition sm:gap-2"
+      class:opacity-0={rewinding || playing}
+      class:scale-50={rewinding || playing}
+    >
+      <h1 class="mb-4 text-center text-3xl font-normal sm:text-5xl">
+        <p>Rewind & play</p>
+        <p>YouTube live streams</p>
+      </h1>
+      <p class="text-normal sm:text-lg px-6 text-center">
+        Rewyt is a desktop app for rewatching live streams beyond YouTube's
+        limits
+      </p>
+    </div>
+  </LandingPane>
 </div>
 
 <div class="mt-12 flex flex-col items-center gap-4 px-4">
