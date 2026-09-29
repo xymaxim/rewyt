@@ -165,7 +165,7 @@
         style={thumbStyle}
       >
         <span
-          class="pointer-events-none text-sm font-bold tracking-wide text-foreground select-none"
+          class="pointer-events-none text-sm font-black tracking-tight text-foreground select-none"
         >
           {thumbLabel}
         </span>

@@ -233,7 +233,7 @@
         "
       >
         <div
-          class="flex flex-1 items-center justify-center text-sm font-bold text-neutral-100"
+          class="flex flex-1 items-center justify-center text-sm font-black text-neutral-100"
         >
           A
         </div>
@@ -258,7 +258,7 @@
         "
       >
         <span
-          class="flex flex-1 items-center justify-center text-sm font-bold text-neutral-100"
+          class="flex flex-1 items-center justify-center text-sm font-black text-neutral-100"
           >B</span
         >
       </div>

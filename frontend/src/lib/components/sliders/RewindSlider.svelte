@@ -225,9 +225,9 @@
               )}
           >
             {#if isBehindPlayhead}
-              <Undo class="text-black" size={18} />
+              <Undo class="text-black" size={24} />
             {:else}
-              <Redo class="text-black" size={18} />
+              <Redo class="text-black" size={24} />
             {/if}
           </div>
         {/if}

@@ -28,13 +28,16 @@
     class="absolute h-8 w-full bg-neutral-200"
     style="clip-path: polygon(0% 50%, 100% 0%, 100% 100%);"
   />
-  <div class="flex gap-3 px-2">
+  <div class="flex w-full justify-between gap-3 px-2">
     {#each zoomKeys.toReversed() as key}
       <button
-        class="z-20 flex h-7 w-8 items-center justify-center rounded-full text-xs tracking-wider transition-none outline-none"
+        class="z-20 flex h-7 w-8 items-center justify-center rounded-full text-xs tracking-wide transition-none outline-none hover:cursor-pointer"
         class:font-medium={zoomKey !== key}
-        class:font-extrabold={zoomKey === key}
+        class:font-black={zoomKey === key}
+        class:text-xs={zoomKey !== key}
+        class:text-sm={zoomKey === key}
         class:text-white={zoomKey === key}
+        class:tracking-tight={zoomKey === key}
         class:bg-neutral-700={zoomKey === key}
         class:cursor-default!={zoomKey === key}
         class:-rotate-30={zoomKey === key}
