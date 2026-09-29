@@ -4,15 +4,10 @@
 
   const items = [
     {
-      value: "how-it-works",
-      title: "How it works?",
-      content: "Placeholder text.",
-    },
-    {
       value: "responsible-use",
       title: "How to use it responsibly?",
       content:
-        "Rewyt was built for personal use, watching streams and keeping favorite moments, not for redistributing content elsewhere. If you do share a clip or screenshot, credit the creator and their channel. Also, don't forget to support the people you watch by subscribing to their channel and liking or commenting on YouTube.",
+        "Rewyt is built for personal use like watching streams and keeping favorite moments, not for redistributing content elsewhere. If you do share a clip or screenshot, please credit the creator and their channel. Also, don't forget to support the people you watch by subscribing to their channel and liking or commenting on YouTube.",
     },
   ];
 </script>

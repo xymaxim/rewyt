@@ -46,7 +46,7 @@
     {#each subjects as subject}
       <a
         href="#{subjectSlug(subject)}"
-        class="text-[var(--color-selected-darkest)]">{subject}</a
+        class="text-[var(--color-selected-darkest)] font-medium hover:text-[var(--color-selected-darker)]">{subject}</a
       >
     {/each}
   </nav>
@@ -60,7 +60,7 @@
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {#each group.items as pick (pick.link)}
             {@const videoId = videoIdFromLink(pick.link)}
-            <div class="flex flex-col rounded-xl bg-neutral-200/50 px-4 py-3">
+            <div class="flex flex-col rounded-xl bg-[var(--color-selected-lighter)] px-4 py-3">
               <span class="flex items-center gap-2">
                 <a
                   href={pick.link}

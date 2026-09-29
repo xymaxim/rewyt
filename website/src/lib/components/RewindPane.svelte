@@ -140,118 +140,123 @@
   }
 </script>
 
-<div class="flex w-full flex-col items-center">
+<div class="flex w-full max-w-[720px] flex-col items-center">
   <div
-    class="flex flex-col items-center self-stretch rounded-2xl px-4 transition-colors"
-    class:bg-amber-100={isTourOpen}
-    class:px-8={isTourOpen}
-    class:py-4={isTourOpen}
-    class:-mx-4={isTourOpen}
-    class:-my-4={isTourOpen}
+    class="relative flex flex-col self-stretch overflow-hidden rounded-xl p-2 pt-8 transition-colors bg-neutral-200"
   >
     <div
-      bind:this={playheadRowEl}
-      class="text-muted-foreground flex w-full scroll-mt-4 flex-col gap-2 font-medium sm:flex-row sm:items-center sm:justify-between"
+      class="absolute top-3 right-3 size-3 rounded-full bg-neutral-400/60"
+    ></div>
+
+    <div
+      class="flex flex-col items-center self-stretch rounded-xl px-8 pt-4 pb-6"
+      class:bg-neutral-100={!isTourOpen}
+      class:bg-amber-100={isTourOpen}
     >
-      <div class="flex items-center gap-8">
-        <span class="font-geist flex items-center gap-1 tabular-nums"
-          >{playheadLabel}</span
-        >
+      <div
+        bind:this={playheadRowEl}
+        class="text-muted-foreground flex w-full scroll-mt-4 flex-col gap-2 font-medium sm:flex-row sm:items-center sm:justify-between"
+      >
+        <div class="flex items-center gap-6">
+          <span class="font-geist flex items-center gap-1 tabular-nums"
+            >{playheadLabel}</span
+          >
+          {#if explorer}
+            <div
+              class="transition-opacity duration-200"
+              class:opacity-20={isDimmed("timeInput")}
+              class:pointer-events-none={isDimmed("timeInput")}
+              inert={isDimmed("timeInput")}
+            >
+              <Popover.Root bind:open={isTimeInputOpen}>
+                <Popover.Trigger>
+                  {#snippet child({ props })}
+                    <InputRewindButton
+                      {...props}
+                      size={36}
+                      aria-label="Input and rewind"
+                    />
+                  {/snippet}
+                </Popover.Trigger>
+                <Popover.Content
+                  side="bottom"
+                  align="start"
+                  sideOffset={8}
+                  class="z-100 w-72 rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-lg"
+                >
+                  <input
+                    bind:value={timeInput}
+                    onkeydown={(e) => {
+                      if (e.key === "Enter") submitTimeInput();
+                    }}
+                    placeholder="YYYY-MM-DDTHH:MM:SS+00:00"
+                    class="font-geist h-10 w-full rounded-xl border-1 px-3 text-sm outline-none"
+                    class:border-2={timeInputInvalid}
+                    class:border-red-400={timeInputInvalid}
+                    class:border-neutral-300={!timeInputInvalid}
+                  />
+                  <button
+                    type="button"
+                    class="font-geist mt-2 h-10 w-full rounded-xl bg-[var(--color-selected)] px-3 text-sm font-semibold hover:cursor-pointer hover:bg-[var(--color-selected-light)]"
+                    onclick={submitTimeInput}
+                  >
+                    Rewind
+                  </button>
+                </Popover.Content>
+              </Popover.Root>
+            </div>
+          {/if}
+        </div>
         {#if explorer}
           <div
-            class="transition-opacity duration-200"
-            class:opacity-20={isDimmed("timeInput")}
-            class:pointer-events-none={isDimmed("timeInput")}
-            inert={isDimmed("timeInput")}
+            class="font-geist transition-opacity duration-200"
+            class:opacity-20={isDimmed("zoom")}
+            class:pointer-events-none={isDimmed("zoom")}
+            inert={isDimmed("zoom")}
           >
-            <Popover.Root bind:open={isTimeInputOpen}>
-              <Popover.Trigger>
-                {#snippet child({ props })}
-                  <InputRewindButton
-                    {...props}
-                    size={36}
-                    aria-label="Input and rewind"
-                  />
-                {/snippet}
-              </Popover.Trigger>
-              <Popover.Content
-                side="bottom"
-                align="start"
-                sideOffset={8}
-                class="z-100 w-72 rounded-2xl border border-gray-200 bg-white px-4 py-3 shadow-lg"
-              >
-                <input
-                  bind:value={timeInput}
-                  onkeydown={(e) => {
-                    if (e.key === "Enter") submitTimeInput();
-                  }}
-                  placeholder="YYYY-MM-DDTHH:MM:SS+00:00"
-                  class="font-geist h-10 w-full rounded-xl border-1 px-3 text-sm outline-none"
-                  class:border-2={timeInputInvalid}
-                  class:border-red-400={timeInputInvalid}
-                  class:border-neutral-300={!timeInputInvalid}
-                />
-                <button
-                  type="button"
-                  class="font-geist mt-2 h-10 w-full rounded-xl bg-[var(--color-selected)] px-3 text-sm font-semibold hover:cursor-pointer hover:bg-[var(--color-selected-light)]"
-                  onclick={submitTimeInput}
-                >
-                  Rewind
-                </button>
-              </Popover.Content>
-            </Popover.Root>
+            <TimelineZoomControl />
           </div>
         {/if}
       </div>
-      {#if explorer}
-        <div
-          class="font-geist transition-opacity duration-200"
-          class:opacity-20={isDimmed("zoom")}
-          class:pointer-events-none={isDimmed("zoom")}
-          inert={isDimmed("zoom")}
-        >
-          <TimelineZoomControl />
-        </div>
-      {/if}
-    </div>
 
-    <div class="font-geist relative mt-2 w-full">
-      {#if explorer}
-        <div
-          class="transition-opacity duration-200"
-          class:opacity-20={isDimmed("timeline")}
-          class:pointer-events-none={isDimmed("timeline")}
-          inert={isDimmed("timeline")}
-        >
-          <Timeline
-            seekableRange={null}
-            mpdStartTime={0}
-            {isRewound}
-            onRewind={handleRewind}
-            onSeekTo={() => {}}
-            tickIntervals={resolveTickIntervals}
-          />
-        </div>
+      <div class="font-geist relative mt-2 w-full">
+        {#if explorer}
+          <div
+            class="transition-opacity duration-200"
+            class:opacity-20={isDimmed("timeline")}
+            class:pointer-events-none={isDimmed("timeline")}
+            inert={isDimmed("timeline")}
+          >
+            <Timeline
+              seekableRange={null}
+              mpdStartTime={0}
+              {isRewound}
+              onRewind={handleRewind}
+              onSeekTo={() => {}}
+              tickIntervals={resolveTickIntervals}
+            />
+          </div>
 
-        <div class="mt-1 mb-2 flex flex-col gap-2">
-          <div
-            class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200"
-            class:opacity-20={isDimmed("daysSlider")}
-            class:pointer-events-none={isDimmed("daysSlider")}
-            inert={isDimmed("daysSlider")}
-          >
-            <DaysSlider />
+          <div class="mt-1 mb-2 flex flex-col gap-2">
+            <div
+              class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200"
+              class:opacity-20={isDimmed("daysSlider")}
+              class:pointer-events-none={isDimmed("daysSlider")}
+              inert={isDimmed("daysSlider")}
+            >
+              <DaysSlider />
+            </div>
+            <div
+              class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200"
+              class:opacity-20={isDimmed("daySlider")}
+              class:pointer-events-none={isDimmed("daySlider")}
+              inert={isDimmed("daySlider")}
+            >
+              <DaySlider />
+            </div>
           </div>
-          <div
-            class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200"
-            class:opacity-20={isDimmed("daySlider")}
-            class:pointer-events-none={isDimmed("daySlider")}
-            inert={isDimmed("daySlider")}
-          >
-            <DaySlider />
-          </div>
-        </div>
-      {/if}
+        {/if}
+      </div>
     </div>
   </div>
 
@@ -273,28 +278,24 @@
         }}
       >
         <div
-          class="flex h-11 w-13 shrink-0 items-center justify-center rounded-full bg-[var(--color-selected)] group-hover:bg-[var(--color-selected-dark)]"
+          class="flex h-11 w-13 shrink-0 items-center justify-center rounded-full bg-[var(--color-selected-dark)] group-hover:bg-[var(--color-selected)]"
         >
           {#if isTourOpen}
-            <X
-              size={28}
-              class="shrink-0 text-[var(--color-selected-darkest)]"
-            />
+            <X size={28} class="shrink-0 text-black" />
           {:else}
-            <ArrowRight
-              size={28}
-              class="shrink-0 text-[var(--color-selected-darkest)]"
-            />
+            <ArrowRight size={28} class="shrink-0 text-black" />
           {/if}
         </div>
         <span class="flex flex-col items-start">
           <span
-            class="text-lg font-semibold text-[var(--color-selected-darker)]"
+            class="text-lg leading-snug font-semibold text-[var(--color-selected-dark)]"
           >
             {isTourOpen ? "Hide the tour" : "Take the tour"}
           </span>
-          <span class="text-muted-foreground">
-            Learn how to rewind and jump through the timeline
+          <span
+            class="leading-snug text-[var(--color-dark-muted-foreground)] sm:text-lg"
+          >
+          Learn how to rewind and jump around the timeline
           </span>
         </span>
       </button>

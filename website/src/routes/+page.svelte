@@ -6,7 +6,8 @@
     BookOpen,
     ChevronRight,
     EllipsisVertical,
-    TextCursor,
+    Undo,
+    Play,
   } from "lucide-svelte";
   import InputRewindButton from "@rewyt-frontend/lib/components/InputRewindButton.svelte";
   import LandingPane from "/src/lib/components/LandingPane.svelte";
@@ -16,17 +17,13 @@
   import MoreAboutPane from "/src/lib/components/MoreAboutPane.svelte";
   import { Popover } from "bits-ui";
   import { page } from "$app/state";
-  import { formatLocalIso } from "$lib/time";
 
   let playing = $state(false);
   let rewinding = $state(false);
   let copyOpen = $state(true);
-  let inputOpen = $state(true);
   let etymologySourceOpen = $state(false);
 
   let selected = $state(0);
-
-  let selectedTimeIso = $derived(formatLocalIso(selected));
 </script>
 
 <div class="relative mt-4 flex flex-col items-center gap-4">
@@ -34,9 +31,9 @@
     href="https://video.liberta.vip/w/jSCtepm8BfAE6oZN7qJXB2?start=1m4s"
     target="_blank"
     rel="noopener noreferrer"
-    class="flex cursor-pointer items-center gap-1 rounded-full border-1 border-[oklch(0.44_0.21_299)]/40 bg-[oklch(0.95_0.03_308)] px-2 py-0 text-sm font-medium text-[oklch(0.44_0.21_299)]! text-[var(--color-muted-foreground)] transition hover:bg-[oklch(0.85_0.07_307)]"
+    class="flex cursor-pointer items-center gap-1 rounded-full border-2 border-black bg-transparent px-4 py-1 text-sm font-medium transition hover:bg-amber-200 hover:border-amber-200"
   >
-    Watch a two-minute demo <ChevronRight size={14} strokeWidth={3} />
+    Watch a two-minute demo
   </a>
   <LandingPane bind:playing bind:rewinding>
     <div
@@ -56,19 +53,19 @@
   </LandingPane>
 </div>
 
-<div class="mt-12 flex flex-col items-center gap-4 px-4">
+<div class="mt-12 flex flex-col items-center gap-4">
   <div class="flex items-center gap-4">
     <a
       href="#get-rewyt"
-      class="flex cursor-pointer items-center gap-1 rounded-2xl bg-[var(--color-selected)] px-4 py-3 font-semibold transition hover:scale-105 hover:bg-[var(--color-selected-dark)] active:scale-95"
+      class="flex cursor-pointer items-center gap-1 rounded-3xl border-2 border-neutral-800 px-3 py-3 font-medium hover:border-[var(--color-selected)] hover:bg-[var(--color-selected)]"
     >
       Get Rewyt <ArrowDown />
     </a>
     <a
       href="https://xymaxim.github.io/rewyt/docs/quickstart/"
-      class="flex cursor-pointer items-center gap-2 rounded-2xl px-4 py-3 font-semibold transition hover:scale-105 active:scale-95"
+      class="flex cursor-pointer items-center gap-2 rounded-3xl border-2 border-neutral-800 px-3 py-3 font-medium hover:border-[var(--color-selected)] hover:bg-[var(--color-selected)]"
     >
-      Quickstart <BookOpen />
+      Quickstart
     </a>
   </div>
   <div class="flex flex-col items-center">
@@ -76,152 +73,194 @@
     <p>
       <a
         href="https://xymaxim.github.io/rewyt/docs/disclaimer/"
-        class="cursor-pointer font-medium text-[var(--color-selected-darkest)] underline hover:no-underline"
+        class="cursor-pointer font-medium text-[var(--color-selected-darker)] underline hover:no-underline"
         >Rewyt Usage Disclaimer</a
       >
     </p>
   </div>
 
-  <ScreenshotPane />
-
   <div
-    class="mt-10 flex w-full max-w-[720px] flex-col rounded-2xl bg-amber-200/80 px-4 py-4 text-left sm:px-6"
+    class="mt-10 mb-8 flex w-full max-w-[720px] flex-col items-center justify-center rounded-4xl px-4 text-2xl"
   >
-    <p class="flex items-baseline">
-      <span class="text-xl font-extrabold">rewyt</span>
-      <span class="ml-2 font-normal text-gray-500">/rɪˈwɪt/</span>
-    </p>
-    <ol class="mt-3 space-y-2 text-gray-700">
-      <li>
-        <span class="shrink-0 text-gray-500 italic">1. (n.)</span>
-        from
-        <Popover.Root bind:open={etymologySourceOpen}>
-          <Popover.Trigger>
-            {#snippet child({ props })}
-              <span
-                {...props}
-                role="button"
-                tabindex="0"
-                class="cursor-pointer border-amber-700 font-medium text-amber-800 underline hover:no-underline"
-                >Old English</span
-              >
-            {/snippet}
-          </Popover.Trigger>
-          <Popover.Content
-            side="top"
-            align="center"
-            sideOffset={8}
-            class="z-10 w-80 rounded-2xl border border-gray-200 bg-white px-4 py-2 text-gray-600 shadow-lg md:w-100"
-          >
-            <p class="leading-tight">
-              Thorpe, Benjamin. <em>Analecta Anglo-Saxonica</em>. John and
-              Arthur Arch, 1834, p. 240.
-              <a
-                href="https://archive.org/details/analectaanglosa02thorgoog/page/240"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="ml-1 font-medium text-amber-700"
-              >
-                [archive.org]
-              </a>
-            </p>
-          </Popover.Content>
-        </Popover.Root>
-        <em>"rewyt,"</em>
-        <a
-          href="https://archive.org/details/analectaanglosax00tho/page/240/mode/2up?q=rewyt"
-          >meaning</a
-        > <em>navigation</em>, <em>voyage</em>.
-      </li>
-      <li>
-        <span class="shrink-0 text-gray-500 italic">2. (v.)</span>
-        to rewatch YouTube live streams, navigating through past moments
-      </li>
-    </ol>
-  </div>
-
-  <div
-    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl text-center"
-  >
-    <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
-      Rewind past moments
-    </h3>
-    <p class="text-muted-foreground text-md mb-8 w-full font-medium md:w-2/3">
-      Rewind through a YouTube live stream and play it back. Explore a stream or
-      rewatch specific moments.
-    </p>
-
-    <RewindPane bind:selected />
-  </div>
-
-  <div
-    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl text-center sm:px-10"
-  >
-    <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
+    <p class="max-w-full items-baseline gap-1">
+      With <span class="font-normal">Rewyt</span>, you can
+      <span class="font-medium text-[var(--color-selected-darker)]">rewind</span
+      >
+      <Undo
+        class="inline-block size-9 rounded-full bg-[var(--color-selected)] p-1"
+      /> and
+      <span class="whitespace-nowrap"
+        ><span class="font-medium text-[var(--color-play)]">play</span>
+        <Play
+          class="inline-block size-9 rounded-full bg-[var(--color-play-lighter)] p-1"
+        /></span
+      >
+      back past moments of ongoing YouTube live streams, far beyond the YouTube player
+      limits.
+      <span
+        class="inline rounded-2xl bg-[var(--color-interval)] box-decoration-clone px-4 text-white"
+        >Clip and save your favorite moments.</span
+      >
       Share timestamps
-    </h3>
-    <p class="text-muted-foreground text-md w-full font-medium md:w-2/3">
-      Copy a timestamp for the moment you found, or paste one to jump right to
-      it. Perfect for sharing with others.
+      <span class="font-mono text-base font-medium tracking-tight"
+        >HH:mm:ss</span
+      > with others.
     </p>
-    <div class="mt-10 flex w-full max-w-120 items-end justify-between">
-      <div class="flex -rotate-7 flex-col gap-2">
-        <div
-          class="rounded-xl border-1 border-neutral-300 bg-neutral-100 px-3 py-2 text-sm shadow-md"
-          class:invisible={!copyOpen}
-        >
-          Copy timestamp
-        </div>
-        <div
-          class="relative inline-flex h-12 w-9.5 items-center justify-center rounded-2xl bg-[oklch(0.9001_0.1264_120.7)] hover:cursor-pointer active:top-[1px]"
-          onclick={() => (copyOpen = !copyOpen)}
-        >
-          <EllipsisVertical size={22} />
-        </div>
-      </div>
+  </div>
 
-      <div class="flex rotate-3 flex-col items-center gap-2">
-        <div
-          class="rounded-2xl border-1 border-neutral-200 bg-neutral-100 p-4 shadow-md"
-          class:invisible={!inputOpen}
-        >
-          <div
-            class="inline-flex items-center rounded-xl border-1 border-neutral-300 bg-white px-8 py-2 text-sm"
-          >
-            {selectedTimeIso}
-          </div>
-        </div>
-        <InputRewindButton
-          size={52}
-          iconSize={22}
-          aria-label="Toggle timestamp input"
-          onclick={() => (inputOpen = !inputOpen)}
-        />
-      </div>
+  <div class="flex w-full max-w-[720px] flex-col">
+    <div
+      class="relative mb-10 flex max-w-[720px] flex-col self-start rounded-2xl bg-[#FFE175]/0 px-4 text-left text-lg leading-snug"
+    >
+      <p class="text-2xl font-medium">rewyt</p>
+      <!-- <p class="flex items-baseline">
+           <span class="font-semibold">rewyt</span>
+           <span class="ml-2 font-medium">/rɪˈwɪt/</span>
+           </p> -->
+      <ol class="pace-y-0">
+        <li>
+          1. <span class="shrink-0 italic">(n.)</span>
+          from
+          <Popover.Root bind:open={etymologySourceOpen}>
+            <Popover.Trigger>
+              {#snippet child({ props })}
+                <span
+                  {...props}
+                  role="button"
+                  tabindex="0"
+                  class="cursor-pointer border-amber-700 font-medium text-amber-800 underline hover:no-underline"
+                  >Old English</span
+                >
+              {/snippet}
+            </Popover.Trigger>
+            <Popover.Content
+              side="top"
+              align="center"
+              sideOffset={8}
+              class="z-10 w-80 rounded-2xl border border-gray-200 bg-white px-4 py-2 text-gray-600 shadow-lg md:w-100"
+            >
+              <p class="leading-tight">
+                Thorpe, Benjamin. <em>Analecta Anglo-Saxonica</em>. John and
+                Arthur Arch, 1834, p. 240.
+                <a
+                  href="https://archive.org/details/analectaanglosa02thorgoog/page/240"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="ml-1 font-medium text-amber-700"
+                >
+                  [archive.org]
+                </a>
+              </p>
+            </Popover.Content>
+          </Popover.Root>
+          <em>"rewyt,"</em>
+          <a
+            href="https://archive.org/details/analectaanglosax00tho/page/240/mode/2up?q=rewyt"
+            >meaning</a
+          > <em>navigation</em>, <em>voyage</em>
+        </li>
+        <li>
+          2. <span class="shrink-0 italic">(v.)</span>
+          to rewatch YouTube live streams, navigating through past moments
+        </li>
+      </ol>
     </div>
   </div>
 
+  <div class="flex w-full flex-col items-center rounded-4xl px-4 py-10">
+    <ScreenshotPane />
+  </div>
+
   <div
-    class="mb-15 flex max-w-[720px] flex-col items-center gap-2 rounded-2xl bg-gradient-to-b from-[oklch(0.9547_0.0571_118.13)]/0 to-70% px-4 py-5 text-center sm:px-10"
+    class="mb-10 flex w-full flex-col items-center gap-2 rounded-4xl bg-[var(--color-dark-background)] py-10 text-center md:py-20"
   >
-    <h3 class="text-2xl font-medium text-[oklch(0.5952_0.1402_124.34)]">
-      Highlight and save clips
-    </h3>
-    <p class="text-muted-foreground text-md w-full font-medium md:w-2/3">
-      Mark an interval and save it to a file with <a
-        href="https://xymaxim.github.io/ypb/"
-        class="inline-flex items-baseline gap-0.5 font-bold text-[#6d8c17]"
-        ><ArrowUpRight size={14} />ypb</a
-      >. Great for clipping and saving an interesting moment.
-    </p>
-    <IntervalPane />
+    <!-- <div class="flex max-w-[720px] items-center">
+           <div
+           class="mb-6 flex size-16 rounded-full bg-[var(--color-selected)]"
+           ></div>
+           </div> -->
+    <!-- <h3 class="text-3xl  font-medium text-[var(--color-selected-dark)]">
+           Rewind past moments
+         </h3> -->
+    <div class="mb-10 max-w-[720px] px-4">
+      <p
+        class="mb-8 inline max-w-1/2 rounded-2xl bg-[var(--color-selected)] box-decoration-clone px-4 text-2xl/tight text-black! text-neutral-200 sm:max-w-2/3 sm:text-2xl/tight"
+      >
+        Rewind a YouTube live stream and play it back. Watch specific moments
+        you missed or browse the stream so far.
+      </p>
+    </div>
+    <RewindPane bind:selected />
+  </div>
+
+  <div class="flex flex-col gap-2 md:flex-row">
+    <div
+      class="flex w-full max-w-[520px] flex-col items-center gap-2 rounded-4xl bg-[#FFE175] px-10 py-10! text-center sm:px-10"
+    >
+      <div class="mb-6 flex max-w-[720px] items-center self-start">
+        <div class="flex size-16 rounded-full bg-[var(--color-interval)]"></div>
+        <div class="flex size-16 rounded-full bg-[var(--color-interval)]"></div>
+      </div>
+
+      <div class="flex w-full max-w-[720px] flex-col items-center gap-6">
+        <h3 class="self-start text-start text-3xl font-medium">
+          Clip and save moments
+        </h3>
+        <p class="w-full self-start text-start text-xl leading-tight">
+          Highlight an interval and save it as a video file with <a
+            href="https://xymaxim.github.io/ypb/"
+            class="rounded-2xl bg-[var(--color-interval)] px-1 text-white hover:bg-[var(--color-interval-light)] hover:text-black"
+            >ypb</a
+          >. Great for keeping the interesting moments.
+        </p>
+        <IntervalPane />
+      </div>
+    </div>
+
+    <div
+      class="flex w-full max-w-[520px] flex-col items-center gap-2 gap-6 rounded-4xl bg-[#FFE175] px-10 py-10 text-center"
+    >
+      <div
+        class="flex h-16 items-center self-start text-start font-mono font-medium"
+      >
+        YYYY-MM-DDTHH:mm:ss
+      </div>
+      <h3 class="self-start text-start text-3xl font-medium">
+        Share timestamps
+      </h3>
+      <p class="w-full self-start text-start text-xl leading-tight">
+        Copy the timestamp of a moment you found, or paste one to jump right to
+        it. Perfect for sharing with others.
+      </p>
+
+      <div
+        class="mt-8 flex w-full max-w-[420px] flex-col gap-3 rounded-2xl bg-neutral-50 p-4 text-left shadow-lg"
+        aria-hidden="true"
+      >
+        {#each [{ user: "LocalRailroadfan", msg: "​​M275 cleared CP98 @2026-09-26T05:51:00-04:00" }, { user: "AstroHuyToai2010", msg: "​Venus setting over the horizon (2026-09-28T19:40:00-10:00)" }, { user: "Katie-h2w", msg: "2026-09-28T20:36:27-10:00 やや右上↘赤く明るく" }] as row (row.user)}
+          <div class="flex items-center gap-4">
+            <div
+              class="text-muted-foreground flex size-7 shrink-0 items-center justify-center rounded-full bg-neutral-300 text-sm font-medium"
+            >
+              {row.user.charAt(0)}
+            </div>
+            <p class="text-sm leading-tight">
+              <span class="font-bold text-[var(--color-selected-darker)]"
+                >@{row.user}</span
+              >
+              <span class="text-muted-foreground">{row.msg}</span>
+            </p>
+          </div>
+        {/each}
+      </div>
+    </div>
   </div>
 
   <MoreAboutPane />
 
   <div
     id="get-rewyt"
-    class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-0 py-4 sm:px-4"
+    class="flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-0 py-4 sm:px-4"
   >
     <h3 class="text-center text-2xl font-medium">Get Rewyt</h3>
 

@@ -14,7 +14,7 @@
   <link rel="icon" href={favicon} type="image/svg+xml" />
 </svelte:head>
 
-<main class="relative mx-auto min-h-dvh max-w-6xl overflow-hidden">
+<main class="relative mx-auto min-h-dvh max-w-8xl overflow-hidden">
   <header
     class="relative z-10 mt-4 flex w-full max-w-screen-xl flex-col gap-2 px-4 sm:flex-row sm:items-center sm:justify-between"
   >
@@ -36,7 +36,7 @@
     </nav>
   </header>
   {@render children()}
-  <footer class="mt-8 mb-6 flex w-full flex-col items-center gap-10 px-4">
+  <footer class="mt-20 mb-6 flex w-full flex-col items-center gap-10 px-4">
     <Dinkus />
     <nav class="flex flex-col items-center gap-3 text-sm font-medium">
       <div class="flex items-center gap-6">

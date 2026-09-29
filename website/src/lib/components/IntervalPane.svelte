@@ -46,8 +46,8 @@
   >
     <div class="relative h-7 w-full select-none">
       <div
-        class="absolute inset-0 rounded-full bg-neutral-200"
-        style="background: repeating-linear-gradient(90deg, rgb(0 0 0 / 10%) 0%, rgb(0 0 0 / 2%) 92%, rgb(0 0 0 / 10%) 100%)"
+        class="absolute inset-0 rounded-full"
+        style="background: repeating-linear-gradient(90deg, rgb(0 0 0 / 20%) 0%, rgb(0 0 0 / 4%) 92%, rgb(0 0 0 / 20%) 100%)"
       ></div>
       {#if explorer}
         <IntervalSlider />
@@ -56,7 +56,7 @@
   </div>
   <div class="max-w-120">
     <span
-      class="inline rounded-xl bg-neutral-200/50 box-decoration-clone px-2 py-1 font-mono text-sm font-medium"
+      class="inline rounded-full bg-[var(--color-interval-50)] box-decoration-clone px-2 py-1 font-mono font-medium"
       >$ ypb download -i {aTime}/{bTime} abcdefgh123</span
     >
   </div>
@@ -65,11 +65,11 @@
   <p class="text-base">
     Or capture frames for a <a
       href="https://xymaxim.github.io/ypb/tutorials/timelapse/"
-      class="font-medium text-[var(--color-interval-600)] underline hover:no-underline">time-lapse video</a
+      class="font-medium bg-[var(--color-interval)] rounded-2xl px-1 text-white hover:bg-[var(--color-interval-light)] hover:text-black">time-lapse video</a
     >:
   </p>
   <div class="max-w-120">
-    <span class="rounded-xl px-2 py-1 font-mono text-sm"
+    <span class="rounded-xl px-2 py-1 font-mono font-medium text-sm leading-snug"
       >$ ypb capture timelapse -i {aTime}/{bTime} --every 10m abcdefgh123</span
     >
   </div>
