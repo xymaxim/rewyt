@@ -5,8 +5,8 @@ on:
     branches: [main]
     paths:
       - 'website/**'
-    tags:
-      - 'v*'
+  release:
+    types: [published]
   workflow_dispatch:
 
 concurrency:
@@ -31,6 +31,8 @@ jobs:
           bun install --frozen-lockfile
           bunx svelte-kit sync
           bun run build
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
 
       - name: Deploy website
         uses: peaceiris/actions-gh-pages@v4

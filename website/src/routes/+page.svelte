@@ -15,6 +15,7 @@
   import IntervalPane from "/src/lib/components/IntervalPane.svelte";
   import ScreenshotPane from "/src/lib/components/ScreenshotPane.svelte";
   import MoreAboutPane from "/src/lib/components/MoreAboutPane.svelte";
+  import { version, releaseDate, downloads } from "$lib/release";
   import { Popover } from "bits-ui";
   import { page } from "$app/state";
 
@@ -264,7 +265,7 @@
   >
     <h3 class="text-center text-2xl font-medium">Get Rewyt</h3>
 
-    <p>Latest version: v2026.9.9 (9 September 2026)</p>
+    <p>Latest release: v{version}{releaseDate ? ` (${releaseDate})` : ""}</p>
     <div class="mt-4 flex w-full flex-col gap-6">
       <p>
         Not sure which to choose? <a
@@ -287,7 +288,7 @@
         </p>
         <div class="mt-2 flex flex-col gap-2 md:flex-row md:gap-4">
           <a
-            href="https://github.com/xymaxim/rewyt/releases/latest"
+            href={downloads.linux}
             class="relative flex flex-1 flex-col rounded-2xl bg-[var(--color-selected-lightest)] px-5 py-4 transition hover:bg-neutral-100"
           >
             <ArrowUpRight
@@ -298,7 +299,7 @@
             <span class="text-muted-foreground text-sm">For x64</span>
           </a>
           <a
-            href="https://github.com/xymaxim/rewyt/releases/latest"
+            href={downloads.macos}
             class="relative flex flex-1 flex-col rounded-2xl bg-[var(--color-selected-lightest)] px-5 py-4 transition hover:bg-neutral-100"
           >
             <ArrowUpRight
@@ -311,7 +312,7 @@
             >
           </a>
           <a
-            href="https://github.com/xymaxim/rewyt/releases/latest"
+            href={downloads.windows}
             class="relative flex flex-1 flex-col rounded-2xl border-0 border-neutral-200 bg-[var(--color-selected-lightest)] px-5 py-4 transition hover:bg-neutral-100"
           >
             <ArrowUpRight
