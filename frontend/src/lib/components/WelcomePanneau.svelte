@@ -1,6 +1,8 @@
 <script lang="ts">
   import { onMount, untrack } from "svelte";
-  import { Undo } from "lucide-svelte";
+  import SelectedCircle from "$lib/components/panneau/primitives/SelectedCircle.svelte";
+  import RewindCircle from "$lib/components/panneau/primitives/RewindCircle.svelte";
+  import PlayCircle from "$lib/components/panneau/primitives/PlayCircle.svelte";
 
   interface Props {
     collapsing?: boolean;
@@ -183,50 +185,16 @@
     style="--collapsing-duration: {collapsingDuration}ms;"
     xmlns="http://www.w3.org/2000/svg"
   >
-    <defs>
-      <linearGradient id="rewind-gradient" x1="0%" y1="50%" x2="100%" y2="50%">
-        <stop offset="0%" stop-color="var(--color-selecting)" />
-        <stop offset="50%" stop-color="var(--color-selected)" />
-      </linearGradient>
-    </defs>
-
     {#snippet selectedCircle()}
-      <circle r={40} fill="var(--color-selecting)" />
-      <circle r={3.2} fill="oklch(0 0 0)" />
+      <SelectedCircle />
     {/snippet}
 
     {#snippet rewindCircle()}
-      <circle
-        r={40}
-        fill="url(#rewind-gradient)"
-        class="clickable"
-        role="button"
-        tabindex="0"
-        aria-label="Randomize layout"
-        onclick={() => seed++}
-        onkeydown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            seed++;
-          }
-        }}
-      />
-      <foreignObject
-        x={-15}
-        y={-15}
-        width={30}
-        height={30}
-        style="pointer-events: none;"
-      >
-        <div xmlns="http://www.w3.org/1999/xhtml" class="icon-wrap">
-          <Undo size={28} color="oklch(0.2 0 0)" />
-        </div>
-      </foreignObject>
+      <RewindCircle onclick={() => seed++} />
     {/snippet}
 
     {#snippet playCircle()}
-      <circle r={15} fill="var(--color-play)" />
-      <circle r={2.25} fill="oklch(0 0 0)" />
+      <PlayCircle />
     {/snippet}
 
     {#snippet highlightCircle()}
@@ -269,7 +237,7 @@
         style:translate="{placements[i].x}px {placements[i].y}px"
         style:rotate="{placements[i].angle}deg"
       >
-        {@render content(placements[i].angle)}
+        {@render content()}
       </g>
     {/each}
   </svg>
@@ -282,18 +250,5 @@
       rotate var(--collapsing-duration) cubic-bezier(0.34, 1.56, 0.64, 1);
     transform-origin: center;
     transform-box: fill-box;
-  }
-
-  .icon-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-  }
-
-  .clickable {
-    cursor: pointer;
-    outline: none;
   }
 </style>
