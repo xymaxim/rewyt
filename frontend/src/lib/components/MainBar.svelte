@@ -16,10 +16,6 @@
     ArrowUpRight,
     ArrowDown,
     Circle,
-    FastForward,
-    Pause,
-    Play,
-    Rewind,
     Radio,
     RotateCcw,
     Settings,
@@ -128,47 +124,22 @@
   <div class="flex items-center gap-2">
     {#if explorer.isRewinding}
       <div
-        class="flex w-50 w-70 items-center justify-center gap-0.5 text-muted-foreground"
+        class="flex w-50 w-58 items-center justify-center gap-0.5 text-muted-foreground"
       >
         <Circle size={6} strokeWidth={5} fill="none" />
         <Circle size={6} strokeWidth={5} fill="none" />
         <Circle size={6} strokeWidth={5} fill="none" />
       </div>
     {:else if playingTime !== null}
-      <div class="flex w-70 items-center gap-4">
-        {#if isPlaying}
-          <div
-            class="flex size-10 cursor-pointer items-center justify-center rounded-full bg-rose-200"
-            onclick={onTogglePlayPause}
-          >
-            <Pause strokeWidth={2} />
-          </div>
-        {:else if explorer.isSliding}
-          <div
-            class="flex size-10 items-center justify-center rounded-full bg-[var(--color-selected-light)]"
-          >
-            {#if explorer.selectedTime <= explorer.playheadTime}
-              <Rewind strokeWidth={2} />
-            {:else}
-              <FastForward strokeWidth={2} />
-            {/if}
-          </div>
-        {:else}
-          <div
-            class="flex size-10! h-[42px] w-11 cursor-pointer items-center justify-center rounded-full bg-rose-200"
-            onclick={onTogglePlayPause}
-          >
-            <Play strokeWidth={2} size={20} />
-          </div>
-        {/if}
+      <div class="flex w-58 items-center gap-4">
         <div
-          class="inline-flex items-center gap-2 text-xl
+          class="inline-flex items-center gap-2 text-base
                      {isPlayheadOutOfView
             ? 'text-gray-300!'
             : 'text-foreground!'}"
         >
           <span
-            class="relative flex items-center font-normal tabular-nums {isPlayheadOutOfView
+            class="relative flex items-center pr-2 tabular-nums text-lg group {isPlayheadOutOfView
               ? 'cursor-pointer'
               : 'pointer-events-none'}"
             title={isPlayheadOutOfView ? "Jump to playhead" : undefined}
@@ -181,14 +152,14 @@
             )}
             {#if isPlayheadOutOfView}
               <span
-                class="absolute top-1/2 left-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--color-play-200)] p-0.5 ring-2 ring-[var(--background)]"
+                class="absolute top-1/2 left-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[var(--color-play-lighter)] p-0.5 ring-2 ring-[var(--background)] group-hover:bg-[var(--color-play-light)]"
               >
                 <ArrowUpRight strokeWidth={2} class="text-foreground" />
               </span>
             {/if}
           </span>
           <span
-            class="flex h-9 w-10 cursor-pointer items-center justify-center rounded-full bg-neutral-200 text-sm transition-colors hover:bg-neutral-100"
+            class="flex h-9 w-10 cursor-pointer items-center justify-center rounded-full bg-neutral-200 text-sm transition-colors hover:bg-neutral-300"
             onclick={openTimezoneDialog}
           >
             {formatOffset(explorer.timezoneOffset)}
@@ -196,15 +167,16 @@
         </div>
       </div>
     {:else}
-      <div class="flex w-70 items-center justify-center">
+      <div class="flex w-58 items-center justify-center">
         <span class="text-3xl text-muted-foreground">&mdash;</span>
       </div>
     {/if}
 
-    <div class="flex h-10 items-center gap-0 gap-1!">
+    <div class="flex h-9 items-center gap-0 gap-1!">
       <InputRewindButton
         title="Input and rewind"
-        size={40}
+        size={36}
+        iconSize={18}
         onclick={() => (inputRewindDialogOpen = true)}
       />
       <Expandable.Root
@@ -216,7 +188,7 @@
         <Expandable.Trigger class="gap-0! transition-none">
           <div
             title="Mark interval"
-            class="main-bar__trigger-button bg-[var(--color-interval-200)]/50! text-sm font-bold tracking-tighter transition-all {context.open
+            class="main-bar__trigger-button bg-[var(--color-interval-200)]/50! text-sm font-black tracking-tighter transition-all {context.open
               ? ' -rotate-30 opacity-50'
               : ''}"
           >
@@ -235,7 +207,7 @@
               title="Mark A"
               variant="ghost"
               size="icon"
-              class="flex size-9 rounded-full bg-[var(--color-interval-200)]/50! text-sm font-semibold"
+              class="flex size-9 rounded-full bg-[var(--color-interval-200)]/50! text-sm font-black"
               onclick={() => {
                 if (explorer.playheadTime !== null)
                   explorer.assignMark("A", explorer.playheadTime);
@@ -247,7 +219,7 @@
               title="Mark B"
               variant="ghost"
               size="icon"
-              class="flex size-9 rounded-full bg-[var(--color-interval-200)]/50! text-sm font-semibold"
+              class="flex size-9 rounded-full bg-[var(--color-interval-200)]/50! text-sm font-black"
               onclick={() => {
                 if (explorer.playheadTime !== null)
                   explorer.assignMark("B", explorer.playheadTime);
@@ -307,7 +279,7 @@
               <Button
                 title="Change zoom"
                 variant="ghost"
-                class="main-bar__trigger-button relative bg-neutral-200! text-xs font-black"
+                class="main-bar__trigger-button relative bg-neutral-200! text-sm font-black"
               >
                 <span
                   class="z-20 flex tracking-wider {isOpen
@@ -334,13 +306,13 @@
             {...props}
             title="Settings"
             variant="ghost"
-            class="main-bar__button bg-neutral-200"
+            class="main-bar__button bg-neutral-200 hover:bg-neutral-300"
           >
             <Settings />
           </Button>
         {/snippet}
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content align="end" class="w-64 rounded-2xl!">
+      <DropdownMenu.Content align="end" class="w-58 rounded-2xl!">
         <DropdownMenu.Group>
           <DropdownMenu.Label
             class="cursor-pointer text-xs font-medium text-muted-foreground"
@@ -437,7 +409,7 @@
   @reference "../../app.css";
 
   :global(.main-bar__button) {
-    @apply inline-flex h-10 w-10 items-center justify-center rounded-full;
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-full;
   }
   :global(.main-bar__trigger-button) {
     @apply inline-flex h-9 w-10 items-center justify-center rounded-full;
