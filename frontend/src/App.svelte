@@ -22,7 +22,7 @@
   import StartingProgress from "./lib/components/StartingProgress.svelte";
   import StartingError from "./lib/components/StartingError.svelte";
   import RewindError from "./lib/components/RewindError.svelte";
-  import PlayerControls from "./lib/components/PlayerControls.svelte";
+  import VideoOverlay from "./lib/components/VideoOverlay.svelte";
 
   export const StreamStatus = {
     IDLE: "idle",
@@ -41,6 +41,7 @@
 
   let videoEl: HTMLVideoElement | null = null;
   let stageEl: HTMLElement | null = null;
+  let playerControls: VideoOverlay | undefined = $state();
 
   // State
   let player = $state(createPlayer(() => videoEl));
@@ -142,6 +143,7 @@
     " ": (e) => {
       e.preventDefault();
       player.togglePlayPause();
+      playerControls?.flashOverlay();
     },
     Backspace: (e) => {
       e.preventDefault();
@@ -283,26 +285,6 @@
       class="group relative flex w-full cursor-default! justify-center"
       class:rewind-error={!!player.rewindError}
     >
-      {#if player.streamInfo}
-        <div
-          class="absolute top-0 right-0 left-0 z-10 flex flex-col gap-0.5 px-4 py-3 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-          style="background: linear-gradient(to bottom, rgba(0,0,0,0.65), transparent);"
-        >
-          <a
-            href="https://www.youtube.com/watch?v={player.streamInfo.id}"
-            class="text-md leading-tight font-bold text-white hover:text-neutral-200"
-            target="_blank"
-            rel="noopener noreferrer">{player.streamInfo.title}</a
-          >
-          <a
-            href="https://youtube.com/channel/{player.streamInfo.channelId}"
-            class="text-sm font-medium text-neutral-100 hover:text-neutral-200"
-            target="_blank"
-            rel="noopener noreferrer">{player.streamInfo.channelTitle}</a
-          >
-        </div>
-      {/if}
-
       <div class:hidden={!!player.streamInfo} class="relative mb-3 flex">
         <div class="absolute inset-0 flex items-center justify-center">
           {#if streamStatus === StreamStatus.STARTING}
@@ -341,16 +323,22 @@
         {#if toastMessage && isStageFullscreen}
           <Toast message={toastMessage} icon={toastIcon} />
         {/if}
-        <video bind:this={videoEl} class="block h-full w-auto max-w-full" muted
+        <video
+          bind:this={videoEl}
+          class="block h-full w-auto max-w-full"
+          onclick={() => player.togglePlayPause()}
+          muted
         ></video>
-        <PlayerControls
+        <VideoOverlay
+          bind:this={playerControls}
+          streamInfo={player.streamInfo}
           {videoEl}
           {stageEl}
           dashPlayer={player.dashPlayer}
           onTogglePlayPause={() => player.togglePlayPause()}
           onScreenshot={() =>
             handleScreenshot(player.playheadTime?.getTime() ?? Date.now())}
-          onRewindToLive={onRewindToLive}
+          {onRewindToLive}
           isAtLiveEdge={player.isAtLiveEdge}
         />
       </div>
@@ -393,7 +381,7 @@
           onPlayInterval={(a, b) => player.playInterval(a, b)}
           onReplay={() => player.replay()}
           onRewind={(isoTime, pause) => player.rewind(isoTime, pause)}
-          onRewindToLive={onRewindToLive}
+          {onRewindToLive}
           onSeekTo={(time, pause) => player.seekTo(time, pause)}
           onStep={(s) => player.step(s)}
           onStopInterval={() => player.stopInterval(explorer.marks.A)}

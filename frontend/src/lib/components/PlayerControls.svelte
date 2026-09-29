@@ -2,8 +2,6 @@
   import {
     Pause,
     Play,
-    Maximize,
-    Minimize,
     Volume2,
     VolumeOff,
     Proportions,
@@ -23,22 +21,24 @@
 
   interface Props {
     videoEl: HTMLVideoElement | null;
-    stageEl: HTMLElement | null;
     dashPlayer: MediaPlayerClass | null;
     isAtLiveEdge: boolean;
     onTogglePlayPause: () => void;
     onScreenshot: () => void | Promise<void>;
     onRewindToLive: () => void;
+    onMenuOpenChange: (open: boolean) => void;
+    isFullscreen: boolean;
   }
 
   let {
     videoEl,
-    stageEl,
     dashPlayer,
     onTogglePlayPause,
     onScreenshot,
     onRewindToLive,
     isAtLiveEdge,
+    onMenuOpenChange,
+    isFullscreen,
   }: Props = $props();
 
   // Playback state
@@ -53,9 +53,6 @@
 
   // Volume state
   let isMuted = $state(true);
-
-  // Fullscreen state
-  let isFullscreen = $state(false);
 
   // Track/quality menu state
   type TrackType = "audio" | "video";
@@ -144,20 +141,6 @@
     if (!videoEl) return;
     videoEl.muted = !videoEl.muted;
     isMuted = videoEl.muted;
-  }
-
-  // Fullscreen handlers
-  function onFullscreenChange() {
-    isFullscreen = !!stageEl && document.fullscreenElement === stageEl;
-  }
-
-  function toggleFullscreen() {
-    if (!stageEl) return;
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(() => {});
-    } else {
-      stageEl.requestFullscreen().catch(() => {});
-    }
   }
 
   // Track/quality menu helpers
@@ -279,12 +262,6 @@
   });
 
   $effect(() => {
-    document.addEventListener("fullscreenchange", onFullscreenChange);
-    return () =>
-      document.removeEventListener("fullscreenchange", onFullscreenChange);
-  });
-
-  $effect(() => {
     const player = dashPlayer;
     if (!player) return;
 
@@ -302,13 +279,12 @@
 </script>
 
 <div
-  class="pointer-events-none absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-  class:opacity-100={qualityOpen || trackOpen}
+  class="pointer-events-none absolute inset-0 flex items-center justify-center"
 >
   <button
     type="button"
     title={isPlaying ? "Pause" : "Play"}
-    class="pointer-events-auto flex size-20 items-center justify-center rounded-full bg-black/60 text-white transition-colors hover:bg-black/50 active:bg-black/40"
+    class="pointer-events-auto flex size-22 items-center justify-center rounded-full bg-[var(--color-video-overlay)] text-white transition-colors hover:bg-[var(--color-video-overlay-hover)] active:scale-95"
     onclick={onTogglePlayPause}
   >
     {#if isPlaying}
@@ -318,9 +294,7 @@
     {/if}
   </button>
 
-  <div
-    class="pointer-events-auto absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent px-6 pt-8"
-  >
+  <div class="pointer-events-auto absolute inset-x-0 bottom-0 px-4 pt-8">
     <Slider.Root
       type="single"
       bind:value={seekValue}
@@ -347,13 +321,15 @@
     </Slider.Root>
 
     <div class="flex items-center justify-between gap-2 pt-2 pb-2">
-      <div class="flex items-center gap-2">
+      <div
+        class="flex items-center gap-2 rounded-full bg-[var(--color-video-overlay)] px-3 py-2"
+      >
         <span class="text-sm font-medium text-white tabular-nums"
           >{elapsed}</span
         >
         <button
           type="button"
-          class="pointer-events-auto px-2 py-0.5 text-sm font-semibold transition-colors {isAtLiveEdge
+          class="pointer-events-auto pl-2 py-0.5 text-sm font-semibold transition-colors {isAtLiveEdge
             ? 'pointer-events-none text-[var(--color-play-950)]'
             : 'text-neutral-400 hover:text-white'}"
           onclick={() => {
@@ -363,11 +339,13 @@
           Live
         </button>
       </div>
-      <div class="flex items-center gap-2">
+      <div
+        class="flex items-center gap-2 rounded-full bg-[var(--color-video-overlay)] px-3 py-1"
+      >
         <button
           type="button"
           title={isMuted ? "Unmute" : "Mute"}
-          class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
+          class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-[var(--color-video-overlay-hover)]"
           onclick={toggleMute}
         >
           {#if isMuted}
@@ -379,7 +357,7 @@
         <Button
           variant="ghost"
           title="Take screenshot"
-          class="pointer-events-auto size-10 rounded-full text-white transition-colors hover:bg-white/25 hover:text-white"
+          class="pointer-events-auto size-10 rounded-full text-white! transition-colors hover:bg-[var(--color-video-overlay-hover)]"
           onclick={handleScreenshot}
         >
           <Camera class="size-[22px]" />
@@ -388,6 +366,7 @@
           open={qualityOpen}
           onOpenChange={(open) => {
             qualityOpen = open;
+            onMenuOpenChange(open || trackOpen);
             if (open && dashPlayer) refreshMenus(dashPlayer);
           }}
         >
@@ -397,7 +376,7 @@
                 type="button"
                 title="Quality"
                 {...props}
-                class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
+                class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-[var(--color-video-overlay-hover)]"
               >
                 <Proportions size={22} strokeWidth={2} />
               </button>
@@ -443,6 +422,7 @@
           open={trackOpen}
           onOpenChange={(open) => {
             trackOpen = open;
+            onMenuOpenChange(open || qualityOpen);
             if (open && dashPlayer) refreshMenus(dashPlayer);
           }}
         >
@@ -452,7 +432,7 @@
                 type="button"
                 title="Tracks"
                 {...props}
-                class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
+                class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-[var(--color-video-overlay-hover)]"
               >
                 <ListVideo size={22} strokeWidth={2} />
               </button>
@@ -491,18 +471,6 @@
             {/each}
           </DropdownMenu.Content>
         </DropdownMenu.Root>
-        <button
-          type="button"
-          title={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-          class="pointer-events-auto flex size-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/25"
-          onclick={toggleFullscreen}
-        >
-          {#if isFullscreen}
-            <Minimize size={22} strokeWidth={2} />
-          {:else}
-            <Maximize size={22} strokeWidth={2} />
-          {/if}
-        </button>
       </div>
     </div>
   </div>
