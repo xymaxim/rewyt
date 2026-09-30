@@ -14,6 +14,7 @@
   import DaysSlider from "@rewyt-frontend/lib/components/sliders/DaysSlider.svelte";
   import DaySlider from "@rewyt-frontend/lib/components/sliders/DaySlider.svelte";
   import {
+    clampViewRange,
     getTickIntervals,
     zoomLevelForSpan,
     type TickIntervals,
@@ -134,6 +135,14 @@
     }
     lastRewindSource = "input";
     explorer.setSelectedTime(target);
+    explorer.setViewRange(
+      clampViewRange(
+        target,
+        explorer.zoomLevel,
+        explorer.days,
+        explorer.centeredOnMidnight,
+      ),
+    );
     explorer.setPlayheadTime(target);
     lastRewindTarget = target;
     isTimeInputOpen = false;
