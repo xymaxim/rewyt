@@ -2,12 +2,14 @@
   import { Accordion } from "bits-ui";
   import { ChevronDown } from "lucide-svelte";
 
-  const items = [
+  const items: { value: string; title: string }[] = [
     {
       value: "responsible-use",
       title: "How to use it responsibly?",
-      content:
-        "Rewyt is built for personal use like watching streams and keeping favorite moments, not for redistributing content elsewhere. If you do share a clip or screenshot, please credit the creator and their channel. Also, don't forget to support the people you watch by subscribing to their channel and liking or commenting on YouTube.",
+    },
+    {
+      value: "how-it-works",
+      title: "How does it work?",
     },
   ];
 </script>
@@ -35,11 +37,48 @@
           </Accordion.Trigger>
         </Accordion.Header>
         <Accordion.Content
-          class="overflow-hidden px-5 text-gray-700 data-[state=closed]:hidden"
+          class="overflow-hidden px-5 data-[state=closed]:hidden"
         >
-          <p class="py-2">{item.content}</p>
+          {#if item.value === "responsible-use"}
+            {@render responsibleUse()}
+          {:else if item.value === "how-it-works"}
+            {@render howItWorks()}
+          {/if}
         </Accordion.Content>
       </Accordion.Item>
     {/each}
   </Accordion.Root>
 </div>
+
+{#snippet responsibleUse()}
+  <p class="py-2">
+    Rewyt is built for personal use like watching streams and keeping favorite
+    moments, not for redistributing content elsewhere. If you do share a clip or
+    screenshot, please credit the creator and their channel. Also, don't forget
+    to support the people you watch by subscribing, liking, and commenting directly on YouTube.
+    Read the <a
+      href="https://xymaxim.github.io/rewyt/docs/disclaimer/"
+      class="font-medium text-[var(--color-selected-darkest)] underline hover:no-underline"
+      >usage disclaimer</a
+    > as well.
+  </p>
+{/snippet}
+
+{#snippet howItWorks()}
+  <p class="py-2">
+    Rewyt runs on top of <a
+      href="https://xymaxim.github.io/ypb/"
+      class="font-medium text-[var(--color-selected-darkest)] underline hover:no-underline hover:text-[var(--color-selected-darker)]"
+      >ypb</a
+    >, a playback proxy that gives access to past moments in YouTube live
+    streams. When you open a stream, ypb fetches its info with yt-dlp, including
+    the media segment URLs. When you rewind to a moment, ypb generates a dynamic
+    MPEG-DASH manifest that starts from that moment. The player then streams the
+    video from YouTube through ypb. More in the
+    <a
+      href="https://xymaxim.github.io/rewyt/docs/overview/"
+      class="font-medium text-[var(--color-selected-darkest)] underline hover:no-underline hover:text-[var(--color-selected-darker)]"
+      >full overview</a
+    >.
+  </p>
+{/snippet}
