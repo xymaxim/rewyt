@@ -9,19 +9,22 @@ Versioning](https://calver.org).
 ### Added
 
 - "Edit selected time" button to enter a timestamp in a dialog
-- "Use playhead" button to set the selected time to the playhead
-- Configurable tick intervals on the timeline
+- "Use playhead" button to set the selected time to the playhead position
+- Configurable tick intervals for the timeline
 - New Rewyt logo and icons
 
 ### Changed
 
-- Reworked the video overlay and how player controls are displayed
-- Removed the "Play/Pause" button from the main bar
-- Redesigned the website main page
+- Reworked the video overlay and player controls
+- Redesigned the website's main page
+
+### Removed
+
+- "Play/Pause" button from the main bar
 
 ### Fixed
 
-- Anchored timeline ticks to local midnight so hour labels line up with local time
+- Timeline ticks now start at local midnight, so hour labels match local time
 
 ## [2026.9.9](https://github.com/xymaxim/rewyt/releases/tag/v2026.9.9)
 
