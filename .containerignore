@@ -4,7 +4,8 @@
 build/
 docs/
 local/
-website/
+website/*
+!website/package.json
 
 frontend/node_modules/
 frontend/dev/

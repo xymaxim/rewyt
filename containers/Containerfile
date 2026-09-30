@@ -1,8 +1,12 @@
 # Frontend build stage
 FROM oven/bun:alpine AS frontend-builder
 WORKDIR /app
+COPY package.json bun.lock ./
+COPY frontend/package.json frontend/
+COPY website/package.json website/
+RUN bun install --frozen-lockfile --filter @rewyt/frontend
 COPY frontend/ frontend/
-RUN cd frontend && bun install --frozen-lockfile && bun run build
+RUN cd frontend && bun run build
 
 # Build stage
 FROM golang:alpine AS builder
