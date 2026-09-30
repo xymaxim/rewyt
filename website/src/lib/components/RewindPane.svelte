@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import { X, ArrowRight } from "lucide-svelte";
+  import { X, ArrowRight } from "@lucide/svelte";
   import { Popover } from "bits-ui";
   import InputRewindButton from "@rewyt-frontend/lib/components/InputRewindButton.svelte";
   import {

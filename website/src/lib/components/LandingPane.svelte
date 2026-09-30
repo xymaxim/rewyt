@@ -8,7 +8,7 @@
   import Rectangle from "@rewyt-frontend/lib/components/panneau/primitives/Rectangle.svelte";
   import GradientRectangle from "@rewyt-frontend/lib/components/panneau/primitives/GradientRectangle.svelte";
   import AnimatedPanneau from "@rewyt-frontend/lib/components/panneau/AnimatedPanneau.svelte";
-  import { FastForward, Play, Square, Rewind } from "lucide-svelte";
+  import { FastForward, Play, Square, Rewind } from "@lucide/svelte";
 
   import type { Snippet } from "svelte";
   import type {

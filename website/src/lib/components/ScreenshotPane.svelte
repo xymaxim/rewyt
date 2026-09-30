@@ -3,7 +3,7 @@
   import annotations from "$lib/data/screenshot-annotations.json";
   import { layoutLabels, labelY } from "$lib/labelPlacement";
   import { MediaQuery } from "svelte/reactivity";
-  import { EyeOff, MousePointer, Pointer } from "lucide-svelte";
+  import { EyeOff, MousePointer, Pointer } from "@lucide/svelte";
 
   const labelledAnnotations = annotations.filter((a) => a.label);
 

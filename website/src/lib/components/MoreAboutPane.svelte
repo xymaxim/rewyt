@@ -1,6 +1,6 @@
 <script lang="ts">
   import { Accordion } from "bits-ui";
-  import { ChevronDown } from "lucide-svelte";
+  import { ChevronDown } from "@lucide/svelte";
 
   const items: { value: string; title: string }[] = [
     {

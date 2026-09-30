@@ -4,7 +4,7 @@
     ChevronLeft,
     ChevronRight,
     Circle,
-  } from "lucide-svelte";
+  } from "@lucide/svelte";
   import type { Explorer } from "@rewyt-frontend/lib/explorer.svelte";
   import { ZOOM_LEVELS } from "@rewyt-frontend/lib/types";
 

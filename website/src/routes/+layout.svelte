@@ -1,6 +1,6 @@
 <script lang="ts">
   import { resolve } from "$app/paths";
-  import { ArrowUpRight } from "lucide-svelte";
+  import { ArrowUpRight } from "@lucide/svelte";
   import "../app.css";
   import favicon from "$lib/assets/favicon.svg";
   import logo from "$lib/assets/logo.svg";

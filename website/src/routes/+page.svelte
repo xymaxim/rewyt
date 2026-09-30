@@ -8,7 +8,7 @@
     EllipsisVertical,
     Undo,
     Play,
-  } from "lucide-svelte";
+  } from "@lucide/svelte";
   import InputRewindButton from "@rewyt-frontend/lib/components/InputRewindButton.svelte";
   import LandingPane from "/src/lib/components/LandingPane.svelte";
   import RewindPane from "/src/lib/components/RewindPane.svelte";
