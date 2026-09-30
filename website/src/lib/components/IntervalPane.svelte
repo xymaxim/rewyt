@@ -57,8 +57,10 @@
   <div class="max-w-120">
     <span
       class="inline rounded-full bg-[var(--color-interval-50)] box-decoration-clone px-2 py-1 font-mono font-medium"
-      >$ ypb <span class="font-bold text-[var(--color-interval-400)]"
-        >download</span
+      >$ ypb <a
+        href="https://xymaxim.github.io/ypb/reference/cli/download/"
+        class="font-bold text-[var(--color-interval-400)] hover:text-[var(--color-interval-300)]"
+        >download</a
       >
       -i {aTime}/{bTime} abcdefgh123</span
     >
@@ -74,8 +76,10 @@
   </p>
   <div class="max-w-120">
     <span class="rounded-xl px-2 py-1 font-mono leading-snug font-medium"
-      >$ ypb capture <span class="font-bold text-[var(--color-interval-400)]"
-        >timelapse</span
+      >$ ypb capture <a
+        href="https://xymaxim.github.io/ypb/reference/cli/cli/#timelapse"
+        class="font-bold text-[var(--color-interval-400)] hover:text-[var(--color-interval-300)]"
+        >timelapse</a
       >
       -i {aTime}/{bTime} --every 10m abcdefgh123</span
     >
