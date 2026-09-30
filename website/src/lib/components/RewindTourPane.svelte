@@ -360,7 +360,7 @@
       {/each}
     </ol>
     {#if currentDone}
-      <p class="mt-2 text-sm font-medium text-green-700">
+      <p class="mt-2 font-medium text-green-700">
         {current.success}
       </p>
     {/if}

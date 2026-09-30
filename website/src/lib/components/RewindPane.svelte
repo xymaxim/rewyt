@@ -297,6 +297,8 @@
             });
           } else {
             tourFocus = null;
+            lastRewindSource = null;
+            lastRewindTarget = null;
           }
         }}
       >
