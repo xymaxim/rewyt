@@ -33,9 +33,9 @@ details.
 
 Rewyt runs either as a [desktop
 app](https://xymaxim.github.io/rewyt/docs/guides/install/desktop/) via
-pre-built binaries or as a [web
-app](https://xymaxim.github.io/rewyt/docs/guides/install/web/) you run
-locally with Compose and access through your browser. See the
+pre-built binaries or via
+[Compose](https://xymaxim.github.io/rewyt/docs/guides/install/compose/),
+which you run locally and access through your browser. See the
 [Install](https://xymaxim.github.io/rewyt/docs/guides/install/install/)
 guide for setup instructions.
 

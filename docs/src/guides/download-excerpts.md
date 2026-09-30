@@ -6,13 +6,13 @@ This guide shows you how to highlight a live stream excerpt and download it as a
 
 Rewyt doesn't download excerpts directly, you need [ypb](https://github.com/xymaxim/ypb) for that.
 
-- Rewyt installed as a [desktop app](install/desktop.md) or [web
-  app](install/web.md)
+- Rewyt installed as a [desktop app](install/desktop.md) or via
+  [Compose](install/compose.md)
 - [ypb](https://xymaxim.github.io/ypb/guides/install/install/) installed
 
 !!! note
 
-    If you're running Rewyt as a web app, `ypb` is already bundled inside its
+    If you're running Rewyt via Compose, `ypb` is already bundled inside its
     container, no separate install needed. Steps 1 and 2 below still apply,
     but for the download step, see [Download excerpts with
     Compose](download-excerpts-compose.md) instead.

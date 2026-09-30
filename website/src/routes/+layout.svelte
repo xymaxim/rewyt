@@ -45,7 +45,7 @@
           class="flex items-center gap-2">Desktop app</a
         >
         <a
-          href="https://xymaxim.github.io/rewyt/docs/guides/install/web/"
+          href="https://xymaxim.github.io/rewyt/docs/guides/install/compose/"
           class="flex items-center gap-2">Compose</a
         >
         <a href="https://xymaxim.github.io/rewyt/docs/changelog/">Changelog</a>

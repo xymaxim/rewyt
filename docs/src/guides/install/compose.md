@@ -1,4 +1,4 @@
-# Web app
+# Compose
 
 Running Rewyt with containers is the recommended way to get started.
 

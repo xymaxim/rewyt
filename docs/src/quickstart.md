@@ -4,11 +4,11 @@ Learn how to install Rewyt and start rewatching YouTube live streams.
 
 ## Installation
 
-Rewyt comes as a **desktop app** (pre-built binary) or a **web app**
-(container).
+Rewyt comes as a **desktop app** (pre-built binary) or as a container
+managed by **Compose**.
 
 - [Desktop app](guides/install/desktop.md): choose this if you already have `yt-dlp` installed
-- [Web app](guides/install/web.md): choose this if you don't, or prefer a self-contained setup
+- [Compose](guides/install/compose.md): choose this if you don't, or prefer a self-contained setup
 
 ### Desktop app
 
@@ -46,7 +46,7 @@ prerequisites and platform details.
 
 </div>
 
-### Web app
+### Compose
 
 Running Rewyt in containers gives you an isolated environment with `yt-dlp`,
 `ffprobe`, and `ypb` pre-installed, along with the PO token provider.
@@ -74,7 +74,7 @@ Open the app in your browser:
 
 <div class="grid" markdown>
 
-:lucide-forward: See [Web app](guides/install/web.md) for configuration options
+:lucide-forward: See [Compose](guides/install/compose.md) for configuration options
 and more details.
 { .card }
 
@@ -89,8 +89,8 @@ session. How to set them depends on how you installed Rewyt:
 - **Desktop app**: uses your yt-dlp configuration file, see [Sign in with
   cookies](http://localhost:8000/rewyt/docs/guides/install/desktop/#sign-in-with-cookies)
   for details
-- **Web app**: uses a configuration file mounted into the container, see
-  [Set up cookies](guides/install/web.md#set-up-cookies-recommended) for details
+- **Compose**: uses a configuration file mounted into the container, see
+  [Set up cookies](guides/install/compose.md#set-up-cookies-recommended) for details
 
 ## Verify installation
 

@@ -324,7 +324,7 @@
         <p>Run it with Podman/Docker, everything included</p>
         <p>
           <a
-            href="https://xymaxim.github.io/rewyt/docs/guides/install/web/"
+            href="https://xymaxim.github.io/rewyt/docs/guides/install/compose/"
             class="cursor-pointer font-medium text-[var(--color-selected-darkest)] underline hover:no-underline"
             >Read the Compose guide</a
           >

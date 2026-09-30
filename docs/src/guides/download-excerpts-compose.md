@@ -6,7 +6,7 @@ Rewyt and [ypb](https://xymaxim.github.io/ypb/) are run via Compose.
 ## Prerequisites
 
 - [Podman](https://podman.io/getting-started/installation) or [Docker](https://docs.docker.com/get-docker/)
-- Rewyt installed as a [web app](install/web.md), running via Compose
+- Rewyt installed via [Compose](install/compose.md)
 
 ## Highlight the excerpt
 
