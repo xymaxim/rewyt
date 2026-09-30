@@ -173,22 +173,14 @@
   </div>
 
   <div
-    class="mb-10 flex w-full flex-col items-center gap-2 rounded-4xl bg-[var(--color-dark-background)] px-4 py-10 text-center md:py-20"
+    class="mb-10 flex w-full flex-col items-center gap-2 rounded-4xl bg-[var(--color-dark-background)] px-0 sm:px-4 py-10 text-center md:py-20"
   >
-    <!-- <div class="flex max-w-[720px] items-center">
-           <div
-           class="mb-6 flex size-16 rounded-full bg-[var(--color-selected)]"
-           ></div>
-           </div> -->
-    <!-- <h3 class="text-3xl  font-medium text-[var(--color-selected-dark)]">
-           Rewind past moments
-         </h3> -->
     <div class="mb-10 max-w-[720px]">
       <p
         class="mb-8 inline max-w-1/2 rounded-2xl bg-[var(--color-selected)] box-decoration-clone px-4 text-2xl/tight text-black! text-neutral-200 sm:max-w-2/3 sm:text-2xl/tight"
       >
         Rewind a YouTube live stream and play it back. Watch specific moments
-        you missed or browse the stream so far.
+        you missed or quickly browse the stream.
       </p>
     </div>
     <RewindPane bind:selected />
@@ -196,15 +188,15 @@
 
   <div class="flex flex-col gap-2 px-4 md:flex-row">
     <div
-      class="flex w-full max-w-[520px] flex-col items-center gap-2 rounded-4xl bg-[#EECFB0] px-8 py-10! text-center sm:px-10"
+      class="flex w-full max-w-[520px] flex-col items-center gap-6 rounded-4xl bg-[#EECFB0] px-6 py-6 text-center sm:px-10"
     >
-      <div class="mb-6 flex max-w-[720px] items-center self-start">
+      <div class="min-h-20 flex max-w-[720px] items-center self-start">
         <div class="flex size-16 rounded-full bg-[var(--color-interval)]"></div>
         <div class="flex size-16 rounded-full bg-[var(--color-interval)]"></div>
       </div>
 
       <div class="flex w-full max-w-[720px] flex-col items-center gap-6">
-        <h3 class="self-start text-start text-3xl font-medium">
+        <h3 class="self-start text-start text-3xl/tight font-medium">
           Clip and save moments
         </h3>
         <p class="w-full self-start text-start text-xl leading-tight">
@@ -219,14 +211,14 @@
     </div>
 
     <div
-      class="flex w-full max-w-[520px] flex-col items-center gap-2 gap-6 rounded-4xl bg-[#EECFB0] px-8 py-10 text-center sm:px-10"
+      class="flex w-full max-w-[520px] flex-col items-center gap-6 rounded-4xl bg-[#EECFB0] px-6 py-6 text-center sm:px-10"
     >
       <div
-        class="flex h-16 items-center self-start text-start font-mono font-medium"
+        class="flex h-20 items-center self-start text-start font-mono font-medium"
       >
         YYYY-MM-DDTHH:mm:ss
       </div>
-      <h3 class="self-start text-start text-3xl font-medium">
+      <h3 class="self-start text-start text-3xl/tight font-medium">
         Share timestamps
       </h3>
       <p class="w-full self-start text-start text-xl leading-tight">

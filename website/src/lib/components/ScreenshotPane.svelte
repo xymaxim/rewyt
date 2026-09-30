@@ -30,7 +30,8 @@
     return ratio >= 0.85 && ratio <= 1.18;
   };
 
-  const holePaddingPx = 5;
+  const isMobile = new MediaQuery("(max-width: 639px)");
+  const holePaddingPx = $derived(isMobile.current ? 2 : 5);
   const holeRadiusPx = 12;
   const maskRadius = 10;
   let screenshotWidth = $state(1006);
@@ -39,7 +40,6 @@
   let showMask = $state(false);
   let showHotspots = $state(false);
 
-  const isMobile = new MediaQuery("(max-width: 639px)");
   const labelsVisible = $derived(
     isMobile.current ? maskedGroup !== null || showHotspots : showMask,
   );
@@ -146,7 +146,7 @@
         <rect
           width="1006"
           height="736"
-          fill="var(--color-selected-darkest)"
+          fill="var(--color-selected-dark)"
           fill-opacity="0.55"
         />
       </g>
@@ -283,8 +283,10 @@
   class:pointer-events-none={labelsVisible}
   class:hidden={isMobile.current && labelItems.length > 0}
 >
-  <span class="hidden text-shadow-lg sm:inline"
+  <span class="hidden text-[var(--color-selected-darker)] sm:inline"
     >Hover the screenshot to show annotations</span
   >
-  <span class="sm:hidden">Tap the screenshot to show annotations</span>
+  <span class="text-[var(--color-selected-darker)] sm:hidden"
+    >Tap the screenshot to show annotations</span
+  >
 </div>
