@@ -355,10 +355,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#web-app" class="md-nav__link">
+  <a href="#compose" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Web app
+        Compose
       </span>
     </span>
   </a>
@@ -579,14 +579,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../guides/install/web/" class="md-nav__link">
+      <a href="../guides/install/compose/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-  Web app
+  Compose
 
     
   </span>
@@ -1049,10 +1049,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#web-app" class="md-nav__link">
+  <a href="#compose" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Web app
+        Compose
       </span>
     </span>
   </a>
@@ -1232,11 +1232,11 @@
 <h1 id="quickstart">Quickstart<a class="headerlink" href="#quickstart" title="Permanent link">&para;</a></h1>
 <p>Learn how to install Rewyt and start rewatching YouTube live streams.</p>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
-<p>Rewyt comes as a <strong>desktop app</strong> (pre-built binary) or a <strong>web app</strong>
-(container).</p>
+<p>Rewyt comes as a <strong>desktop app</strong> (pre-built binary) or as a container
+managed by <strong>Compose</strong>.</p>
 <ul>
 <li><a href="../guides/install/desktop/">Desktop app</a>: choose this if you already have <code>yt-dlp</code> installed</li>
-<li><a href="../guides/install/web/">Web app</a>: choose this if you don&rsquo;t, or prefer a self-contained setup</li>
+<li><a href="../guides/install/compose/">Compose</a>: choose this if you don&rsquo;t, or prefer a self-contained setup</li>
 </ul>
 <h3 id="desktop-app">Desktop app<a class="headerlink" href="#desktop-app" title="Permanent link">&para;</a></h3>
 <p>Download the binary for your platform from the <a href="https://github.com/xymaxim/rewyt/releases/latest">latest
@@ -1263,9 +1263,10 @@ working directory.</p>
 <p class="card"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-forward" viewBox="0 0 24 24"><path d="m15 17 5-5-5-5"/><path d="M4 18v-2a4 4 0 0 1 4-4h12"/></svg></span> See <a href="../guides/install/desktop/">Desktop app</a> for
 prerequisites and platform details.</p>
 </div>
-<h3 id="web-app">Web app<a class="headerlink" href="#web-app" title="Permanent link">&para;</a></h3>
-<p>Running Rewyt in containers gives you an isolated environment with <code>yt-dlp</code>,
-<code>ffprobe</code>, and <code>ypb</code> pre-installed, along with the PO token provider.</p>
+<h3 id="compose">Compose<a class="headerlink" href="#compose" title="Permanent link">&para;</a></h3>
+<p>Running Rewyt in containers gives you an isolated environment with <code>yt-dlp</code>
+(auto-updated to nightly on every start), <code>ffprobe</code>, and <code>ypb</code> pre-installed,
+along with the PO token provider.</p>
 <p><strong>Prerequisites:</strong> <a href="https://podman.io/getting-started/installation">Podman</a> or
 <a href="https://docs.docker.com/get-docker/">Docker</a>, with Compose.</p>
 <p><strong>macOS/Windows only, Podman:</strong> Initialize the Podman machine (one-time setup):</p>
@@ -1283,7 +1284,7 @@ cd ~/rewyt-app
 <div class="language-text highlight"><pre><span></span><code>http://localhost:8080
 </code></pre></div>
 <div class="grid">
-<p class="card"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-forward" viewBox="0 0 24 24"><path d="m15 17 5-5-5-5"/><path d="M4 18v-2a4 4 0 0 1 4-4h12"/></svg></span> See <a href="../guides/install/web/">Web app</a> for configuration options
+<p class="card"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="lucide lucide-forward" viewBox="0 0 24 24"><path d="m15 17 5-5-5-5"/><path d="M4 18v-2a4 4 0 0 1 4-4h12"/></svg></span> See <a href="../guides/install/compose/">Compose</a> for configuration options
 and more details.</p>
 </div>
 <h2 id="initial-setup">Initial setup<a class="headerlink" href="#initial-setup" title="Permanent link">&para;</a></h2>
@@ -1294,8 +1295,8 @@ session. How to set them depends on how you installed Rewyt:</p>
 <li><strong>Desktop app</strong>: uses your yt-dlp configuration file, see <a href="http://localhost:8000/rewyt/docs/guides/install/desktop/#sign-in-with-cookies">Sign in with
   cookies</a>
   for details</li>
-<li><strong>Web app</strong>: uses a configuration file mounted into the container, see
-  <a href="../guides/install/web/#set-up-cookies-recommended">Set up cookies</a> for details</li>
+<li><strong>Compose</strong>: uses a configuration file mounted into the container, see
+  <a href="../guides/install/compose/#set-up-cookies-recommended">Set up cookies</a> for details</li>
 </ul>
 <h2 id="verify-installation">Verify installation<a class="headerlink" href="#verify-installation" title="Permanent link">&para;</a></h2>
 <p>Open the app to see a welcome screen, where you can verify that your
