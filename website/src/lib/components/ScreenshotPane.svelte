@@ -283,6 +283,8 @@
   class:pointer-events-none={labelsVisible}
   class:hidden={isMobile.current && labelItems.length > 0}
 >
-  <span class="hidden sm:inline">Hover the screenshot to show annotations</span>
+  <span class="hidden text-shadow-lg sm:inline"
+    >Hover the screenshot to show annotations</span
+  >
   <span class="sm:hidden">Tap the screenshot to show annotations</span>
 </div>

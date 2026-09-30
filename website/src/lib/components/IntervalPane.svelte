@@ -42,7 +42,7 @@
 
 <div class="mt-8 flex w-full flex-col items-center justify-center gap-4">
   <div
-    class="relative top-[-14px] z-10 flex w-full items-center justify-center font-geist"
+    class="font-geist relative top-[-14px] z-10 flex w-full items-center justify-center"
   >
     <div class="relative h-7 w-full select-none">
       <div
@@ -57,20 +57,27 @@
   <div class="max-w-120">
     <span
       class="inline rounded-full bg-[var(--color-interval-50)] box-decoration-clone px-2 py-1 font-mono font-medium"
-      >$ ypb download -i {aTime}/{bTime} abcdefgh123</span
+      >$ ypb <span class="font-bold text-[var(--color-interval-400)]"
+        >download</span
+      >
+      -i {aTime}/{bTime} abcdefgh123</span
     >
   </div>
 </div>
 <div class="mt-8 flex flex-col gap-1">
-  <p class="text-base">
+  <p class="text-lg">
     Or capture frames for a <a
       href="https://xymaxim.github.io/ypb/tutorials/timelapse/"
-      class="font-medium bg-[var(--color-interval)] rounded-2xl px-1 text-white hover:bg-[var(--color-interval-light)] hover:text-black">time-lapse video</a
+      class="rounded-2xl bg-[var(--color-interval)] box-decoration-clone px-1 font-medium text-white hover:bg-[var(--color-interval-light)] hover:text-black"
+      >time-lapse</a
     >:
   </p>
   <div class="max-w-120">
-    <span class="rounded-xl px-2 py-1 font-mono font-medium text-sm leading-snug"
-      >$ ypb capture timelapse -i {aTime}/{bTime} --every 10m abcdefgh123</span
+    <span class="rounded-xl px-2 py-1 font-mono leading-snug font-medium"
+      >$ ypb capture <span class="font-bold text-[var(--color-interval-400)]"
+        >timelapse</span
+      >
+      -i {aTime}/{bTime} --every 10m abcdefgh123</span
     >
   </div>
 </div>

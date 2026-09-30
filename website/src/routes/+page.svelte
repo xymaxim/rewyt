@@ -32,7 +32,7 @@
     href="https://video.liberta.vip/w/jSCtepm8BfAE6oZN7qJXB2?start=1m4s"
     target="_blank"
     rel="noopener noreferrer"
-    class="flex cursor-pointer items-center gap-1 rounded-full border-2 border-black bg-transparent px-4 py-1 text-sm font-medium transition hover:bg-amber-200 hover:border-amber-200"
+    class="flex cursor-pointer items-center rounded-full border-2 border-amber-500 bg-transparent px-4 py-1 text-sm font-medium transition hover:border-amber-200 hover:bg-amber-200"
   >
     Watch a two-minute demo
   </a>
@@ -81,7 +81,7 @@
   </div>
 
   <div
-    class="mt-10 mb-8 flex w-full max-w-[720px] flex-col items-center justify-center rounded-4xl px-4 text-2xl lg:px-0"
+    class="mt-20 mb-8 flex w-full max-w-[720px] flex-col items-center justify-center rounded-4xl px-4 text-2xl lg:px-0"
   >
     <p class="max-w-full items-baseline gap-1">
       With <span class="font-normal">Rewyt</span>, you can
@@ -109,9 +109,9 @@
     </p>
   </div>
 
-  <div class="flex w-full max-w-[720px] flex-col">
+  <div class="mb-10 flex w-full max-w-[720px] flex-col">
     <div
-      class="relative mb-10 flex max-w-[720px] flex-col self-start rounded-2xl bg-[#FFE175]/0 px-4 text-left text-lg leading-snug lg:px-0"
+      class="relative flex max-w-[720px] flex-col self-start rounded-2xl px-4 text-left text-lg leading-snug lg:px-0"
     >
       <p class="text-2xl font-medium">rewyt</p>
       <!-- <p class="flex items-baseline">
@@ -196,7 +196,7 @@
 
   <div class="flex flex-col gap-2 px-4 md:flex-row">
     <div
-      class="flex w-full max-w-[520px] flex-col items-center gap-2 rounded-4xl bg-[#FFE175] px-10 py-10! text-center sm:px-10"
+      class="flex w-full max-w-[520px] flex-col items-center gap-2 rounded-4xl bg-[#EECFB0] px-8 py-10! text-center sm:px-10"
     >
       <div class="mb-6 flex max-w-[720px] items-center self-start">
         <div class="flex size-16 rounded-full bg-[var(--color-interval)]"></div>
@@ -219,7 +219,7 @@
     </div>
 
     <div
-      class="flex w-full max-w-[520px] flex-col items-center gap-2 gap-6 rounded-4xl bg-[#FFE175] px-10 py-10 text-center"
+      class="flex w-full max-w-[520px] flex-col items-center gap-2 gap-6 rounded-4xl bg-[#EECFB0] px-8 py-10 text-center sm:px-10"
     >
       <div
         class="flex h-16 items-center self-start text-start font-mono font-medium"
