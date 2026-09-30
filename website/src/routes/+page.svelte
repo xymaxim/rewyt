@@ -81,7 +81,7 @@
   </div>
 
   <div
-    class="mt-10 mb-8 flex w-full max-w-[720px] flex-col items-center justify-center rounded-4xl px-4 text-2xl"
+    class="mt-10 mb-8 flex w-full max-w-[720px] flex-col items-center justify-center rounded-4xl px-4 text-2xl lg:px-0"
   >
     <p class="max-w-full items-baseline gap-1">
       With <span class="font-normal">Rewyt</span>, you can
@@ -111,7 +111,7 @@
 
   <div class="flex w-full max-w-[720px] flex-col">
     <div
-      class="relative mb-10 flex max-w-[720px] flex-col self-start rounded-2xl bg-[#FFE175]/0 px-4 text-left text-lg leading-snug"
+      class="relative mb-10 flex max-w-[720px] flex-col self-start rounded-2xl bg-[#FFE175]/0 px-4 text-left text-lg leading-snug lg:px-0"
     >
       <p class="text-2xl font-medium">rewyt</p>
       <!-- <p class="flex items-baseline">
@@ -173,7 +173,7 @@
   </div>
 
   <div
-    class="mb-10 flex w-full flex-col items-center gap-2 rounded-4xl bg-[var(--color-dark-background)] py-10 text-center md:py-20"
+    class="mb-10 flex w-full flex-col items-center gap-2 rounded-4xl bg-[var(--color-dark-background)] px-4 py-10 text-center md:py-20"
   >
     <!-- <div class="flex max-w-[720px] items-center">
            <div
@@ -183,7 +183,7 @@
     <!-- <h3 class="text-3xl  font-medium text-[var(--color-selected-dark)]">
            Rewind past moments
          </h3> -->
-    <div class="mb-10 max-w-[720px] px-4">
+    <div class="mb-10 max-w-[720px]">
       <p
         class="mb-8 inline max-w-1/2 rounded-2xl bg-[var(--color-selected)] box-decoration-clone px-4 text-2xl/tight text-black! text-neutral-200 sm:max-w-2/3 sm:text-2xl/tight"
       >
@@ -194,7 +194,7 @@
     <RewindPane bind:selected />
   </div>
 
-  <div class="flex flex-col gap-2 md:flex-row">
+  <div class="flex flex-col gap-2 px-4 md:flex-row">
     <div
       class="flex w-full max-w-[520px] flex-col items-center gap-2 rounded-4xl bg-[#FFE175] px-10 py-10! text-center sm:px-10"
     >
@@ -261,7 +261,7 @@
 
   <div
     id="get-rewyt"
-    class="flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-0 py-4 sm:px-4"
+    class="flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-4 py-4"
   >
     <h3 class="text-center text-2xl font-medium">Get Rewyt</h3>
 

@@ -13,7 +13,7 @@
 </script>
 
 <div
-  class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-0 py-4 sm:px-4"
+  class="mb-15 flex w-full max-w-[720px] flex-col items-center gap-2 rounded-2xl px-4 py-4"
 >
   <h3 class="text-center text-2xl font-medium">More about Rewyt</h3>
 
