@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - 'website/**'
+      - "website/**"
   release:
     types: [published]
   workflow_dispatch:
@@ -24,11 +24,10 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
-      - run: cd frontend && bun install --frozen-lockfile
+      - run: bun install --frozen-lockfile
 
       - run: |
           cd website
-          bun install --frozen-lockfile
           bunx svelte-kit sync
           bun run build
         env:
