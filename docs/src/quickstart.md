@@ -48,8 +48,9 @@ prerequisites and platform details.
 
 ### Compose
 
-Running Rewyt in containers gives you an isolated environment with `yt-dlp`,
-`ffprobe`, and `ypb` pre-installed, along with the PO token provider.
+Running Rewyt in containers gives you an isolated environment with `yt-dlp`
+(auto-updated to nightly on every start), `ffprobe`, and `ypb` pre-installed,
+along with the PO token provider.
 
 **Prerequisites:** [Podman](https://podman.io/getting-started/installation) or
 [Docker](https://docs.docker.com/get-docker/), with Compose.

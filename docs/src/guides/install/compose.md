@@ -14,6 +14,10 @@ The app runs as two containers managed by [Compose](https://compose-spec.io/):
 - **Rewyt** ([ghcr.io/xymaxim/rewyt](https://ghcr.io/xymaxim/rewyt)): the main app, with yt-dlp, ffmpeg, and [ypb](https://xymaxim.github.io/ypb) inside
 - **PO token provider** ([brainicism/bgutil-ytdlp-pot-provider](https://hub.docker.com/r/brainicism/bgutil-ytdlp-pot-provider)): handles YouTube's bot verification in the background
 
+!!! note
+
+    yt-dlp is updated to its nightly build on every container start, so no need to update it manually.
+
 ## Prerequisites
 
 - [Podman](https://podman.io/getting-started/installation) with [Compose](https://podman-desktop.io/docs/compose)
@@ -94,7 +98,7 @@ section for what's available and how to set them.
 
 ## Update the app
 
-To update the container images:
+When a new version is released, update the container images:
 
 ```shell
 podman compose pull
