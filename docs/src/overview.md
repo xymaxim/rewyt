@@ -8,7 +8,7 @@ to provide access to past moments in YouTube live streams.
 ```mermaid
 sequenceDiagram
     autonumber
-    participant A as Frontend<br/>(Svelte + Shaka Player)
+    participant A as Frontend<br/>(Svelte + dash.js)
     participant B as Backend<br/>(Go)
     participant C as ypb
     participant Y as YouTube
