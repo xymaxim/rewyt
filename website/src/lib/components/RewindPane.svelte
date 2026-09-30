@@ -142,7 +142,7 @@
 
 <div class="flex w-full max-w-[720px] flex-col items-center">
   <div
-    class="relative flex flex-col self-stretch overflow-hidden rounded-xl p-2 pt-8 transition-colors bg-neutral-200"
+    class="relative flex flex-col self-stretch overflow-hidden rounded-xl bg-neutral-200 p-2 pt-8 transition-colors"
   >
     <div
       class="absolute top-3 right-3 size-3 rounded-full bg-neutral-400/60"
@@ -161,13 +161,13 @@
           <span class="font-geist flex items-center gap-1 tabular-nums"
             >{playheadLabel}</span
           >
-          {#if explorer}
-            <div
-              class="transition-opacity duration-200"
-              class:opacity-20={isDimmed("timeInput")}
-              class:pointer-events-none={isDimmed("timeInput")}
-              inert={isDimmed("timeInput")}
-            >
+          <div
+            class="transition-opacity duration-200"
+            class:opacity-20={isDimmed("timeInput")}
+            class:pointer-events-none={isDimmed("timeInput")}
+            inert={isDimmed("timeInput")}
+          >
+            {#if explorer}
               <Popover.Root bind:open={isTimeInputOpen}>
                 <Popover.Trigger>
                   {#snippet child({ props })}
@@ -204,29 +204,33 @@
                   </button>
                 </Popover.Content>
               </Popover.Root>
-            </div>
+            {:else}
+              <div class="size-9"></div>
+            {/if}
+          </div>
+        </div>
+        <div
+          class="font-geist transition-opacity duration-200"
+          class:opacity-20={isDimmed("zoom")}
+          class:pointer-events-none={isDimmed("zoom")}
+          inert={isDimmed("zoom")}
+        >
+          {#if explorer}
+            <TimelineZoomControl />
+          {:else}
+            <div class="h-7 w-8"></div>
           {/if}
         </div>
-        {#if explorer}
-          <div
-            class="font-geist transition-opacity duration-200"
-            class:opacity-20={isDimmed("zoom")}
-            class:pointer-events-none={isDimmed("zoom")}
-            inert={isDimmed("zoom")}
-          >
-            <TimelineZoomControl />
-          </div>
-        {/if}
       </div>
 
       <div class="font-geist relative mt-2 w-full">
-        {#if explorer}
-          <div
-            class="transition-opacity duration-200"
-            class:opacity-20={isDimmed("timeline")}
-            class:pointer-events-none={isDimmed("timeline")}
-            inert={isDimmed("timeline")}
-          >
+        <div
+          class="transition-opacity duration-200"
+          class:opacity-20={isDimmed("timeline")}
+          class:pointer-events-none={isDimmed("timeline")}
+          inert={isDimmed("timeline")}
+        >
+          {#if explorer}
             <Timeline
               seekableRange={null}
               mpdStartTime={0}
@@ -235,27 +239,37 @@
               onSeekTo={() => {}}
               tickIntervals={resolveTickIntervals}
             />
-          </div>
+          {:else}
+            <div class="h-[116px]"></div>
+          {/if}
+        </div>
 
-          <div class="mt-1 mb-2 flex flex-col gap-2">
-            <div
-              class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200"
-              class:opacity-20={isDimmed("daysSlider")}
-              class:pointer-events-none={isDimmed("daysSlider")}
-              inert={isDimmed("daysSlider")}
-            >
+        <div class="mt-1 mb-2 flex flex-col gap-2">
+          <div
+            class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200"
+            class:opacity-20={isDimmed("daysSlider")}
+            class:pointer-events-none={isDimmed("daysSlider")}
+            inert={isDimmed("daysSlider")}
+          >
+            {#if explorer}
               <DaysSlider />
-            </div>
-            <div
-              class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200"
-              class:opacity-20={isDimmed("daySlider")}
-              class:pointer-events-none={isDimmed("daySlider")}
-              inert={isDimmed("daySlider")}
-            >
-              <DaySlider />
-            </div>
+            {:else}
+              <div class="h-9"></div>
+            {/if}
           </div>
-        {/if}
+          <div
+            class="relative w-full rounded-2xl bg-neutral-200 px-[1rem] transition-opacity duration-200"
+            class:opacity-20={isDimmed("daySlider")}
+            class:pointer-events-none={isDimmed("daySlider")}
+            inert={isDimmed("daySlider")}
+          >
+            {#if explorer}
+              <DaySlider />
+            {:else}
+              <div class="h-9"></div>
+            {/if}
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -295,7 +309,7 @@
           <span
             class="leading-snug text-[var(--color-dark-muted-foreground)] sm:text-lg"
           >
-          Learn how to rewind and jump around the timeline
+            Learn how to rewind and jump around the timeline
           </span>
         </span>
       </button>
