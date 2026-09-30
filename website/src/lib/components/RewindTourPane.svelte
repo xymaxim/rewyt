@@ -48,13 +48,10 @@
     new Date().getMonth(),
     new Date().getDate() - 3,
   ).getTime();
-  const targetDayLabel = new Date(targetDayStart).toLocaleDateString(
-    undefined,
-    {
-      month: "short",
-      day: "numeric",
-    },
-  );
+  const targetDayLabel = new Date(targetDayStart).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
 
   let tutorialIndex = $state(0);
 
@@ -99,8 +96,7 @@
   const tutorials: Tutorial[] = [
     {
       title: "Rewind by clicking the timeline",
-      description:
-        "Click on the timeline to rewind and play from the moment in one action.",
+      description: "Click on the timeline to rewind and play in one action.",
       success: `Great!`,
       steps: [
         {
@@ -129,7 +125,7 @@
     },
     {
       title: "Rewind by pressing the rewind button",
-      description: "Choose a moment on the timeline before rewinding to it.",
+      description: "Choose a moment on the timeline first, then rewind to it.",
       success: `Great!`,
       steps: [
         {
@@ -138,7 +134,6 @@
               parts: [
                 plain("Drag the rewind slider to "),
                 bold(tutorialSliderTime),
-                plain(` on ${targetDayLabel}`),
               ],
               met: () => selectedAt(tutorialSliderTime),
             },
@@ -158,27 +153,9 @@
     },
     {
       title: "Navigate by zooming in",
-      description:
-        "Zoom in on the timeline to navigate with greater precision.",
+      description: "Zoom in on the timeline to pick a moment more precisely.",
       success: `Great!`,
       steps: [
-        {
-          substeps: [
-            {
-              parts: [
-                plain("Go to "),
-                bold(targetDayLabel),
-                plain(" with the days slider,"),
-              ],
-              met: () => onTargetDay,
-            },
-            {
-              parts: [plain("select "), bold(tutorialSliderTime)],
-              met: () => selectedAt(tutorialSliderTime),
-            },
-          ],
-          focus: ["timeline", "daysSlider"],
-        },
         {
           substeps: [
             {
@@ -208,8 +185,8 @@
       ],
     },
     {
-      title: "Input and rewind to an exact time",
-      description: "Type a precise time and jump straight to it.",
+      title: "Rewind by entering an exact time",
+      description: "Type an exact time and rewind to it.",
       success: `Great!`,
       steps: [
         {
@@ -330,8 +307,30 @@
     {/each}
   </div>
 
-  <div class="mt-2 text-sm font-semibold">
-    Tutorial {tutorialIndex + 1} of {tutorials.length}
+  <div class="mt-2 flex items-center justify-between text-sm font-semibold">
+    <span>Tutorial {tutorialIndex + 1} of {tutorials.length}</span>
+
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        aria-label="Previous tutorial"
+        class="flex size-10 items-center justify-center rounded-full bg-neutral-300 hover:cursor-pointer hover:bg-neutral-200 disabled:pointer-events-none disabled:opacity-0"
+        disabled={tutorialIndex === 0}
+        onclick={() => (tutorialIndex -= 1)}
+      >
+        <ChevronLeft />
+      </button>
+
+      <button
+        type="button"
+        aria-label="Next tutorial"
+        class="flex size-10 items-center justify-center rounded-full bg-neutral-300 hover:cursor-pointer hover:bg-neutral-200 disabled:pointer-events-none disabled:opacity-0"
+        disabled={tutorialIndex === tutorials.length - 1}
+        onclick={() => (tutorialIndex += 1)}
+      >
+        <ChevronRight />
+      </button>
+    </div>
   </div>
 
   <div>
@@ -365,27 +364,5 @@
         {current.success}
       </p>
     {/if}
-  </div>
-
-  <div class="mt-4 flex items-center gap-2">
-    <button
-      type="button"
-      aria-label="Previous tutorial"
-      class="flex size-10 items-center justify-center rounded-full bg-neutral-300 hover:cursor-pointer hover:bg-neutral-200 disabled:pointer-events-none disabled:opacity-0"
-      disabled={tutorialIndex === 0}
-      onclick={() => (tutorialIndex -= 1)}
-    >
-      <ChevronLeft />
-    </button>
-
-    <button
-      type="button"
-      aria-label="Next tutorial"
-      class="flex size-10 items-center justify-center rounded-full bg-neutral-300 hover:cursor-pointer hover:bg-neutral-200 disabled:pointer-events-none disabled:opacity-0"
-      disabled={tutorialIndex === tutorials.length - 1}
-      onclick={() => (tutorialIndex += 1)}
-    >
-      <ChevronRight />
-    </button>
   </div>
 </div>
