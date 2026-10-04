@@ -29,12 +29,12 @@
 
 <div class="relative mt-4 flex flex-col items-center gap-4">
   <a
-    href="https://video.liberta.vip/w/jSCtepm8BfAE6oZN7qJXB2?start=1m4s"
+    href="https://peertube.tech/w/6ijT3vpWXEGx6vd5cxFPwX"
     target="_blank"
     rel="noopener noreferrer"
     class="flex cursor-pointer items-center rounded-full border-2 border-amber-500 bg-transparent px-4 py-1 text-sm font-medium transition hover:border-amber-200 hover:bg-amber-200"
   >
-    Watch a two-minute demo
+    Watch a quick demo
   </a>
   <LandingPane bind:playing bind:rewinding>
     <div
