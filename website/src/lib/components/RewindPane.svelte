@@ -154,7 +154,7 @@
     class="relative flex flex-col self-stretch overflow-hidden rounded-xl bg-neutral-200 px-0 pt-8 pb-2 transition-colors sm:px-2"
   >
     <div
-      class="absolute top-3 right-3 size-3 rounded-full bg-neutral-400/60"
+      class="absolute top-3 right-3 size-3 rounded-full bg-neutral-400/50 hover:cursor-pointer"
     ></div>
 
     <div
