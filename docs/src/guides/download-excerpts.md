@@ -1,10 +1,10 @@
-# Highlight and download excerpts
+# Highlight and save clips
 
-This guide shows you how to highlight a live stream excerpt and download it as a video file.
+This guide shows you how to highlight a clip of a live stream and save it as a video file.
 
 ## Prerequisites
 
-Rewyt doesn't download excerpts directly, you need [ypb](https://github.com/xymaxim/ypb) for that.
+Rewyt doesn't save clips directly; you need [ypb](https://github.com/xymaxim/ypb) for that.
 
 - Rewyt installed as a [desktop app](install/desktop.md) or via
   [Compose](install/compose.md)
@@ -14,18 +14,18 @@ Rewyt doesn't download excerpts directly, you need [ypb](https://github.com/xyma
 
     If you're running Rewyt via Compose, `ypb` is already bundled inside its
     container, no separate install needed. Steps 1 and 2 below still apply,
-    but for the download step, see [Download excerpts with
+    but for the last step, see [Save clips with
     Compose](download-excerpts-compose.md) instead.
 
 ## Steps
 
-1. **Highlight an excerpt**
+1. **Highlight an interval**
 
-   Use the **A** and **B** buttons (or `a` and `b` keyboard shortcuts) to mark the start and end of your excerpt on the timeline.
+   Use the **A** and **B** buttons (or `a` and `b` keyboard shortcuts) to mark the start and end of your clip on the timeline.
 
    <figure>
    <img src="./download-excerpts-files/download-highlight.png"/>
-   <figcaption aria-hidden="true">Highlighting an excerpt on the timeline</figcaption>
+   <figcaption aria-hidden="true">Highlighting an interval on the timeline</figcaption>
    </figure>
 
 2. **Copy the download command**
@@ -38,20 +38,20 @@ Rewyt doesn't download excerpts directly, you need [ypb](https://github.com/xyma
 
    <figure>
    <img src="./download-excerpts-files/download-copy-download.png"/>
-   <figcaption aria-hidden="true">Copying the download command for the highlighted excerpt</figcaption>
+   <figcaption aria-hidden="true">Copying the download command for the highlighted interval</figcaption>
    </figure>
 
-3. **Download the excerpt**
+3. **Save the clip**
 
-   Run the download command with the copied command:
+   Run the copied command:
 
    ```bash
    ypb download -i 2026-09-05T03:14:15+00:00/2026-09-05T09:26:53+00:00 abcdefgh123
    ```
-   
-By the end, you will have a downloaded file in your working directory when done.
-   
+
+When it finishes, you will have the clip as a video file in your working directory.
+
 ## See also
 
 See [Create a time-lapse
-video](https://xymaxim.github.io/ypb/tutorials/timelapse/) to turn your excerpt into a time-lapse.
+video](https://xymaxim.github.io/ypb/tutorials/timelapse/) to turn your clip into a time-lapse.

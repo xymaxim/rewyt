@@ -1,6 +1,6 @@
-# Download excerpts with Compose
+# Save clips with Compose
 
-This guide shows you how to download a highlighted live stream excerpt when
+This guide shows you how to save a highlighted clip of a live stream when
 Rewyt and [ypb](https://xymaxim.github.io/ypb/) are run via Compose.
 
 ## Prerequisites
@@ -8,20 +8,20 @@ Rewyt and [ypb](https://xymaxim.github.io/ypb/) are run via Compose.
 - [Podman](https://podman.io/getting-started/installation) or [Docker](https://docs.docker.com/get-docker/)
 - Rewyt installed via [Compose](install/compose.md)
 
-## Highlight the excerpt
+## Highlight the clip
 
 !!! note
 
-    For highlighting excerpts in Rewyt, see [Highlight and download excerpts](./download-excerpts.md).
+    For highlighting clips in Rewyt, see [Highlight and save clips](./download-excerpts.md).
 
-Highlight the excerpt and copy the corresponding timestamp or the download command:
+Highlight the clip and copy the corresponding timestamp or the download command:
 
 ```text
 2026-09-05T03:14:15+00:00/2026-09-05T09:26:53+00:00
 ypb download -i 2026-09-05T03:14:15+00:00/2026-09-05T09:26:53+00:00 abcdefgh123
 ```
 
-## Download the excerpt
+## Save the clip
 
 Run ypb inside the already-running Rewyt container:
 
