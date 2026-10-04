@@ -50,8 +50,9 @@
         >
         <a href="https://xymaxim.github.io/rewyt/docs/changelog/">Changelog</a>
       </div>
-      <div class="flex items-center gap-6">
+      <div class="flex items-center gap-4">
         <a href="https://xymaxim.github.io/rewyt/docs/">Docs</a>
+        <a href="https://peertube.tech/c/tutosrewyt/videos/">Videos</a>
         <a href="https://github.com/xymaxim/rewyt/">Source</a>
         <a href="https://xymaxim.github.io/rewyt/docs/disclaimer/">Disclaimer</a
         >
