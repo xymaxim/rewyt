@@ -69,7 +69,7 @@
 <div class="mt-8 flex flex-col gap-1">
   <p class="text-lg">
     Or capture frames for a <a
-      href="https://xymaxim.github.io/ypb/tutorials/timelapse/"
+      href="https://peertube.tech/w/jhWcxA8oZxgryffNFFUzqa"
       class="rounded-2xl bg-[var(--color-interval)] box-decoration-clone px-1 font-medium text-white hover:bg-[var(--color-interval-light)] hover:text-black"
       >time-lapse</a
     >:
