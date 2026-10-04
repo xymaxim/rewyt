@@ -28,6 +28,10 @@
   }
 </script>
 
+<svelte:head>
+  <title>Live Picks</title>
+</svelte:head>
+
 <section class="mx-auto mt-6 max-w-4xl px-4">
   <h1 class="text-3xl font-medium">Live Picks</h1>
 

@@ -27,6 +27,10 @@
   let selected = $state(0);
 </script>
 
+<svelte:head>
+  <title>Rewyt - Rewatch YouTube live streams</title>
+</svelte:head>
+
 <div class="relative mt-4 flex flex-col items-center gap-4">
   <a
     href="https://peertube.tech/w/6ijT3vpWXEGx6vd5cxFPwX"
