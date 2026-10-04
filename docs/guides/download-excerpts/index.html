@@ -25,7 +25,7 @@
     
     
       
-        <title>Highlight and download excerpts - Rewyt documentation</title>
+        <title>Highlight and save clips - Rewyt documentation</title>
       
     
     
@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#highlight-and-download-excerpts" class="md-skip">
+        <a href="#highlight-and-save-clips" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Highlight and download excerpts
+              Highlight and save clips
             
           </span>
         </div>
@@ -528,7 +528,7 @@
   <span class="md-ellipsis">
     
   
-  Highlight and download excerpts
+  Highlight and save clips
 
     
   </span>
@@ -545,7 +545,7 @@
   <span class="md-ellipsis">
     
   
-  Highlight and download excerpts
+  Highlight and save clips
 
     
   </span>
@@ -626,7 +626,7 @@
   <span class="md-ellipsis">
     
   
-  Download excerpts with Compose
+  Save clips with Compose
 
     
   </span>
@@ -1029,10 +1029,10 @@
   
 
 
-<h1 id="highlight-and-download-excerpts">Highlight and download excerpts<a class="headerlink" href="#highlight-and-download-excerpts" title="Permanent link">&para;</a></h1>
-<p>This guide shows you how to highlight a live stream excerpt and download it as a video file.</p>
+<h1 id="highlight-and-save-clips">Highlight and save clips<a class="headerlink" href="#highlight-and-save-clips" title="Permanent link">&para;</a></h1>
+<p>This guide shows you how to highlight a clip of a live stream and save it as a video file.</p>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
-<p>Rewyt doesn&rsquo;t download excerpts directly, you need <a href="https://github.com/xymaxim/ypb">ypb</a> for that.</p>
+<p>Rewyt doesn&rsquo;t save clips directly; you need <a href="https://github.com/xymaxim/ypb">ypb</a> for that.</p>
 <ul>
 <li>Rewyt installed as a <a href="../install/desktop/">desktop app</a> or via
   <a href="../install/compose/">Compose</a></li>
@@ -1042,17 +1042,17 @@
 <p class="admonition-title">Note</p>
 <p>If you&rsquo;re running Rewyt via Compose, <code>ypb</code> is already bundled inside its
 container, no separate install needed. Steps 1 and 2 below still apply,
-but for the download step, see <a href="../download-excerpts-compose/">Download excerpts with
+but for the last step, see <a href="../download-excerpts-compose/">Save clips with
 Compose</a> instead.</p>
 </div>
 <h2 id="steps">Steps<a class="headerlink" href="#steps" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>Highlight an excerpt</strong></li>
+<li><strong>Highlight an interval</strong></li>
 </ol>
-<p>Use the <strong>A</strong> and <strong>B</strong> buttons (or <code>a</code> and <code>b</code> keyboard shortcuts) to mark the start and end of your excerpt on the timeline.</p>
+<p>Use the <strong>A</strong> and <strong>B</strong> buttons (or <code>a</code> and <code>b</code> keyboard shortcuts) to mark the start and end of your clip on the timeline.</p>
 <figure>
    <img src=".././download-excerpts-files/download-highlight.png"/>
-   <figcaption aria-hidden="true">Highlighting an excerpt on the timeline</figcaption>
+   <figcaption aria-hidden="true">Highlighting an interval on the timeline</figcaption>
    </figure>
 
 <ol>
@@ -1064,19 +1064,19 @@ Compose</a> instead.</p>
 <p><code>ypb download -i 2026-09-05T03:14:15+00:00/2026-09-05T09:26:53+00:00 abcdefgh123</code></p>
 <figure>
    <img src=".././download-excerpts-files/download-copy-download.png"/>
-   <figcaption aria-hidden="true">Copying the download command for the highlighted excerpt</figcaption>
+   <figcaption aria-hidden="true">Copying the download command for the highlighted interval</figcaption>
    </figure>
 
 <ol>
-<li><strong>Download the excerpt</strong></li>
+<li><strong>Save the clip</strong></li>
 </ol>
-<p>Run the download command with the copied command:</p>
+<p>Run the copied command:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>ypb<span class="w"> </span>download<span class="w"> </span>-i<span class="w"> </span><span class="m">2026</span>-09-05T03:14:15+00:00/2026-09-05T09:26:53+00:00<span class="w"> </span>abcdefgh123
 </span></code></pre></div>
-<p>By the end, you will have a downloaded file in your working directory when done.</p>
+<p>When it finishes, you will have the clip as a video file in your working directory.</p>
 <h2 id="see-also">See also<a class="headerlink" href="#see-also" title="Permanent link">&para;</a></h2>
 <p>See <a href="https://xymaxim.github.io/ypb/tutorials/timelapse/">Create a time-lapse
-video</a> to turn your excerpt into a time-lapse.</p>
+video</a> to turn your clip into a time-lapse.</p>
 
 
 

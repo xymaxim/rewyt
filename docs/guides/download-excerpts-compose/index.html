@@ -25,7 +25,7 @@
     
     
       
-        <title>Download excerpts with Compose - Rewyt documentation</title>
+        <title>Save clips with Compose - Rewyt documentation</title>
       
     
     
@@ -71,7 +71,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#download-excerpts-with-compose" class="md-skip">
+        <a href="#save-clips-with-compose" class="md-skip">
           Skip to content
         </a>
       
@@ -107,7 +107,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Download excerpts with Compose
+              Save clips with Compose
             
           </span>
         </div>
@@ -519,7 +519,7 @@
   <span class="md-ellipsis">
     
   
-  Highlight and download excerpts
+  Highlight and save clips
 
     
   </span>
@@ -555,7 +555,7 @@
   <span class="md-ellipsis">
     
   
-  Download excerpts with Compose
+  Save clips with Compose
 
     
   </span>
@@ -572,7 +572,7 @@
   <span class="md-ellipsis">
     
   
-  Download excerpts with Compose
+  Save clips with Compose
 
     
   </span>
@@ -609,10 +609,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#highlight-the-excerpt" class="md-nav__link">
+  <a href="#highlight-the-clip" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Highlight the excerpt
+        Highlight the clip
       </span>
     </span>
   </a>
@@ -620,10 +620,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#download-the-excerpt" class="md-nav__link">
+  <a href="#save-the-clip" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Download the excerpt
+        Save the clip
       </span>
     </span>
   </a>
@@ -937,10 +937,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#highlight-the-excerpt" class="md-nav__link">
+  <a href="#highlight-the-clip" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Highlight the excerpt
+        Highlight the clip
       </span>
     </span>
   </a>
@@ -948,10 +948,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#download-the-excerpt" class="md-nav__link">
+  <a href="#save-the-clip" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Download the excerpt
+        Save the clip
       </span>
     </span>
   </a>
@@ -1029,24 +1029,24 @@
   
 
 
-<h1 id="download-excerpts-with-compose">Download excerpts with Compose<a class="headerlink" href="#download-excerpts-with-compose" title="Permanent link">&para;</a></h1>
-<p>This guide shows you how to download a highlighted live stream excerpt when
+<h1 id="save-clips-with-compose">Save clips with Compose<a class="headerlink" href="#save-clips-with-compose" title="Permanent link">&para;</a></h1>
+<p>This guide shows you how to save a highlighted clip of a live stream when
 Rewyt and <a href="https://xymaxim.github.io/ypb/">ypb</a> are run via Compose.</p>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <ul>
 <li><a href="https://podman.io/getting-started/installation">Podman</a> or <a href="https://docs.docker.com/get-docker/">Docker</a></li>
 <li>Rewyt installed via <a href="../install/compose/">Compose</a></li>
 </ul>
-<h2 id="highlight-the-excerpt">Highlight the excerpt<a class="headerlink" href="#highlight-the-excerpt" title="Permanent link">&para;</a></h2>
+<h2 id="highlight-the-clip">Highlight the clip<a class="headerlink" href="#highlight-the-clip" title="Permanent link">&para;</a></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>For highlighting excerpts in Rewyt, see <a href=".././download-excerpts/">Highlight and download excerpts</a>.</p>
+<p>For highlighting clips in Rewyt, see <a href=".././download-excerpts/">Highlight and save clips</a>.</p>
 </div>
-<p>Highlight the excerpt and copy the corresponding timestamp or the download command:</p>
+<p>Highlight the clip and copy the corresponding timestamp or the download command:</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>2026-09-05T03:14:15+00:00/2026-09-05T09:26:53+00:00
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>ypb download -i 2026-09-05T03:14:15+00:00/2026-09-05T09:26:53+00:00 abcdefgh123
 </span></code></pre></div>
-<h2 id="download-the-excerpt">Download the excerpt<a class="headerlink" href="#download-the-excerpt" title="Permanent link">&para;</a></h2>
+<h2 id="save-the-clip">Save the clip<a class="headerlink" href="#save-the-clip" title="Permanent link">&para;</a></h2>
 <p>Run ypb inside the already-running Rewyt container:</p>
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># --workdir must stay /media, it&#39;s where the container&#39;s volume is mounted</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>podman<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>--workdir<span class="w"> </span>/media<span class="w"> </span>rewyt<span class="w"> </span>ypb<span class="w"> </span>download<span class="w"> </span><span class="se">\</span>
