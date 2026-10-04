@@ -50,11 +50,15 @@ guide for setup instructions.
 ## Disclaimer
 
 This app unfortunately violates YouTube's [Terms of
-Service](https://www.youtube.com/t/terms), so use it at your own risk. You
-might run into rate limits or get blocked if YouTube notices.
+Service](https://www.youtube.com/t/terms). Use it at your own risk. If YouTube
+notices, you might get rate-limited or temporarily blocked.
 
-If you enjoy the videos you watch, please consider supporting the creators by
-subscribing to their channels and engaging with their content directly.
+Please use it responsibly. Support the people you watch by subscribing to their
+channels and liking or commenting on their content, and credit the original
+video and channel if you share a clip or screenshot.
+
+Read the full [usage
+disclaimer](https://xymaxim.github.io/rewyt/docs/disclaimer/).
 
 ## Sponsoring
 
