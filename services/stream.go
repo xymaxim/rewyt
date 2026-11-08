@@ -17,14 +17,15 @@ type StreamService struct {
 	ctx         context.Context
 	stream      ypb.Streamer
 	startCancel context.CancelFunc
+	port        int
 }
 
 func NewStreamService() *StreamService {
-	return &StreamService{}
+	return &StreamService{port: playbackPort}
 }
 
 func (s *StreamService) GetPlaybackPort() int {
-	return playbackPort
+	return s.port
 }
 
 // ServiceStartup is called when the service is registered
@@ -46,19 +47,28 @@ func (s *StreamService) StartStream(videoID string) error {
 	startCtx, cancel := context.WithCancel(s.ctx)
 	s.startCancel = cancel
 
+	port, err := findFreePort(playbackPort)
+	if err != nil {
+		s.stream = nil
+		cancel()
+		return fmt.Errorf("finding playback port: %w", err)
+	}
+
 	onYpbPrint := func(b []byte) {
 		app := application.Get()
 		app.Event.Emit("stream-stdout", string(b))
 	}
 
-	str, err := newStream(startCtx, videoID, playbackPort, onYpbPrint)
+	str, err := newStream(startCtx, videoID, port, onYpbPrint)
 	if err != nil {
 		s.stream = nil
 		cancel()
 		return fmt.Errorf("creating stream: %w", err)
 	}
 
+	log.Printf("using playback port %d", port)
 	s.stream = str
+	s.port = port
 
 	go func() {
 		err := str.Start()

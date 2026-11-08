@@ -14,8 +14,6 @@ export interface StreamInfo {
   actualStartTime: Date;
 }
 
-const playbackPort = await GetPlaybackPort();
-
 const liveDelay = 10;
 const liveEdgeThreshold = liveDelay + 5;
 
@@ -97,6 +95,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
   let dashPlayer: MediaPlayerClass | null = null;
   let animFrameId: number;
   let initialSeekTime = 0;
+  let playbackPort = 0;
 
   // State
   let isRewinding = $state(false);
@@ -165,6 +164,7 @@ export function createPlayer(getVideoEl: () => HTMLVideoElement | null) {
 
   // Lifecycle
   async function init() {
+    playbackPort = await GetPlaybackPort();
     const response = await fetch(`http://localhost:${playbackPort}/info`);
     const json = await response.json();
     streamInfo = {

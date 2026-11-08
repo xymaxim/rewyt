@@ -6,9 +6,9 @@ Versioning](https://calver.org).
 
 ## [2026.11.8](https://github.com/xymaxim/rewyt/releases/tag/v2026.11.8)
 
-### Changed
+### Added
 
-- Upgrade ypb to v2026.11.8
+- Use the next free port if the playback port is already in use
 
 ## [2026.10.1](https://github.com/xymaxim/rewyt/releases/tag/v2026.10.1)
 
