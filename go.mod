@@ -1,17 +1,17 @@
 module rewyt
 
-go 1.26
+go 1.26.0
 
 require (
 	github.com/wailsapp/wails/v3 v3.0.0-alpha.98
-	github.com/xymaxim/ypb v0.0.0-20260909162142-c663eb825121
+	github.com/xymaxim/ypb v0.0.0-20261108185258-66f59d2f2a26
 )
 
 // replace github.com/xymaxim/ypb => ../ypb
 
 require (
 	dario.cat/mergo v1.0.2 // indirect
-	github.com/Eyevinn/mp4ff v0.55.0 // indirect
+	github.com/Eyevinn/mp4ff v0.62.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.3.0 // indirect
 	github.com/adrg/xdg v0.5.3 // indirect
@@ -44,6 +44,6 @@ require (
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	golang.org/x/crypto v0.50.0 // indirect
 	golang.org/x/net v0.53.0 // indirect
-	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )

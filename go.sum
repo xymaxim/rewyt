@@ -1,7 +1,7 @@
 dario.cat/mergo v1.0.2 h1:85+piFYR1tMbRrLcDwR18y4UKJ3aH1Tbzi24VRW1TK8=
 dario.cat/mergo v1.0.2/go.mod h1:E/hbnu0NxMFBjpMIE34DRGLWqDy0g5FuKDhCb31ngxA=
-github.com/Eyevinn/mp4ff v0.55.0 h1:wFShr5eqcJaVd15/uPMe747sAWPbz7dl2TfhusDx+Kk=
-github.com/Eyevinn/mp4ff v0.55.0/go.mod h1:AhC+bOI7GSZmzuN4zFY9U76qMedbHI+8BdQXWrC9+8U=
+github.com/Eyevinn/mp4ff v0.62.0 h1:Vx4U0xUfSdcwEgw1wBbTZ53+yZhlJpT7eIAkLUDaxmM=
+github.com/Eyevinn/mp4ff v0.62.0/go.mod h1:97zsDIJUiDTYqKpqq/b1K9foamxXmvsgE4GdPrPK3ks=
 github.com/Microsoft/go-winio v0.5.2/go.mod h1:WpS1mjBmmwHBEWmogvA2mj8546UReBk4v8QkMxJ6pZY=
 github.com/Microsoft/go-winio v0.6.2 h1:F2VQgta7ecxGYO8k3ZZz3RS8fVIXVxONVUPlNERoyfY=
 github.com/Microsoft/go-winio v0.6.2/go.mod h1:yd8OoFMLzJbo9gZq8j5qaps8bJ9aShtEA8Ipt1oGCvU=
@@ -111,8 +111,8 @@ github.com/wailsapp/wails/webview2 v1.0.24 h1:uULnjCSaRfMlU84mS3kjLgPsRosEOIusVK
 github.com/wailsapp/wails/webview2 v1.0.24/go.mod h1:sdf+s0nAdxlzVWf9SCxC15XaxnQPJeY+uU1Ucn3jHQM=
 github.com/xanzy/ssh-agent v0.3.3 h1:+/15pJfg/RsTxqYcX6fHqOXZwwMP+2VyYWJeWM2qQFM=
 github.com/xanzy/ssh-agent v0.3.3/go.mod h1:6dzNDKs0J9rVPHPhaGCukekBHKqfl+L3KghI1Bc68Uw=
-github.com/xymaxim/ypb v0.0.0-20260909162142-c663eb825121 h1:tCPmOjH/zWNvNrA6vy/jrvK0vk2O+U0pVuBoNR0o89s=
-github.com/xymaxim/ypb v0.0.0-20260909162142-c663eb825121/go.mod h1:b0tc5cOfRhfHWh5+QxRNmN1hxBCMAleZ50Mme1VfBlQ=
+github.com/xymaxim/ypb v0.0.0-20261108185258-66f59d2f2a26 h1:tO8FBgVop+F83K9M8Am1g77JqkjAxCZzgMWcHxW9NXc=
+github.com/xymaxim/ypb v0.0.0-20261108185258-66f59d2f2a26/go.mod h1:LgR1O1qBxSQMHS85dTco20o7AeU4xN/CaYEG2zUxqzY=
 golang.org/x/crypto v0.0.0-20220622213112-05595931fe9d/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
 golang.org/x/crypto v0.50.0 h1:zO47/JPrL6vsNkINmLoo/PH1gcxpls50DNogFvB5ZGI=
 golang.org/x/crypto v0.50.0/go.mod h1:3muZ7vA7PBCE6xgPX7nkzzjiUq87kRItoJQM1Yo8S+Q=
@@ -130,8 +130,8 @@ golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBc
 golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.1.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.6.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
-golang.org/x/sys v0.43.0 h1:Rlag2XtaFTxp19wS8MXlJwTvoh8ArU6ezoyFsMyCTNI=
-golang.org/x/sys v0.43.0/go.mod h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw=
+golang.org/x/sys v0.47.0 h1:o7XGOvZQCADBQQ4Y7VNq2dRWQR7JmOUW8Kxx4ZsNgWs=
+golang.org/x/sys v0.47.0/go.mod h1:4GL1E5IUh+htKOUEOaiffhrAeqysfVGipDYzABqnCmw=
 golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1/go.mod h1:bj7SfCRtBDWHUb9snDiAeCFNEtKQo2Wmx5Cou7ajbmo=
 golang.org/x/term v0.42.0 h1:UiKe+zDFmJobeJ5ggPwOshJIVt6/Ft0rcfrXZDLWAWY=
 golang.org/x/term v0.42.0/go.mod h1:Dq/D+snpsbazcBG5+F9Q1n2rXV8Ma+71xEjTRufARgY=

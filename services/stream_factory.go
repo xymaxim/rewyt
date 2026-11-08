@@ -12,12 +12,12 @@ import (
 func newStream(ctx context.Context, videoID string, port int, onPrint func([]byte)) (ypb.Streamer, error) {
 	if fixtureDir := os.Getenv("REWYT_MOCK_FIXTURE_DIR"); fixtureDir != "" {
 		log.Printf("running new stream on port %d type=mock v=%s", port, videoID)
-		return ypb.NewMockStream(ctx, fixtureDir, port, mockStreamStart())
+		return ypb.NewMockStream(ctx, fixtureDir, "", port, mockStreamStart())
 	}
 
 	log.Printf("running new stream on port %d type=youtube v=%s", port, videoID)
 	cfg := &ypb.StreamConfig{OnPrint: onPrint}
-	return ypb.NewStream(ctx, videoID, port, cfg)
+	return ypb.NewStream(ctx, videoID, "", port, cfg)
 }
 
 func mockStreamStart() time.Time {
