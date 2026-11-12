@@ -4,6 +4,13 @@ The format of this changelog is based on [Keep a
 Changelog](https://keepachangelog.com/en/1.1.0/). Versions follow [Calendar
 Versioning](https://calver.org).
 
+## [2026.11.12](https://github.com/xymaxim/rewyt/releases/tag/v2026.11.12)
+
+### Security
+
+- Update ypb to v2026.11.12, which blocks DNS rebinding on loopback listeners
+  and removes wildcard CORS headers
+
 ## [2026.11.8](https://github.com/xymaxim/rewyt/releases/tag/v2026.11.8)
 
 ### Added

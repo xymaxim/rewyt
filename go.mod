@@ -4,7 +4,7 @@ go 1.26.0
 
 require (
 	github.com/wailsapp/wails/v3 v3.0.0-alpha.98
-	github.com/xymaxim/ypb v0.0.0-20261108185258-66f59d2f2a26
+	github.com/xymaxim/ypb v0.0.0-20261112184329-e954d543bc5d
 )
 
 // replace github.com/xymaxim/ypb => ../ypb
